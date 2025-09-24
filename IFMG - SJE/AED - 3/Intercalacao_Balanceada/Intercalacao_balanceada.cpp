@@ -68,6 +68,7 @@ int main()
     {
         cout << "Pedaco " << i + 1 << ": " << pedacos[i] << endl;
     }
+    
 
     return 0;
 }
