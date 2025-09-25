@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"name": "Testes",
+			"path": "."
+		},
+		{
+			"name": "IAP 2024",
+			"path": "../IAP 2024"
+		},
+		{
+			"name": "AED-1 2024",
+			"path": "../AED-1 2024"
+		},
+		{
+			"name": "AED - 2 2025",
+			"path": "../AED - 2 2025"
+		},
+		{
+			"name": "AED - 3 2025",
+			"path": "../AED - 3 2025"
+		}
+	]
+}
