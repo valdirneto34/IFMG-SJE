@@ -13,27 +13,32 @@
 			"path": "../AED-1 2024"
 		},
 		{
+			"name": "PYTHON-CemV",
+			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/PYTHON-CemV"
+		},
+		{
+			"name": "CPP-CFB",
+			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/CPP-CFB"
+		},
+		{
+			"name": "PYTHON_CFB",
+			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/PYTHON_CFB"
+		},
+		{
+			"name": "HTML-CemV",
+			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/HTML-CemV"
+		},
+		{
 			"name": "AED - 2 2025",
 			"path": "../AED - 2 2025"
 		},
 		{
-			"name": "AED - 3 2025",
-			"path": "../AED - 3 2025"
-		},
-		{
-			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/CPP-CFB"
-		},
-		{
+			"name": "DART",
 			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/DART"
 		},
 		{
-			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/HTML-CemV"
-		},
-		{
-			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/PYTHON_CFB"
-		},
-		{
-			"path": "../../../ESTUDOS EM CASA/ESTUDOS-EM-CASA/PYTHON-CemV"
+			"name": "AED - 3 2025",
+			"path": "../AED - 3 2025"
 		}
 	]
 }
