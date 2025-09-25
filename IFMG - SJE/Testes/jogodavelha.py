@@ -34,7 +34,7 @@ def newPosition(preenchidos):
             input(f'Digite uma posição disponível no intervalo de (1-9): '))
         if position not in preenchidos:
             break
-        print(f'\033[31mPosição inválida!\033[m', end=' ')
+        print(f'\033[31mPosição inválida!\033[m',end=' ')
     return position
 
 
