@@ -1,5 +1,3 @@
-package somanumeros;
-
 import java.util.Scanner;
 
 public class SomaNumeros {
