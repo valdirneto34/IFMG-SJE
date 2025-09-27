@@ -35,10 +35,13 @@ cópias disponíveis para aluguel.*/
 delimiter $$
 create procedure pr_copia_fime_disponivel (in nome_filme varchar(255))
 begin
-select * from  filme f join inventario i on i.filme_id = f.filme_id 
-join aluguel a on a.inventario_id = i.inventario_id where f.titulo = nome_filme having(a.data_de_devolucao != null);
+select distinct i.inventario_id, f.titulo from filme f join inventario i on i.filme_id = f.filme_id 
+left join aluguel a on a.inventario_id = i.inventario_id where f.titulo = nome_filme
+and a.data_de_devolucao is not null group by i.inventario_id;
 end $$
 delimiter ;
+
+call pr_copia_fime_disponivel('AFRICAN EGG');
 
 /*Questão 4. Crie uma stored procedure que retorne os 5 clientes que mais alugaram
 filmes.*/
