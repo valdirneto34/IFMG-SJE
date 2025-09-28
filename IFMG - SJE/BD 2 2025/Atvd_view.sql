@@ -7,9 +7,9 @@ inner join rental A on I.inventory_id = A.inventory_id
 inner join staff func on A.staff_id = func.staff_id
 where f.rental_duration >= 4 group by f.title, func.first_name;
 
--- 1. Crie uma view chamada filme_em_estoque que liste os filmes disponíveis em estoque
--- para cada loja. A view deve incluir o nome do filme, o ID da loja e o status de disponibilidade. 
-
+/*1. Crie uma view chamada filme_em_estoque que liste os filmes disponíveis em estoque
+para cada loja. A view deve incluir o nome do filme, o ID da loja e o status de disponibilidade.*/
+ 
 create or replace view vw_filme_em_estoque as
 select f.title as nome_do_filme, s.store_id as id_da_loja, i.inventory_id,
 if(i.inventory_id in (select inventory_id from rental where return_date is null), 'Alugado', 'Disponível') as status
@@ -17,8 +17,9 @@ from inventory i join film f on i.film_id = f.film_id join store s on i.store_id
 
 select * from vw_filme_em_estoque;
 
--- 2. Crie uma view chamada clientes_vips que mostre os clientes que fizeram mais de 30
--- locações. A view deve exibir o nome do cliente, o número de locações e a cidade de residência.
+/*2. Crie uma view chamada clientes_vips que mostre os clientes que fizeram mais de 30
+locações. A view deve exibir o nome do cliente, o número de locações e a cidade de
+residência.*/
 
 create or replace view vw_clientes_vips as
 select c.first_name as nome_cliente, ci.city as cidade_residencia, count(r.rental_id) as qtd_locacoes
@@ -30,8 +31,8 @@ having count(r.rental_id) > 30;
 
 select * from clientes_vips;
 
--- 3. Crie uma view chamada receita_por_categoria que calcule a receita total por categoria de
--- filme. A view deve incluir o nome da categoria e a receita total gerada. 
+/*3. Crie uma view chamada receita_por_categoria que calcule a receita total por categoria 
+de filme. A view deve incluir o nome da categoria e a receita total gerada.*/
 
 create or replace view vw_receita_por_categoria as
 select ca.name as name_categoria, sum(pa.amount) as receita_total 
@@ -44,8 +45,8 @@ group by ca.name;
 
 select * from receita_por_categoria;
 
--- 4. Crie uma view que liste os clientes que não locaram filmes nos últimos 6 meses. A view
--- deve incluir o nome do cliente, o ID do cliente, a data da última locação e a cidade. 
+/*4. Crie uma view que liste os clientes que não locaram filmes nos últimos 6 meses. A view
+deve incluir o nome do cliente, o ID do cliente, a data da última locação e a cidade.*/
 
 create or replace view vw_clientes_inativos_ultimo_semestre as
 select c.customer_id as cliente_id, c.first_name as nome_cliente, ci.city as cidade, max(re.rental_date) as data_ultima_locacao
@@ -57,8 +58,8 @@ having max(re.rental_date) < date_sub(curdate(), interval 6 month) order by c.cu
 
 select * from vw_clientes_inativos_ultimo_semestre;
 
--- 5. Crie uma view que mostre a receita total gerada por filmes de cada categoria nos últimos
--- 12 meses. A view deve incluir o nome da categoria, a receita total, e a quantidade de filmes locados.
+/*5. Crie uma view que mostre a receita total gerada por filmes de cada categoria nos últimos
+12 meses. A view deve incluir o nome da categoria, a receita total, e a quantidade de filmes locados.*/
 
 create or replace view vw_receita_categoria_ultimo_ano as
 select ca.name as nome_categoria, sum(pa.amount) as receita_total, count(re.rental_id) as qtd_filmes_locados
@@ -72,9 +73,10 @@ group by ca.name;
 
 select * from vw_receita_categoria_ultimo_ano;
 
--- 6. Crie uma view que liste os filmes que têm a maior taxa de locação em cada categoria. A
--- view deve incluir o nome do filme, a categoria, a quantidade de locações e a receita total
--- gerada por esse filme. 
+/* 6. Crie uma view que liste os filmes que têm a maior taxa de locação em cada categoria. A
+view deve incluir o nome do filme, a categoria, a quantidade de locações e a receita total
+gerada por esse filme.*/
+ 
 
 create or replace view vw_maior_locacao_categoria as
 with RankedFilms as
@@ -91,9 +93,9 @@ from RankedFilms where rank_locacao = 1;
 
 select * from vw_maior_locacao_categoria;
 
--- 7. Crie uma view que fornece uma análise da rentabilidade dos diferentes gêneros de filmes
--- disponíveis e exiba o gênero do filme, a receita total gerada por filmes daquele gênero, o
--- número de filmes no gênero e a receita média por filme.
+/*7. Crie uma view que fornece uma análise da rentabilidade dos diferentes gêneros de filmes
+disponíveis e exiba o gênero do filme, a receita total gerada por filmes daquele gênero, o
+número de filmes no gênero e a receita média por filme.*/
 
 create or replace view vw_rentabilidade_genero as
 select ca.name as genero, sum(pa.amount) as receita_total, count( distinct fi.film_id) as qtd_filmes, round(sum(pa.amount) / count(distinct fi.film_id), 2) as receita_media
