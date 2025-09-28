@@ -46,5 +46,49 @@ call pr_copia_fime_disponivel('AFRICAN EGG');
 /*Questão 4. Crie uma stored procedure que retorne os 5 clientes que mais alugaram
 filmes.*/
 
+delimiter $$
+create procedure pr_clientes_mais_alugam ()
+begin
+select cliente_id, primeiro_nome, qtd_alugueis from (
+select c.cliente_id, c.primeiro_nome, count(c.cliente_id) as qtd_alugueis,
+rank() over (order by count(c.cliente_id) desc) as ranked
+from cliente c join aluguel a on c.cliente_id = a.cliente_id group by c.cliente_id, c.primeiro_nome) as r
+where r.ranked <= 5;
+end $$
+delimiter ;
 
+call pr_clientes_mais_alugam();
+
+/*Questão 5. Crie uma stored procedure que gere um relatório de receita mensal por
+categoria de filme. A procedure deve aceitar um intervalo de datas como entrada e
+retornar o total de receita por categoria para cada mês no período especificado.
+A procedure deve aceitar dois parâmetros: data inicial e data final.
+
+A procedure deve agrupar a receita por mês e por categoria, exibindo o nome da
+categoria e o total de receita gerada em aluguéis.
+Parâmetros:
+datini: Data de início do período.
+datfim: Data de término do período.
+A query se conecta às tabelas PAGAMENTO, ALUGUEL, INVENTARIO,
+FILME_CATERGORIA e CATEGORIA para calcular o total de receita por categoria.
+A função DATE_FORMAT agrupa as datas de pagamento por mês (%Y-%m).
+O GROUP BY garante que os dados sejam agrupados por categoria e por mês.
+CALL PR_categ_mes_receita('2023-01-01', '2023-06-30');*/
+
+delimiter $$
+create procedure pr_categ_mes_receita (in datini date, in datfim date)
+begin
+select ca.nome, date_format(p.data_de_pagamento, '%Y-%m') as receita_mes, sum(p.valor) as total_receita 
+from categoria ca join filme_categoria fc on fc.categoria_id = ca.categoria_id
+join inventario i on i.filme_id = fc.filme_id join aluguel a on a.inventario_id = i.inventario_id
+join pagamento p on p.aluguel_id = a.aluguel_id where p.data_de_pagamento 
+between datini and datfim group by receita_mes, ca.nome order by receita_mes, ca.nome;
+end $$
+delimiter ;
+
+drop procedure pr_categ_mes_receita;
+
+call pr_categ_mes_receita ('2023-01-01', '2023-06-30');
+
+call  pr_categ_mes_receita('2005-01-01', '2005-06-30');
 
