@@ -9,7 +9,7 @@ public class ExibeNumPrimos {
                     cont++;
                 }
             }
-            if (cont <= 2) {
+            if (cont == 2) {
                 System.out.print(i + " - ");
             }
         }
