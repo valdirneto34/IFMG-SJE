@@ -1,19 +1,28 @@
 def main():
-    game = [' '] * 9
-    char = ['X', 'O']
-    preenchidos = []
-    turn = True
-    cont = 0
     while True:
-        draw(game)
-        print(f'Turno: Jogador: {getPlayer(turn)}')
-        check = newPosition(preenchidos)
-        game[check-1] = char[getPlayer(turn)-1]
-        preenchidos.append(check)
-        cont += 1
-        if finishGame(game, cont, turn):
+        game = [' '] * 9
+        char = ['X', 'O']
+        preenchidos = []
+        turn = True
+        cont = 0
+        while True:
+            draw(game)
+            print(f'Turno: Jogador: {getPlayer(turn)}')
+            check = newPosition(preenchidos)
+            game[check-1] = char[getPlayer(turn)-1]
+            preenchidos.append(check)
+            cont += 1
+            if finishGame(game, cont, turn):
+                break
+            turn = not turn
+        while True:
+            opcao = input(str('Quer jogar novamente?: [S/N] ')).upper().strip()[0]
+            if opcao in 'SN':
+                break
+            print(f'\033[31mOpção inválida!\033[m',end=' ')
+        if opcao == 'N':
             break
-        turn = not turn
+
 
 
 def finishGame(game, qtd, turn):
