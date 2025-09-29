@@ -86,8 +86,6 @@ between datini and datfim group by receita_mes, ca.nome order by receita_mes, ca
 end $$
 delimiter ;
 
-drop procedure pr_categ_mes_receita;
-
 call pr_categ_mes_receita ('2023-01-01', '2023-06-30');
 
 call  pr_categ_mes_receita('2005-01-01', '2005-06-30');
