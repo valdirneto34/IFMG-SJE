@@ -4,7 +4,7 @@
 int main()
 {
     int matriz[3][3], diagonalP = 0, diagonalS = 0, linha1 = 0, linha2 = 0, linha3 = 0, col1 = 0, col2 = 0, col3 = 0;
-    cout("Insira a matriz:\n");
+    printf("Insira a matriz:\n");
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -38,11 +38,11 @@ int main()
     {
         if (linha1 == linha2 && linha2 == linha3)
             if (col1 == col2 && col2 == col3)
-                cout("\n%d\n", linha1);
+                printf("\n%d\n", linha1);
     }
     else
     {
-        cout("-1\n");
+        printf("-1\n");
     }
     system("pause");
     return 0;

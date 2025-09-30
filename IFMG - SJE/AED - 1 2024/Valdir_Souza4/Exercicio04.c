@@ -32,7 +32,7 @@ void FLVazia(TipoLista *Lista)
 void Insere(TipoItem *x, TipoLista *Lista)
 {
     if (Lista->Ultimo > MaxTam)
-        cout("\nA Lista está cheia\n");
+        printf("\nA Lista está cheia\n");
     else
     {
         Lista->Item[Lista->Ultimo - 1] = *x;
@@ -59,20 +59,20 @@ void OrdenaDec(TipoLista *Lista)
 
 void Imprime(TipoLista *Lista)
 {
-    cout("\nLista em ordem decrescente:\n");
+    printf("\nLista em ordem decrescente:\n");
     for (int i = Lista->Primeiro - 1; i < Lista->Ultimo - 1; i++)
-        cout("%d  ", Lista->Item[i].numero);
-    cout("\n");
+        printf("%d  ", Lista->Item[i].numero);
+    printf("\n");
 }
 
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
     FLVazia(&Lista);
-    cout("\nInsira %d números\n\n", MaxTam);
+    printf("\nInsira %d números\n\n", MaxTam);
     do
     {
-        cout("Insira o %dº número: ", Lista.Ultimo);
+        printf("Insira o %dº número: ", Lista.Ultimo);
         scanf("%d", &x);
         Insere(&x, &Lista);
 

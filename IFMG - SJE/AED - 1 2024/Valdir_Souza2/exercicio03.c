@@ -5,46 +5,46 @@ int main()
 {
     setlocale(LC_ALL, "portuguese");
     int num = 1;
-    cout("Digite um número entre 0 e 10 para vê-lo por extenso: ");
+    printf("Digite um número entre 0 e 10 para vê-lo por extenso: ");
     scanf("%d", &num);
 
     switch (num)
     {
     case 0:
-        cout("Zero\n");
+        printf("Zero\n");
         break;
     case 1:
-        cout("Um\n");
+        printf("Um\n");
         break;
     case 2:
-        cout("Dois\n");
+        printf("Dois\n");
         break;
     case 3:
-        cout("Três\n");
+        printf("Três\n");
         break;
     case 4:
-        cout("Quatro\n");
+        printf("Quatro\n");
         break;
     case 5:
-        cout("Cinco\n");
+        printf("Cinco\n");
         break;
     case 6:
-        cout("Seis\n");
+        printf("Seis\n");
         break;
     case 7:
-        cout("Sete\n");
+        printf("Sete\n");
         break;
     case 8:
-        cout("Oito\n");
+        printf("Oito\n");
         break;
     case 9:
-        cout("Nove\n");
+        printf("Nove\n");
         break;
     case 10:
-        cout("Dez\n");
+        printf("Dez\n");
         break;
     default:
-        cout("Número inválido!.\n");
+        printf("Número inválido!.\n");
     }
     return 0;
 }

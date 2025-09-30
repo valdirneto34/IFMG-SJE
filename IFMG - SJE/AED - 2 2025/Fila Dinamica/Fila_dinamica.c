@@ -47,14 +47,14 @@ void Enfileira(TipoItem x, TipoFila *Fila)
 void Imprime(TipoFila Fila)
 {
     if (Vazia(Fila))
-        cout("ERRO: A fila está vazia!\n");
+        printf("ERRO: A fila está vazia!\n");
     else
     {
         TipoApontador aux = Fila.Frente->Prox;
         while (aux != NULL)
         {
-            cout("Codigo: %d\n", aux->Item.cod);
-            cout("Idade: %d\n\n", aux->Item.idade);
+            printf("Codigo: %d\n", aux->Item.cod);
+            printf("Idade: %d\n\n", aux->Item.idade);
             aux = aux->Prox;
         }
     }
@@ -64,7 +64,7 @@ void Desenfileira(TipoFila *Fila, TipoItem *x)
 {
     TipoApontador q;
     if (Vazia(*Fila))
-        cout("ERRO: A fila está vazia!\n");
+        printf("ERRO: A fila está vazia!\n");
     else
     {
         q = Fila->Frente;
@@ -77,7 +77,7 @@ void Desenfileira(TipoFila *Fila, TipoItem *x)
 void Procurar(TipoFila Fila, TipoItem *x)
 {
     if (Vazia(Fila))
-        cout("\nERRO: Lista está vazia!\n");
+        printf("\nERRO: Lista está vazia!\n");
     else
     {
         int encontrou = 0;
@@ -92,16 +92,16 @@ void Procurar(TipoFila Fila, TipoItem *x)
             aux = aux->Prox;
         }
         if (encontrou)
-            cout("Elemento encontrado!\n");
+            printf("Elemento encontrado!\n");
         else
-            cout("Elemento não encontrado!\n");
+            printf("Elemento não encontrado!\n");
     }
 }
 
 void ContarIdadesPares(TipoFila Fila)
 {
     if (Vazia(Fila))
-        cout("\nERRO: Lista está vazia!\n");
+        printf("\nERRO: Lista está vazia!\n");
     else
     {
         int cont = 0;
@@ -112,14 +112,14 @@ void ContarIdadesPares(TipoFila Fila)
                 cont++;
             aux = aux->Prox;
         }
-        cout("Existem %d pessoas com idades pares.\n", cont);
+        printf("Existem %d pessoas com idades pares.\n", cont);
     }
 }
 
 void ContarIdadesImpares(TipoFila Fila)
 {
     if (Vazia(Fila))
-        cout("\nERRO: Lista está vazia!\n");
+        printf("\nERRO: Lista está vazia!\n");
     else
     {
         int cont = 0;
@@ -130,7 +130,7 @@ void ContarIdadesImpares(TipoFila Fila)
                 cont++;
             aux = aux->Prox;
         }
-        cout("Existem %d pessoas com idades ímpares.\n", cont);
+        printf("Existem %d pessoas com idades ímpares.\n", cont);
     }
 }
 
@@ -142,17 +142,17 @@ int main()
 
     do
     {
-        cout("\n\nMENU\n\n");
-        cout("Digite a opção desejada:\n");
-        cout("0 - Sair\n");
-        cout("1 - Esvaziar a fila\n");
-        cout("2 - Verificar se a fila está pilha\n");
-        cout("3 - Enfileirar elemento na fila\n");
-        cout("4 - Imprimir os elementos da fila\n");
-        cout("5 - Desenfileirar elemento da fila\n");
-        cout("6 - Procurar elemento pelo código\n");
-        cout("7 - Contar idades pares na fila\n");
-        cout("8 - Contar idades ímpares na fila\n");
+        printf("\n\nMENU\n\n");
+        printf("Digite a opção desejada:\n");
+        printf("0 - Sair\n");
+        printf("1 - Esvaziar a fila\n");
+        printf("2 - Verificar se a fila está pilha\n");
+        printf("3 - Enfileirar elemento na fila\n");
+        printf("4 - Imprimir os elementos da fila\n");
+        printf("5 - Desenfileirar elemento da fila\n");
+        printf("6 - Procurar elemento pelo código\n");
+        printf("7 - Contar idades pares na fila\n");
+        printf("8 - Contar idades ímpares na fila\n");
 
         scanf("%d", &opcao);
 
@@ -160,7 +160,7 @@ int main()
         {
         case 0:
         {
-            cout("PROGRAMA ENCERRADO\n");
+            printf("PROGRAMA ENCERRADO\n");
             break;
         }
         case 1:
@@ -173,19 +173,19 @@ int main()
             resposta = Vazia(Fila);
             if (resposta == 1)
             {
-                cout("A fila está vazia!\n");
+                printf("A fila está vazia!\n");
             }
             else
             {
-                cout("A fila não está vazia!\n");
+                printf("A fila não está vazia!\n");
             }
             break;
         }
         case 3:
         {
-            cout("Digite o código\n");
+            printf("Digite o código\n");
             scanf("%d", &x.cod);
-            cout("Digite a idade\n");
+            printf("Digite a idade\n");
             scanf("%d", &x.idade);
             Enfileira(x, &Fila);
             break;
@@ -202,7 +202,7 @@ int main()
         }
         case 6:
         {
-            cout("Digite o código do elemento\n");
+            printf("Digite o código do elemento\n");
             scanf("%d", &x.cod);
             Procurar(Fila, &x);
             break;
@@ -219,7 +219,7 @@ int main()
         }
         default:
         {
-            cout("OPÇÃO INVALIDA!");
+            printf("OPÇÃO INVALIDA!");
             break;
         }
         }

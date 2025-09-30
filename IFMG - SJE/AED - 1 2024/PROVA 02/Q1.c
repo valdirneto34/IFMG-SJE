@@ -35,10 +35,10 @@ int Vazia(TipoLista *Lista)
 
 void Imprime(TipoLista *Lista)
 {
-    cout("\n");
+    printf("\n");
     for (int i = Lista->Inicio - 1; i <= Lista->Fim; i++)
-        cout("Codigo: %d  -  Tipo: %d\n\n", Lista->Item[i].codigo, Lista->Item[i].tipo);
-    cout("\n");
+        printf("Codigo: %d  -  Tipo: %d\n\n", Lista->Item[i].codigo, Lista->Item[i].tipo);
+    printf("\n");
 }
 
 void Insere(TipoLista *Lista, TipoItem x, Apontador pos)
@@ -52,26 +52,26 @@ int main()
     int opcao;
     do
     {
-        cout("\n\nMENU\n\n");
-        cout("0 - Sair\n");
-        cout("1 - Inserir cliente\n");
-        cout("2 - Imprimir lista\n");
-        cout("Sua escolha: ");
+        printf("\n\nMENU\n\n");
+        printf("0 - Sair\n");
+        printf("1 - Inserir cliente\n");
+        printf("2 - Imprimir lista\n");
+        printf("Sua escolha: ");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            cout("\nPROGRAMA ENCERRADO\n");
+            printf("\nPROGRAMA ENCERRADO\n");
             break;
         }
         case 1:
         {
-            cout("Digite o codigo: ");
+            printf("Digite o codigo: ");
             scanf("%d", &x.codigo);
-            cout("Digite o tipo de casa(1-pequena, 2-media, 3-grande): ");
+            printf("Digite o tipo de casa(1-pequena, 2-media, 3-grande): ");
             scanf("%d", &x.tipo);
-            cout("Digite a posicao: ");
+            printf("Digite a posicao: ");
             scanf("%d", &pos);
             Insere(&Lista, x, pos);
             break;
@@ -83,7 +83,7 @@ int main()
         }
         default:
         {
-            cout("\nOPCAO INVALIDA\n");
+            printf("\nOPCAO INVALIDA\n");
             break;
         }
         }

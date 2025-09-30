@@ -25,9 +25,9 @@ int main()
             totalAPrazo += compras[i].valor;
     }
     totalDasCpmpras = totalAVista + totalAPrazo;
-    cout("Valor total das compras A Vista..: R$%.2f\n", totalAVista);
-    cout("Valor total das compras A Prazo..: R$%.2f\n", totalAPrazo);
-    cout("Valor total das compras efetuadas: R$%.2f\n", totalDasCpmpras);
+    printf("Valor total das compras A Vista..: R$%.2f\n", totalAVista);
+    printf("Valor total das compras A Prazo..: R$%.2f\n", totalAPrazo);
+    printf("Valor total das compras efetuadas: R$%.2f\n", totalDasCpmpras);
     system("pause");
     return 0;
 }

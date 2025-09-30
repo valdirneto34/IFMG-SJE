@@ -16,7 +16,7 @@ void Preencher(int vetor[])
     vetor[0] = 0;
     for (int i = 1; i <= MaxTam; i++)
     {
-        cout("Digite o valor da posicao %d: ", i);
+        printf("Digite o valor da posicao %d: ", i);
         scanf("%d", &vetor[i]);
     }
 }
@@ -33,9 +33,9 @@ void Imprime(int v[])
 {
     for (int i = 1; i <= MaxTam; i++)
     {
-        cout("%d   ", v[i]);
+        printf("%d   ", v[i]);
     }
-    cout("\n");
+    printf("\n");
 }
 
 void Bubblesort(int A[])
@@ -165,22 +165,22 @@ int main()
     int opcao;
     do
     {
-        cout("\nMENU\n\n");
-        cout("Digite a opcao desejada:\n");
-        cout("0 - Sair\n");
-        cout("1 - Preencher o vetor\n");
-        cout("2 - Metodo Bubblesort\n");
-        cout("3 - Metodo da Selecao\n");
-        cout("4 - Metodo da Insercao\n");
-        cout("5 - Metodo Shellsort\n");
-        cout("6 - Metodo Quicksort\n");
-        cout("7 - Imprimir o vetor\n");
+        printf("\nMENU\n\n");
+        printf("Digite a opcao desejada:\n");
+        printf("0 - Sair\n");
+        printf("1 - Preencher o vetor\n");
+        printf("2 - Metodo Bubblesort\n");
+        printf("3 - Metodo da Selecao\n");
+        printf("4 - Metodo da Insercao\n");
+        printf("5 - Metodo Shellsort\n");
+        printf("6 - Metodo Quicksort\n");
+        printf("7 - Imprimir o vetor\n");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            cout("\nPROGRAMA ENCERRADO\n\n");
+            printf("\nPROGRAMA ENCERRADO\n\n");
             break;
         }
         case 1:
@@ -192,7 +192,7 @@ int main()
         {
             Copia(vetor, A);
             Bubblesort(A);
-            cout("\nVETOR ORDENADO (Bubble Sort):\n");
+            printf("\nVETOR ORDENADO (Bubble Sort):\n");
             Imprime(A);
             break;
         }
@@ -200,7 +200,7 @@ int main()
         {
             Copia(vetor, A);
             Selecao(A);
-            cout("\nVETOR ORDENADO (Selecao):\n");
+            printf("\nVETOR ORDENADO (Selecao):\n");
             Imprime(A);
             break;
         }
@@ -208,7 +208,7 @@ int main()
         {
             Copia(vetor, A);
             Insercao(A);
-            cout("\nVETOR ORDENADO (Insercao):\n");
+            printf("\nVETOR ORDENADO (Insercao):\n");
             Imprime(A);
             break;
         }
@@ -216,7 +216,7 @@ int main()
         {
             Copia(vetor, A);
             Shellsort(A);
-            cout("\nVETOR ORDENADO (Shellsort):\n");
+            printf("\nVETOR ORDENADO (Shellsort):\n");
             Imprime(A);
             break;
         }
@@ -224,19 +224,19 @@ int main()
         {
             Copia(vetor, A);
             Quicksort(A, 1, 3);
-            cout("\nVETOR ORDENADO (Quicksort):\n");
+            printf("\nVETOR ORDENADO (Quicksort):\n");
             Imprime(A);
             break;
         }
         case 7:
         {
-            cout("\nVETOR ATUAL:\n");
+            printf("\nVETOR ATUAL:\n");
             Imprime(vetor);
             break;
         }
         default:
         {
-            cout("OPCAO INVALIDA\n\n");
+            printf("OPCAO INVALIDA\n\n");
             break;
         }
         }

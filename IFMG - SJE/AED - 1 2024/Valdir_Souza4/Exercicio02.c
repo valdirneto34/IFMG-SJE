@@ -35,7 +35,7 @@ void Insere(TipoItem *x, TipoLista *Lista)
 {
     if (Lista->Ultimo > MaxTam)
     {
-        cout("\nA Lista está cheia\n");
+        printf("\nA Lista está cheia\n");
         x->notas = -1;
         return;
     }
@@ -48,7 +48,7 @@ void Calcula(TipoLista *Lista)
     Lista->Media = 0;
     Lista->qtdeValores = 0;
     Lista->ValAcimaMedia = 0;
-    cout("\n");
+    printf("\n");
     for (int i = Lista->Primeiro - 1; i <= Lista->Ultimo - 2; i++)
     {
         Lista->Media += Lista->Item[i].notas;
@@ -62,19 +62,19 @@ void Calcula(TipoLista *Lista)
 
 void Imprime(TipoLista *Lista)
 {
-    cout("Quantidade de valores lidos: %d\n", Lista->qtdeValores);
-    cout("Valores na ordem que foram informados:\n");
+    printf("Quantidade de valores lidos: %d\n", Lista->qtdeValores);
+    printf("Valores na ordem que foram informados:\n");
     for (int i = Lista->Primeiro - 1; i <= Lista->Ultimo - 2; i++)
     {
-        cout("%d  ", Lista->Item[i].notas);
+        printf("%d  ", Lista->Item[i].notas);
     }
-    cout("\nValores na ordem inversa:\n");
+    printf("\nValores na ordem inversa:\n");
     for (int i = Lista->Ultimo - 2; i >= Lista->Primeiro - 1; i--)
     {
-        cout("%d\n", Lista->Item[i].notas);
+        printf("%d\n", Lista->Item[i].notas);
     }
-    cout("Média dos valores: %.2f\n", Lista->Media);
-    cout("Quantidade de valores acima da média: %d\n", Lista->ValAcimaMedia);
+    printf("Média dos valores: %.2f\n", Lista->Media);
+    printf("Quantidade de valores acima da média: %d\n", Lista->ValAcimaMedia);
 }
 
 int main()
@@ -84,7 +84,7 @@ int main()
     system("cls");
     do
     {
-        cout("Insira o %dº número: ", Lista.Ultimo);
+        printf("Insira o %dº número: ", Lista.Ultimo);
         scanf("%d", &x.notas);
         if (x.notas == -1)
             break;

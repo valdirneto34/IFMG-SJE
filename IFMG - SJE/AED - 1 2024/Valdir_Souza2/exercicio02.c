@@ -9,29 +9,29 @@ int main()
     while (opc != 4)
     {
         system("cls");
-        cout("1 - Abrir Arquivo\n");
-        cout("2 - Salvar Arquivo\n");
-        cout("3 - Imprimir Arquivo\n");
-        cout("4 - Sair\n");
-        cout("Digite uma opção: ");
+        printf("1 - Abrir Arquivo\n");
+        printf("2 - Salvar Arquivo\n");
+        printf("3 - Imprimir Arquivo\n");
+        printf("4 - Sair\n");
+        printf("Digite uma opção: ");
         scanf("%d", &opc);
 
         switch (opc)
         {
         case 1:
-            cout("Abrindo arquivo!\n");
+            printf("Abrindo arquivo!\n");
             break;
         case 2:
-            cout("Salvando arquivo!\n");
+            printf("Salvando arquivo!\n");
             break;
         case 3:
-            cout("Imprimindo arquivo!\n");
+            printf("Imprimindo arquivo!\n");
             break;
         case 4:
-            cout("Saindo...\n");
+            printf("Saindo...\n");
             break;
         default:
-            cout("Opção inválida!\n");
+            printf("Opção inválida!\n");
         }
         system("pause");
     }

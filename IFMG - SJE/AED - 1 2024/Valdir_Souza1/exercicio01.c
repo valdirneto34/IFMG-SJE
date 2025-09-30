@@ -9,7 +9,7 @@ int main()
     {
         for (int j = 0; j < 5; j++)
         {
-            cout("Insira o valor para a linha %d e a coluna %d: ", i, j);
+            printf("Insira o valor para a linha %d e a coluna %d: ", i, j);
             scanf("%d", &matriz[i][j]);
         }
     }
@@ -17,6 +17,6 @@ int main()
     {
         somadiagonal += matriz[i][i];
     }
-    cout("\nO resultado da soma é %d.", somadiagonal);
+    printf("\nO resultado da soma é %d.", somadiagonal);
     return 0;
 }

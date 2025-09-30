@@ -24,15 +24,14 @@ int main()
             }
             matriz[i][j] = a;
         }
-       
     }
-    cout("\nMatriz gerada:\n");
+    printf("\nMatriz gerada:\n");
     for (int i = 0; i < 8; i++)
     {
-        cout("\n");
+        printf("\n");
         for (int j = 0; j < 8; j++)
         {
-            cout("%5d", matriz[i][j]);
+            printf("%5d", matriz[i][j]);
         }
     }
     return 0;

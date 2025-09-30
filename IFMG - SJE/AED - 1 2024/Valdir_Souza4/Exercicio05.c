@@ -33,20 +33,20 @@ void FLVazia(TipoLista *Lista)
 void Imprime(TipoLista *Lista)
 {
     Lista->Classificaco = 0;
-    cout("\n");
+    printf("\n");
     for (int i = Lista->Primeiro - 1; i <= Lista->Ultimo - 2; i++)
     {
         if (Lista->Item[i].resp == 1)
             Lista->Classificaco++;
     }
     if (Lista->Classificaco == 2)
-        cout("Suspeita\n");
+        printf("Suspeita\n");
     else if (Lista->Classificaco >= 3 && Lista->Classificaco <= 4)
-        cout("Cúmplice\n");
+        printf("Cúmplice\n");
     else if (Lista->Classificaco == 5)
-        cout("Assassino\n");
+        printf("Assassino\n");
     else
-        cout("Inocente\n");
+        printf("Inocente\n");
 }
 
 int main()
@@ -54,25 +54,25 @@ int main()
     SetConsoleOutputCP(CP_UTF8);
     FLVazia(&Lista);
     system("cls");
-    cout("\nRESPONDA COM 1 PARA SIM OU 0 PARA NÃO\n\n");
+    printf("\nRESPONDA COM 1 PARA SIM OU 0 PARA NÃO\n\n");
 
-    cout("Telefonou para a vítima?\n");
+    printf("Telefonou para a vítima?\n");
     scanf("%d", &Lista.Item[Lista.Ultimo - 1].resp);
     Lista.Ultimo++;
 
-    cout("Esteve no local do crime?\n");
+    printf("Esteve no local do crime?\n");
     scanf("%d", &Lista.Item[Lista.Ultimo - 1].resp);
     Lista.Ultimo++;
 
-    cout("Mora perto da vítima?\n");
+    printf("Mora perto da vítima?\n");
     scanf("%d", &Lista.Item[Lista.Ultimo - 1].resp);
     Lista.Ultimo++;
 
-    cout("Devia para a vítima?\n");
+    printf("Devia para a vítima?\n");
     scanf("%d", &Lista.Item[Lista.Ultimo - 1].resp);
     Lista.Ultimo++;
 
-    cout("Já trabalhou com a vítima?\n");
+    printf("Já trabalhou com a vítima?\n");
     scanf("%d", &Lista.Item[Lista.Ultimo - 1].resp);
     Lista.Ultimo++;
 

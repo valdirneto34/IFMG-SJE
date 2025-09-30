@@ -4,12 +4,12 @@
 int main()
 {
     int vetor[3], matriz[3][3];
-    cout("VETOR\n");
+    printf("VETOR\n");
     for (int i = 0; i < 3; i++)
     {
         scanf("%d", &vetor[i]);
     }
-    cout("\nMATRIZ\n");
+    printf("\nMATRIZ\n");
     for (int i = 0; i < 3; i++)
     {
         for (int j = 0; j < 3; j++)
@@ -17,13 +17,13 @@ int main()
             scanf("%d", &matriz[i][j]);
         }
     }
-    cout("\nSAIDA");
+    printf("\nSAIDA");
     for (int i = 0; i < 3; i++)
     {
-        cout("\n");
+        printf("\n");
         for (int j = 0; j < 3; j++)
         {
-            cout("%d  ", matriz[i][j] * vetor[j]);
+            printf("%d  ", matriz[i][j] * vetor[j]);
         }
     }
 

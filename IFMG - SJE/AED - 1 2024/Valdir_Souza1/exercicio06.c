@@ -5,12 +5,12 @@ int main()
 {
     setlocale(LC_ALL, "portuguese");
     int matriz[8][8], somaelementos = 0;
-    cout("\nInsira a matriz:\n");
+    printf("\nInsira a matriz:\n");
     for (int i = 0; i < 8; i++)
     {
         for (int j = 0; j < 8; j++)
         {
-            cout("Linha %d e a coluna %d: ", i, j);
+            printf("Linha %d e a coluna %d: ", i, j);
             scanf("%d", &matriz[i][j]);
         }
     }
@@ -21,6 +21,6 @@ int main()
             somaelementos += matriz[i][j];
         }
     }
-    cout("\n\nA soma dos elementos acima da diagonal principal é: %d",somaelementos);
+    printf("\n\nA soma dos elementos acima da diagonal principal é: %d",somaelementos);
     return 0;
 }
