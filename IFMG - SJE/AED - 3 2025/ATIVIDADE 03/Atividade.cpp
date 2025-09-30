@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <algorithm>
 #include <windows.h>
 
 /*
@@ -9,14 +10,37 @@ armazenando nome completo, altura e idade. Monte um arquivo PDF contando resumid
 quais problemas teve e como os superou, colocando prints do código e do resultado para ilustrar o que foi construído.
 */
 
+struct Pessoa
+{
+    string nome;
+    float altura;
+    int idade;
+};
+
+
+Pessoa cadastraPessoa(Pessoa p)
+{
+    cout << "\nDigite o nome da pessoa: ";
+    getline(cin, p.nome);
+    cout << "Digite a altura da pessoa em metros: ";
+    cin >> p.altura;
+    cout << "Digite a idade da pessoa: ";
+    cin >> p.idade;
+    cout << p.nome << " tem " << p.idade << " anos e altura de " << p.altura << " metros." << endl;
+    return p;
+}
+
+void listaPessoas(){
+    
+}
+
 using namespace std;
 
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
-    string nome;
-    float altura;
-    int opcao, idade;
+    Pessoa pessoa_ler, pessoa_saida;
+    int opcao;
     fstream arq("arquivo.txt");
     arq.open("arquivo.txt", ios::in);
     if (!arq.is_open())
@@ -27,12 +51,14 @@ int main()
 
     do
     {
-        cout << "\n\nMENU\n\n";
+        cout << "\n------------ MENU ------------" << endl;
         cout << "0 - Sair" << endl;
         cout << "1 - Cadastrar Pessoa" << endl;
         cout << "2 - Listar Pessoas" << endl;
-        cout << "Digite a opção desejada: ";
+        cout << "--------------------------------" << endl;
+        cout << "\nDigite a opção desejada: ";
         cin >> opcao;
+        cin.ignore();
 
         switch (opcao)
         {
@@ -43,21 +69,12 @@ int main()
         }
         case 1:
         {
-            cout << "\nDigite o nome da pessoa: ";
-            getline(cin, nome);
-            cin.ignore();
-            cout << "Digite a altura da pessoa em metros: ";
-            cin >> altura;
-            cin.ignore();
-            cout << "Digite a idade da pessoa: ";
-            cin >> idade;
-            cin.ignore();
-            cout << nome << " tem " << idade << " anos e altura de " << altura << " metros." << endl;
+            cadastraPessoa(pessoa_ler);
             break;
         }
         default:
         {
-            cout << "\nOPÇÃO INVÁLIDA!!" << endl;
+            
             break;
         }
         }
