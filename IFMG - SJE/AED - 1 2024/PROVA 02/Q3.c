@@ -30,7 +30,7 @@ void Insere(TipoPilha *Pilha, TipoItem x)
 {
     if (Pilha->Topo >= MaxTam)
     {
-        printf("\nERRO: Pilha esta cheia\n");
+        cout("\nERRO: Pilha esta cheia\n");
     }
     else
     {
@@ -43,14 +43,14 @@ void ImprimeFundoTopo(TipoPilha *Pilha)
 {
     if (Vazia(Pilha))
     {
-        printf("\nERRO: Pilha esta vazia\n");
+        cout("\nERRO: Pilha esta vazia\n");
     }
     else
     {
-        printf("\n");
+        cout("\n");
         for (int i = 0; i < Pilha->Topo; i++)
         {
-            printf("%d   ", Pilha->Item[i].elemento);
+            cout("%d   ", Pilha->Item[i].elemento);
         }
     }
 }
@@ -61,7 +61,7 @@ void CalculaMedia(TipoPilha *Pilha)
     int cont = 0;
     if (Vazia(Pilha))
     {
-        printf("\nERRO: Pilha esta vazia\n");
+        cout("\nERRO: Pilha esta vazia\n");
     }
     else
     {
@@ -72,7 +72,7 @@ void CalculaMedia(TipoPilha *Pilha)
             cont++;
         }
         aux /= cont;
-        printf("\nA media aritmetica e: %.2f\n", aux);
+        cout("\nA media aritmetica e: %.2f\n", aux);
     }
 }
 
@@ -82,23 +82,23 @@ int main()
     int opcao;
     do
     {
-        printf("\n\nMENU\n\n");
-        printf("0 - Sair\n");
-        printf("1 - Inserir valor na Pilha\n");
-        printf("2 - Imprimir Pilha\n");
-        printf("3 - Calcular Media\n");
-        printf("Sua escolha: ");
+        cout("\n\nMENU\n\n");
+        cout("0 - Sair\n");
+        cout("1 - Inserir valor na Pilha\n");
+        cout("2 - Imprimir Pilha\n");
+        cout("3 - Calcular Media\n");
+        cout("Sua escolha: ");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            printf("\nPROGRAMA ENCERRADO\n");
+            cout("\nPROGRAMA ENCERRADO\n");
             break;
         }
         case 1:
         {
-            printf("Digite o valor: ");
+            cout("Digite o valor: ");
             scanf("%d", &x.elemento);
             Insere(&Pilha, x);
             break;
@@ -115,7 +115,7 @@ int main()
         }
         default:
         {
-            printf("\nOPCAO INVALIDA\n");
+            cout("\nOPCAO INVALIDA\n");
             break;
         }
         }

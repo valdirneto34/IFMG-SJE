@@ -23,7 +23,7 @@ int main()
             cont++;
         }
     }
-    printf("Faltam %d figurinhas.\n", cont);
+    cout("Faltam %d figurinhas.\n", cont);
     return 0;
 }
 /*

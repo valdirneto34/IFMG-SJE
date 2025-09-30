@@ -11,9 +11,9 @@ int main()
     pb = &b;
     c = 3 * (*pb - *pa);
 
-    printf("%d\n", pa);
-    printf("%d\n", *pa);
-    printf("%d\n", *pb);
-    printf("%d\n", c);
+    cout("%d\n", pa);
+    cout("%d\n", *pa);
+    cout("%d\n", *pb);
+    cout("%d\n", c);
     return 0;
 }

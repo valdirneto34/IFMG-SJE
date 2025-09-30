@@ -34,7 +34,7 @@ void FLVazia(TipoLista *Lista)
 void Insere(TipoItem *x, TipoLista *Lista)
 {
     if (Lista->Ultimo > MaxTam)
-        printf("\nA Lista está cheia\n");
+        cout("\nA Lista está cheia\n");
     else
     {
         Lista->Item[Lista->Ultimo - 1] = *x;
@@ -47,10 +47,10 @@ void Imprime(TipoLista *Lista)
     Lista->Maior = Lista->Primeiro - 1;
     Lista->Menor = Lista->Primeiro - 1;
     Lista->Media = 0;
-    printf("\nNúmeros: ");
+    cout("\nNúmeros: ");
     for (int i = Lista->Primeiro - 1; i <= Lista->Ultimo - 2; i++)
     {
-        printf("%d  ", Lista->Item[i].numero);
+        cout("%d  ", Lista->Item[i].numero);
         Lista->Media += Lista->Item[i].numero;
         if (Lista->Item[i].numero > Lista->Item[Lista->Maior].numero)
             Lista->Maior = i;
@@ -58,9 +58,9 @@ void Imprime(TipoLista *Lista)
             Lista->Menor = i;
     }
     Lista->Media /= Lista->Ultimo - 1;
-    printf("\nMaior número: %d\n", Lista->Item[Lista->Maior].numero);
-    printf("Menor número: %d\n", Lista->Item[Lista->Menor].numero);
-    printf("Média dos números: %f\n", Lista->Media);
+    cout("\nMaior número: %d\n", Lista->Item[Lista->Maior].numero);
+    cout("Menor número: %d\n", Lista->Item[Lista->Menor].numero);
+    cout("Média dos números: %f\n", Lista->Media);
 }
 
 int main()
@@ -70,7 +70,7 @@ int main()
     FLVazia(&Lista);
     do
     {
-        printf("Insira o %dº número: ", Lista.Ultimo);
+        cout("Insira o %dº número: ", Lista.Ultimo);
         scanf("%d", &x);
         Insere(&x, &Lista);
     } while (Lista.Ultimo <= MaxTam);

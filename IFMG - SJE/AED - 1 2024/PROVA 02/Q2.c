@@ -37,7 +37,7 @@ void Insere(TipoFila *Fila, TipoItem x)
 {
     if (Fila->Fim % MaxTam + 1 == Fila->Inicio)
     {
-        printf("\nERRO: Fila esta cheia\n");
+        cout("\nERRO: Fila esta cheia\n");
     }
     else
     {
@@ -50,7 +50,7 @@ void DivideFila(TipoFila Fila, TipoFila *Fila1, TipoFila *Fila2)
 {
     if (Vazia(Fila))
     {
-        printf("\nERRO: Fila esta vazia\n");
+        cout("\nERRO: Fila esta vazia\n");
     }
     else
     {
@@ -73,14 +73,14 @@ void Imprime(TipoFila Fila)
 {
     if (Vazia(Fila))
     {
-        printf("\nERRO: Fila esta vazia\n");
+        cout("\nERRO: Fila esta vazia\n");
     }
     else
     {
-        printf("\n");
+        cout("\n");
         for (int i = Fila.Inicio - 1; i <= Fila.Fim - 2; i++)
         {
-            printf("%d   ", Fila.Item[i].valor);
+            cout("%d   ", Fila.Item[i].valor);
         }
     }
 }
@@ -93,25 +93,25 @@ int main()
     int opcao;
     do
     {
-        printf("\n\nMENU\n\n");
-        printf("0 - Sair\n");
-        printf("1 - Inserir valor na Fila\n");
-        printf("2 - Imprimir Fila Principal\n");
-        printf("3 - Imprimir Fila1\n");
-        printf("4 - Imprimir Fila2\n");
-        printf("5 - Dividir Fila Principal\n");
-        printf("Sua escolha: ");
+        cout("\n\nMENU\n\n");
+        cout("0 - Sair\n");
+        cout("1 - Inserir valor na Fila\n");
+        cout("2 - Imprimir Fila Principal\n");
+        cout("3 - Imprimir Fila1\n");
+        cout("4 - Imprimir Fila2\n");
+        cout("5 - Dividir Fila Principal\n");
+        cout("Sua escolha: ");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            printf("\nPROGRAMA ENCERRADO\n");
+            cout("\nPROGRAMA ENCERRADO\n");
             break;
         }
         case 1:
         {
-            printf("Digite o valor: ");
+            cout("Digite o valor: ");
             scanf("%d", &x.valor);
             Insere(&Fila, x);
             break;
@@ -138,7 +138,7 @@ int main()
         }
         default:
         {
-            printf("\nOPCAO INVALIDA\n");
+            cout("\nOPCAO INVALIDA\n");
             break;
         }
         }

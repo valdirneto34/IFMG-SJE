@@ -38,7 +38,7 @@ int Vazia(TipoLista Lista)
 void Insere(TipoItem x, TipoLista *Lista)
 {
     if (Lista->Ultimo > MaxTam)
-        printf("\nA Lista está cheia\n");
+        cout("\nA Lista está cheia\n");
     else
     {
         Lista->Item[Lista->Ultimo - 1] = x;
@@ -48,21 +48,21 @@ void Insere(TipoItem x, TipoLista *Lista)
 
 void Imprime(TipoLista Lista)
 {
-    printf("\n");
+    cout("\n");
     for (int i = Lista.Primeiro - 1; i <= Lista.Ultimo - 2; i++)
     {
-        printf("Cód: %d -- Idade: %d\n\n", Lista.Item[i].cod, Lista.Item[i].idade);
+        cout("Cód: %d -- Idade: %d\n\n", Lista.Item[i].cod, Lista.Item[i].idade);
     }
 }
 
 void Retira(Apontador pos, TipoLista *Lista, TipoItem *x)
 {
     if (Vazia(*Lista) || pos >= Lista->Ultimo)
-        printf("ERRO: Posição não existe\n");
+        cout("ERRO: Posição não existe\n");
     else
     {
         *x = Lista->Item[pos - 1];
-        printf("O elemento retirado foi o de código %d\n", x->cod);
+        cout("O elemento retirado foi o de código %d\n", x->cod);
         Lista->Ultimo--;
         for (int i = pos; i < Lista->Ultimo - 1; i++)
             Lista->Item[i - 1] = Lista->Item[i];
@@ -72,11 +72,11 @@ void Retira(Apontador pos, TipoLista *Lista, TipoItem *x)
 void RetiraPos(Apontador pos, TipoLista *Lista, TipoItem *x)
 {
     if (Vazia(*Lista) || pos >= Lista->Ultimo)
-        printf("ERRO: Posição não existe\n");
+        cout("ERRO: Posição não existe\n");
     else
     {
         *x = Lista->Item[pos];
-        printf("O elemento retirado foi o de código %d\n", x->cod);
+        cout("O elemento retirado foi o de código %d\n", x->cod);
         Lista->Ultimo--;
         for (int i = pos; i < Lista->Ultimo - 1; i++)
             Lista->Item[i] = Lista->Item[i + 1];
@@ -87,7 +87,7 @@ void Procura(TipoItem x, TipoLista Lista)
 {
     if (Vazia(Lista))
     {
-        printf("Lista está vazia\n");
+        cout("Lista está vazia\n");
         return;
     }
     int aux = 0;
@@ -95,16 +95,16 @@ void Procura(TipoItem x, TipoLista Lista)
         if (Lista.Item[i].cod == x.cod)
             aux = 1;
     if (aux == 1)
-        printf("Elemento encontrado\n");
+        cout("Elemento encontrado\n");
     else
-        printf("Elemento não encontrado\n");
+        cout("Elemento não encontrado\n");
 }
 
 void InserePrimeiraPosicao(TipoItem *x, TipoLista *Lista)
 {
     if (Lista->Ultimo > MaxTam)
     {
-        printf("\nA Lista está cheia\n");
+        cout("\nA Lista está cheia\n");
         return;
     }
     else
@@ -120,7 +120,7 @@ void InserePosEscUsu(TipoItem *x, TipoLista *Lista, Apontador pos)
 {
     if (Lista->Ultimo > MaxTam)
     {
-        printf("\nA Lista está cheia\n");
+        cout("\nA Lista está cheia\n");
         return;
     }
     else
@@ -139,46 +139,46 @@ int main()
     FLVazia(&Lista);
     do
     {
-        printf("\n\nMENU\n\n");
-        printf("Digite a opção desejada:\n");
-        printf("0 - Sair\n");
-        printf("1 - Esvaziar Lista\n");
-        printf("2 - Verificar se a lista está vazia\n");
-        printf("3 - Inserir elemento na lista\n");
-        printf("4 - Imprimir os elementos da lista\n");
-        printf("5 - Retirar elemento da lista antes da posição determinada\n");
-        printf("6 - Retirar elemento da lista\n");
-        printf("7 - Pesquisar elemento na lista\n");
-        printf("8 - Inserir na primeira posição\n");
-        printf("9 - Inserir um elemnto na posição determinada pelo usuário\n");
+        cout("\n\nMENU\n\n");
+        cout("Digite a opção desejada:\n");
+        cout("0 - Sair\n");
+        cout("1 - Esvaziar Lista\n");
+        cout("2 - Verificar se a lista está vazia\n");
+        cout("3 - Inserir elemento na lista\n");
+        cout("4 - Imprimir os elementos da lista\n");
+        cout("5 - Retirar elemento da lista antes da posição determinada\n");
+        cout("6 - Retirar elemento da lista\n");
+        cout("7 - Pesquisar elemento na lista\n");
+        cout("8 - Inserir na primeira posição\n");
+        cout("9 - Inserir um elemnto na posição determinada pelo usuário\n");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            printf("PROGRAMA ENCERRADO!\n");
+            cout("PROGRAMA ENCERRADO!\n");
             break;
         }
         case 1:
         {
             FLVazia(&Lista);
-            printf("\nLISTA VAZIA\n");
+            cout("\nLISTA VAZIA\n");
             break;
         }
         case 2:
         {
             resposta = Vazia(Lista);
             if (resposta == 1)
-                printf("\n Lista está vazia\n");
+                cout("\n Lista está vazia\n");
             else
-                printf("\n Lista não está vazia\n");
+                cout("\n Lista não está vazia\n");
             break;
         }
         case 3:
         {
-            printf("Digite o código\n");
+            cout("Digite o código\n");
             scanf("%d", &x.cod);
-            printf("Digite a idade\n");
+            cout("Digite a idade\n");
             scanf("%d", &x.idade);
             Insere(x, &Lista);
             break;
@@ -190,47 +190,47 @@ int main()
         }
         case 5:
         {
-            printf("Digite a posição\n");
+            cout("Digite a posição\n");
             scanf("%d", &pos);
             Retira(pos, &Lista, &x);
             break;
         }
         case 6:
         {
-            printf("Digite a posição\n");
+            cout("Digite a posição\n");
             scanf("%d", &pos);
             RetiraPos(pos, &Lista, &x);
             break;
         }
         case 7:
         {
-            printf("Digite o código do elemento\n");
+            cout("Digite o código do elemento\n");
             scanf("%d", &x.cod);
             Procura(x, Lista);
             break;
         }
         case 8:
         {
-            printf("Digite o código\n");
+            cout("Digite o código\n");
             scanf("%d", &x.cod);
-            printf("Digite a idade\n");
+            cout("Digite a idade\n");
             scanf("%d", &x.idade);
             InserePrimeiraPosicao(&x, &Lista);
             break;
         }
         case 9:
         {
-            printf("Digite o código\n");
+            cout("Digite o código\n");
             scanf("%d", &x.cod);
-            printf("Digite a idade\n");
+            cout("Digite a idade\n");
             scanf("%d", &x.idade);
-            printf("Digite a posição\n");
+            cout("Digite a posição\n");
             scanf("%d", &pos);
             InserePosEscUsu(&x, &Lista, pos);
             break;
         }
         default:
-            printf("\n\nOpção inválida\n\n");
+            cout("\n\nOpção inválida\n\n");
         }
         _getch();
         system("cls");

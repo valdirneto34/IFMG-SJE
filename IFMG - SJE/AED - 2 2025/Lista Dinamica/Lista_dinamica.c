@@ -51,14 +51,14 @@ void Insere(TipoItem x, TipoLista *Lista)
 void Imprime(TipoLista Lista)
 {
     if (Vazia(Lista))
-        printf("\nERRO: Lista esta vazia!\n");
+        cout("\nERRO: Lista esta vazia!\n");
     else
     {
         TipoApontador aux = Lista.Primeiro->Prox;
         while (aux != NULL)
         {
-            printf("Codigo: %d\n", aux->Item.cod);
-            printf("Idade: %d\n\n", aux->Item.idade);
+            cout("Codigo: %d\n", aux->Item.cod);
+            cout("Idade: %d\n\n", aux->Item.idade);
             aux = aux->Prox;
         }
     }
@@ -67,7 +67,7 @@ void Imprime(TipoLista Lista)
 void RetiraUltimo(TipoLista *Lista, TipoItem *x)
 {
     if (Vazia(*Lista))
-        printf("\nERRO: Lista esta vazia!\n");
+        cout("\nERRO: Lista esta vazia!\n");
     else
     {
         TipoApontador q, z;
@@ -75,7 +75,7 @@ void RetiraUltimo(TipoLista *Lista, TipoItem *x)
         if (q->Prox == NULL)
         {
             *x = q->Item;
-            printf("O elemento retirado foi o de codigo %d\n", x->cod);
+            cout("O elemento retirado foi o de codigo %d\n", x->cod);
             Lista->Ultimo = Lista->Primeiro;
             Lista->Primeiro->Prox = NULL;
         }
@@ -87,7 +87,7 @@ void RetiraUltimo(TipoLista *Lista, TipoItem *x)
                 q = q->Prox;
             }
             *x = q->Item;
-            printf("O elemento retirado foi o de codigo %d\n", x->cod);
+            cout("O elemento retirado foi o de codigo %d\n", x->cod);
             Lista->Ultimo = z;
             z->Prox = NULL;
         }
@@ -98,7 +98,7 @@ void RetiraUltimo(TipoLista *Lista, TipoItem *x)
 void RetiraElemento(TipoLista *Lista, TipoItem *x)
 {
     if (Vazia(*Lista))
-        printf("\nERRO: Lista esta vazia!\n");
+        cout("\nERRO: Lista esta vazia!\n");
     else
     {
         TipoApontador q, z;
@@ -106,7 +106,7 @@ void RetiraElemento(TipoLista *Lista, TipoItem *x)
         if (q->Prox == NULL)
         {
             *x = q->Item;
-            printf("O elemento retirado foi o de codigo %d\n", x->cod);
+            cout("O elemento retirado foi o de codigo %d\n", x->cod);
             Lista->Ultimo = Lista->Primeiro;
             Lista->Primeiro->Prox = NULL;
         }
@@ -125,9 +125,9 @@ void RetiraElemento(TipoLista *Lista, TipoItem *x)
                 }
             }
             if (retira)
-                printf("Elemento retirado com sucesso!\n");
+                cout("Elemento retirado com sucesso!\n");
             else
-                printf("Elemento não encontrado!\n");
+                cout("Elemento não encontrado!\n");
         }
         free(q);
     }
@@ -136,7 +136,7 @@ void RetiraElemento(TipoLista *Lista, TipoItem *x)
 void Procurar(TipoLista Lista, TipoItem *x)
 {
     if (Vazia(Lista))
-        printf("\nERRO: Lista está vazia!\n");
+        cout("\nERRO: Lista está vazia!\n");
     else
     {
         int encontrou = 0;
@@ -151,16 +151,16 @@ void Procurar(TipoLista Lista, TipoItem *x)
             aux = aux->Prox;
         }
         if (encontrou)
-            printf("Elemento encontrado!\n");
+            cout("Elemento encontrado!\n");
         else
-            printf("Elemento não encontrado!\n");
+            cout("Elemento não encontrado!\n");
     }
 }
 
 void ContarIdadesPares(TipoLista Lista)
 {
     if (Vazia(Lista))
-        printf("\nERRO: Lista está vazia!\n");
+        cout("\nERRO: Lista está vazia!\n");
     else
     {
         int cont = 0;
@@ -171,14 +171,14 @@ void ContarIdadesPares(TipoLista Lista)
                 cont++;
             aux = aux->Prox;
         }
-        printf("Existem %d pessoas com idades pares.\n", cont);
+        cout("Existem %d pessoas com idades pares.\n", cont);
     }
 }
 
 void ContarIdadesImpares(TipoLista Lista)
 {
     if (Vazia(Lista))
-        printf("\nERRO: Lista está vazia!\n");
+        cout("\nERRO: Lista está vazia!\n");
     else
     {
         int cont = 0;
@@ -189,7 +189,7 @@ void ContarIdadesImpares(TipoLista Lista)
                 cont++;
             aux = aux->Prox;
         }
-        printf("Existem %d pessoas com idades ímpares.\n", cont);
+        cout("Existem %d pessoas com idades ímpares.\n", cont);
     }
 }
 
@@ -201,18 +201,18 @@ int main()
 
     do
     {
-        printf("\n\nMenu\n\n");
-        printf("Digite a opção desejada:\n");
-        printf("0 - Sair\n");
-        printf("1 - Esvaziar a lista\n");
-        printf("2 - Verificar se a lista está vazia\n");
-        printf("3 - Inserir elemento na lista\n");
-        printf("4 - Imprimir os elemento da lista\n");
-        printf("5 - Retirar último elemento da lista\n");
-        printf("6 - Retirar elemento da lista pelo código\n");
-        printf("7 - Procurar elemento pelo código\n");
-        printf("8 - Contar idades pares na lista\n");
-        printf("9 - Contar idades ímpares na lista\n");
+        cout("\n\nMenu\n\n");
+        cout("Digite a opção desejada:\n");
+        cout("0 - Sair\n");
+        cout("1 - Esvaziar a lista\n");
+        cout("2 - Verificar se a lista está vazia\n");
+        cout("3 - Inserir elemento na lista\n");
+        cout("4 - Imprimir os elemento da lista\n");
+        cout("5 - Retirar último elemento da lista\n");
+        cout("6 - Retirar elemento da lista pelo código\n");
+        cout("7 - Procurar elemento pelo código\n");
+        cout("8 - Contar idades pares na lista\n");
+        cout("9 - Contar idades ímpares na lista\n");
 
         scanf("%d", &opcao);
 
@@ -220,13 +220,13 @@ int main()
         {
         case 0:
         {
-            printf("PROGRAMA ENCERRADO\n");
+            cout("PROGRAMA ENCERRADO\n");
             break;
         }
         case 1:
         {
             FLVazia(&Lista);
-            printf("\nA lista agora está vazia\n");
+            cout("\nA lista agora está vazia\n");
             break;
         }
         case 2:
@@ -234,19 +234,19 @@ int main()
             resposta = Vazia(Lista);
             if (resposta == 1)
             {
-                printf("A lista está vazia!!\n");
+                cout("A lista está vazia!!\n");
             }
             else
             {
-                printf("A lista não está vazia!!\n");
+                cout("A lista não está vazia!!\n");
             }
             break;
         }
         case 3:
         {
-            printf("Digite o codigo\n");
+            cout("Digite o codigo\n");
             scanf("%d", &x.cod);
-            printf("Digite a idade\n");
+            cout("Digite a idade\n");
             scanf("%d", &x.idade);
             Insere(x, &Lista);
             break;
@@ -263,14 +263,14 @@ int main()
         }
         case 6:
         {
-            printf("Digite o código do elemento\n");
+            cout("Digite o código do elemento\n");
             scanf("%d", &x.cod);
             RetiraElemento(&Lista, &x);
             break;
         }
         case 7:
         {
-            printf("Digite o código do elemento\n");
+            cout("Digite o código do elemento\n");
             scanf("%d", &x.cod);
             Procurar(Lista, &x);
             break;
@@ -287,7 +287,7 @@ int main()
         }
         default:
         {
-            printf("OPÇÃO INVALIDA!");
+            cout("OPÇÃO INVALIDA!");
             break;
         }
         }

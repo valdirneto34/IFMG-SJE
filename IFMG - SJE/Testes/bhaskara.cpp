@@ -93,20 +93,20 @@ void calculaBhaskara()
         cout << "X2 é igual a: " << x2 << "\n\n";
     }
     bhaskara.cortaEixoY = pow(bhaskara.a * 0, 2) + 0 * bhaskara.b + bhaskara.c;
-    printf("Intercepta o eixo Y no %.2f\n", bhaskara.cortaEixoY);
+    cout("Intercepta o eixo Y no %.2f\n", bhaskara.cortaEixoY);
     bhaskara.xVertice = -bhaskara.b / 2 * bhaskara.a;
     bhaskara.yVertice = -delta / 4 * bhaskara.a;
-    printf("X do vértice é: %.2f\n", bhaskara.xVertice);
-    printf("Y do vértice é: %.2f\n", bhaskara.yVertice);
+    cout("X do vértice é: %.2f\n", bhaskara.xVertice);
+    cout("Y do vértice é: %.2f\n", bhaskara.yVertice);
     if (bhaskara.a > 0)
     {
-        printf("Como a = %.2f > 0, ponto de mínimo.\n", bhaskara.a);
-        printf("Im = {Y e R | y >= %.2f}\n", bhaskara.yVertice);
+        cout("Como a = %.2f > 0, ponto de mínimo.\n", bhaskara.a);
+        cout("Im = {Y e R | y >= %.2f}\n", bhaskara.yVertice);
     }
     else
     {
-        printf("Como a = %.2f < 0, ponto de máximo.\n", bhaskara.a);
-        printf("Im = {Y e R | y <= %.2f}\n", bhaskara.yVertice);
+        cout("Como a = %.2f < 0, ponto de máximo.\n", bhaskara.a);
+        cout("Im = {Y e R | y <= %.2f}\n", bhaskara.yVertice);
     }
 }
 

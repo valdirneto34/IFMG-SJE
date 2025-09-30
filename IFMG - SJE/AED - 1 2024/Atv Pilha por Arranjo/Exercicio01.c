@@ -34,7 +34,7 @@ int Vazia(TipoPilha Pilha)
 void Empilhar(TipoPilha *Pilha, TipoItem *x)
 {
     if (Pilha->Topo >= MaxTam)
-        printf("ERRO: Pilha está cheia");
+        cout("ERRO: Pilha está cheia");
     else
     {
         Pilha->Item[Pilha->Topo] = *x;
@@ -45,11 +45,11 @@ void Empilhar(TipoPilha *Pilha, TipoItem *x)
 void Desempilhar(TipoPilha *Pilha, TipoItem *x)
 {
     if (Vazia(*Pilha))
-        printf("ERRO: Pilha está vazia");
+        cout("ERRO: Pilha está vazia");
     else
     {
         *x = Pilha->Item[Pilha->Topo - 1];
-        printf("O elemento retirado foi o de código %d\n", x->cod);
+        cout("O elemento retirado foi o de código %d\n", x->cod);
         Pilha->Topo--;
     }
 }
@@ -57,13 +57,13 @@ void Desempilhar(TipoPilha *Pilha, TipoItem *x)
 void ImprimeFundoTopo(TipoPilha Pilha)
 {
     if (Vazia(Pilha))
-        printf("ERRO: Pilha está vazia");
+        cout("ERRO: Pilha está vazia");
     else
     {
-        printf("\n");
+        cout("\n");
         for (int i = 0; i < Pilha.Topo; i++)
         {
-            printf("Cód: %d - Idade: %d\n\n", Pilha.Item[i].cod, Pilha.Item[i].idade);
+            cout("Cód: %d - Idade: %d\n\n", Pilha.Item[i].cod, Pilha.Item[i].idade);
         }
     }
 }
@@ -71,13 +71,13 @@ void ImprimeFundoTopo(TipoPilha Pilha)
 void ImprimeTopoFundo(TipoPilha Pilha)
 {
     if (Vazia(Pilha))
-        printf("ERRO: Pilha está vazia");
+        cout("ERRO: Pilha está vazia");
     else
     {
-        printf("\n");
+        cout("\n");
         for (int i = Pilha.Topo - 1; i >= 0; i--)
         {
-            printf("Cód: %d - Idade: %d\n\n", Pilha.Item[i].cod, Pilha.Item[i].idade);
+            cout("Cód: %d - Idade: %d\n\n", Pilha.Item[i].cod, Pilha.Item[i].idade);
         }
     }
 }
@@ -90,18 +90,18 @@ int Tamanho(TipoPilha *Pilha)
 void Procura(TipoPilha *Pilha, TipoItem *x)
 {
     if (Vazia(*Pilha))
-        printf("ERRO: Pilha está vazia");
+        cout("ERRO: Pilha está vazia");
     else
     {
         for (int i = Pilha->Topo - 1; i >= 0; i--)
         {
             if (Pilha->Item[i].cod == x->cod)
             {
-                printf("\nElemento encontrado!\n");
+                cout("\nElemento encontrado!\n");
                 return;
             }
         }
-        printf("Elemento não encontrado!\n");
+        cout("Elemento não encontrado!\n");
     }
 }
 
@@ -109,7 +109,7 @@ void Divide(TipoPilha *Pilha1, TipoPilha *Pilha2, TipoPilha *Pilha3)
 {
     int aux = Pilha1->Topo / 2;
     if (Vazia(*Pilha1))
-        printf("ERRO: Pilha está vazia");
+        cout("ERRO: Pilha está vazia");
     else
     {
         for (int i = Pilha1->Topo - 1; i >= aux; i--)
@@ -124,9 +124,9 @@ void Divide(TipoPilha *Pilha1, TipoPilha *Pilha2, TipoPilha *Pilha3)
             Pilha3->Topo++;
             Pilha1->Topo--;
         }
-        printf("\nPilha 2:\n");
+        cout("\nPilha 2:\n");
         ImprimeTopoFundo(*Pilha2);
-        printf("Pilha 3:\n");
+        cout("Pilha 3:\n");
         ImprimeTopoFundo(*Pilha3);
     }
 }
@@ -134,7 +134,7 @@ void Divide(TipoPilha *Pilha1, TipoPilha *Pilha2, TipoPilha *Pilha3)
 void CalculaIdade(TipoPilha *Pilha)
 {
     if (Vazia(*Pilha))
-        printf("ERRO: Pilha está vazia");
+        cout("ERRO: Pilha está vazia");
     else
     {
         float media;
@@ -148,9 +148,9 @@ void CalculaIdade(TipoPilha *Pilha)
                 maior = Pilha->Item[i].idade;
         }
         media /= Pilha->Topo;
-        printf("A maior idade é %d\n", maior);
-        printf("A menor idade é %d\n", menor);
-        printf("A média das idades é %.2f\n", media);
+        cout("A maior idade é %d\n", maior);
+        cout("A menor idade é %d\n", menor);
+        cout("A média das idades é %.2f\n", media);
     }
 }
 
@@ -163,26 +163,26 @@ int main()
     FPVazia(&Pilha3);
     do
     {
-        printf("\n\nMENU\n\n");
-        printf("Digite a opção desejada:\n");
-        printf("0 - Sair\n");
-        printf("1 - Esvaziar Pilha\n");
-        printf("2 - Verificar se a pilha está vazia\n");
-        printf("3 - Inserir elemento na pilha\n");
-        printf("4 - Retirar elemento da pilha\n");
-        printf("5 - Imprimir os elementos da pilha no sentido Fundo_Topo\n");
-        printf("6 - Imprimir os elementos da pilha no sentido Topo_Fundo\n");
-        printf("7 - Verificar tamanho da pilha\n");
-        printf("8 - Procurar elemento pelo código\n");
-        printf("9 - Partir a pilha em duas pilhas\n");
-        printf("10 - Calcular a média, a menor e a maior das idades\n");
+        cout("\n\nMENU\n\n");
+        cout("Digite a opção desejada:\n");
+        cout("0 - Sair\n");
+        cout("1 - Esvaziar Pilha\n");
+        cout("2 - Verificar se a pilha está vazia\n");
+        cout("3 - Inserir elemento na pilha\n");
+        cout("4 - Retirar elemento da pilha\n");
+        cout("5 - Imprimir os elementos da pilha no sentido Fundo_Topo\n");
+        cout("6 - Imprimir os elementos da pilha no sentido Topo_Fundo\n");
+        cout("7 - Verificar tamanho da pilha\n");
+        cout("8 - Procurar elemento pelo código\n");
+        cout("9 - Partir a pilha em duas pilhas\n");
+        cout("10 - Calcular a média, a menor e a maior das idades\n");
 
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            printf("PROGRAMA ENCERRADO!\n");
+            cout("PROGRAMA ENCERRADO!\n");
             break;
         }
         case 1:
@@ -194,16 +194,16 @@ int main()
         {
             resposta = Vazia(Pilha);
             if (resposta == 1)
-                printf("Pilha está vazia");
+                cout("Pilha está vazia");
             else
-                printf("Pilha não está vazia");
+                cout("Pilha não está vazia");
             break;
         }
         case 3:
         {
-            printf("Digite o código: ");
+            cout("Digite o código: ");
             scanf("%d", &x.cod);
-            printf("Digite a idade: ");
+            cout("Digite a idade: ");
             scanf("%d", &x.idade);
             Empilhar(&Pilha, &x);
             break;
@@ -225,12 +225,12 @@ int main()
         }
         case 7:
         {
-            printf("O tamanho da pilha é %d", Tamanho(&Pilha));
+            cout("O tamanho da pilha é %d", Tamanho(&Pilha));
             break;
         }
         case 8:
         {
-            printf("Insira o código: ");
+            cout("Insira o código: ");
             scanf("%d", &x.cod);
             Procura(&Pilha, &x);
             break;
@@ -246,7 +246,7 @@ int main()
             break;
         }
         default:
-            printf("\n\nOpção inválida\n\n");
+            cout("\n\nOpção inválida\n\n");
         }
         _getch();
         system("cls");

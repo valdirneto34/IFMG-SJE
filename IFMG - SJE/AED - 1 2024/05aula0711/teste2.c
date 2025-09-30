@@ -11,8 +11,8 @@ int main()
     p = &x3;
     *p = 0;
 
-    printf("cont: %d  %d  %d  %d\n\n", x1, x2, x3, *p);
-    printf("cont: %d  %d  %d  %d\n\n", &x1, &x2, &x3, p);
+    cout("cont: %d  %d  %d  %d\n\n", x1, x2, x3, *p);
+    cout("cont: %d  %d  %d  %d\n\n", &x1, &x2, &x3, p);
 
     return 0;
 }

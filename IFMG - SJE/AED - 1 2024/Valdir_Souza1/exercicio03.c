@@ -40,9 +40,9 @@ int main()
         }
     }
     multplidiagonais = diagonalprin * diagonalsecun;
-    printf("Diagonal Principal: %d\n", diagonalprin);
-    printf("Diagonal Secundária: %d\n", diagonalsecun);
-    printf("Multiplicação: %d\n", multplidiagonais);
+    cout("Diagonal Principal: %d\n", diagonalprin);
+    cout("Diagonal Secundária: %d\n", diagonalsecun);
+    cout("Multiplicação: %d\n", multplidiagonais);
 
     return 0;
 }

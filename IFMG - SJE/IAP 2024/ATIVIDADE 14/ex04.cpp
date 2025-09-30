@@ -22,7 +22,7 @@ int main()
             m1[i] = new int[nC1];
             for (int j = 0; j < nC1; j++)
             {
-                printf("Valor da linha %d e coluna %d: ", i + 1, j + 1);
+                cout("Valor da linha %d e coluna %d: ", i + 1, j + 1);
                 cin >> m1[i][j];
             }
         }
@@ -33,7 +33,7 @@ int main()
             m2[i] = new int[nC2];
             for (int j = 0; j < nC2; j++)
             {
-                printf("Valor da linha %d e coluna %d: ", i + 1, j + 1);
+                cout("Valor da linha %d e coluna %d: ", i + 1, j + 1);
                 cin >> m2[i][j];
             }
         }

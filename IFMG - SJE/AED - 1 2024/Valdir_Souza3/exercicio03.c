@@ -5,7 +5,7 @@ int main()
 {
     int *k, aux;
     k = malloc(sizeof(int) * 6);
-    printf("ENTRADA:\n");
+    cout("ENTRADA:\n");
     for (int i = 0; i < 6; i++)
     {
         scanf("%d", &k[i]);
@@ -16,10 +16,10 @@ int main()
         k[i] = k[i + 1];
         k[i + 1] = aux;
     }
-    printf("\nSAIDA:\n");
+    cout("\nSAIDA:\n");
     for (int i = 0; i < 6; i++)
     {
-        printf("%d\n", k[i]);
+        cout("%d\n", k[i]);
     }
     free(k);
 

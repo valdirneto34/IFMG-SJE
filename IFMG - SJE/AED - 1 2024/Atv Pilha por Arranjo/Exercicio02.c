@@ -29,9 +29,9 @@ void Empilhar(TipoPilha *Pilha, TipoItem *x)
     if (Pilha->Topo >= MaxTam)
     {
         if (Pilha->Item[Pilha->Topo - 1].valor % 2 == 0)
-            printf("\nERRO: Pilha dos Pares está cheia\n");
+            cout("\nERRO: Pilha dos Pares está cheia\n");
         else
-            printf("\nERRO: Pilha dos Ímpares está cheia\n");
+            cout("\nERRO: Pilha dos Ímpares está cheia\n");
     }
     else
     {
@@ -44,7 +44,7 @@ void ImprimeTopoFundo(TipoPilha Pilha)
 {
     for (int i = Pilha.Topo - 1; i >= 0; i--)
     {
-        printf("%d   ", Pilha.Item[i].valor);
+        cout("%d   ", Pilha.Item[i].valor);
     }
 }
 
@@ -56,7 +56,7 @@ int main()
     FPVazia(&Pilha_Impares);
     for (int i = 0; i < 12; i++)
     {
-        printf("\nDigite um número: ");
+        cout("\nDigite um número: ");
         scanf("%d", &x.valor);
         if (x.valor % 2 == 0)
         {
@@ -66,14 +66,14 @@ int main()
         {
             Empilhar(&Pilha_Impares, &x);
         }
-        printf("\nMais um número? [S/N]: ");
+        cout("\nMais um número? [S/N]: ");
         scanf("%s", &resp);
         if (resp == 'N' || resp == 'n' || (Pilha_Pares.Topo >= MaxTam && Pilha_Impares.Topo >= MaxTam))
             break;
     }
-    printf("\n\nPilha dos Pares:\n");
+    cout("\n\nPilha dos Pares:\n");
     ImprimeTopoFundo(Pilha_Pares);
-    printf("\n\nPilha dos Impares:\n");
+    cout("\n\nPilha dos Impares:\n");
     ImprimeTopoFundo(Pilha_Impares);
 
     return 0;

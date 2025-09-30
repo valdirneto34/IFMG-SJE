@@ -14,38 +14,38 @@ int main()
     int resp, cont = 0;
     for (int i = 0; i < 3; i++)
     {
-        printf("\n\n1 - POP\n");
-        printf("2 - FUNK\n");
-        printf("3 - ROCK\n");
-        printf("Digite o tipo de musica: ");
+        cout("\n\n1 - POP\n");
+        cout("2 - FUNK\n");
+        cout("3 - ROCK\n");
+        cout("Digite o tipo de musica: ");
         scanf("%d", &bandas[i].tipoMusica);
-        printf("Digite o numero de integrantes: ");
+        cout("Digite o numero de integrantes: ");
         scanf("%d", &bandas[i].numeroIntegrantes);
-        printf("Digite o ranking da banda: ");
+        cout("Digite o ranking da banda: ");
         scanf("%d", &bandas[i].ranking);
     }
-    printf("\nInsira um numero de 1 a 3: ");
+    cout("\nInsira um numero de 1 a 3: ");
     scanf("%d", &resp);
 
     for (int i = 0; i < 3; i++)
     {
         if (bandas[i].ranking == resp)
         {
-            printf("Banda de ");
+            cout("Banda de ");
             if (bandas[i].tipoMusica == 1)
-                printf("POP");
+                cout("POP");
             else if (bandas[i].tipoMusica == 2)
-                printf("FUNK");
+                cout("FUNK");
             else if (bandas[i].tipoMusica == 3)
-                printf("ROCK");
-            printf(" esta em %d lugar.\n", bandas[i].ranking);
+                cout("ROCK");
+            cout(" esta em %d lugar.\n", bandas[i].ranking);
             cont = 1;
             break;
         }
     }
     if (cont == 0)
     {
-        printf("\nERRO: O ranking so contem as 3 primeiras colocacoes.\n");
+        cout("\nERRO: O ranking so contem as 3 primeiras colocacoes.\n");
     }
     system("pause");
     return 0;
