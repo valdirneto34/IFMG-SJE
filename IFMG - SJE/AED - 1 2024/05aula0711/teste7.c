@@ -10,10 +10,10 @@ int main()
     *pv = v + 1;
     pu = &u;
     
-    cout("%d\n", *pv);
-    cout("%d\n", *pu);
-    cout("%d\n", u);
-    cout("%d\n", pu);
+    printf("%d\n", *pv);
+    printf("%d\n", *pu);
+    printf("%d\n", u);
+    printf("%d\n", pu);
 
     return 0;
 }

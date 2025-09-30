@@ -37,7 +37,7 @@ int Vazia(TipoFila Fila)
 void Enfileira(TipoItem x, TipoFila *Fila)
 {
     if (Fila->Tras % MaxTam + 1 == Fila->Frente)
-        cout("\nA Fila está cheia\n");
+        printf("\nA Fila está cheia\n");
     else
     {
         Fila->Item[Fila->Tras - 1] = x;
@@ -66,17 +66,17 @@ int main()
     FFVazia(&Fila);
     for (int i = 1; i <= 5; i++)
     {
-        cout("Digite a temperatura do %dº mês:\n", i);
+        printf("Digite a temperatura do %dº mês:\n", i);
         scanf("%d", &x.temp);
         Enfileira(x, &Fila);
     }
     media = CalculaMedia(&Fila);
-    cout("\n\n   Meses acima da média:\n\n");
+    printf("\n\n   Meses acima da média:\n\n");
     for (int i = Fila.Frente - 1; i <= Fila.Tras - 2; i++)
     {
         cont++;
         if (Fila.Item[i].temp > media)
-            cout("Mês %d: %d\n\n", cont, Fila.Item[i].temp);
+            printf("Mês %d: %d\n\n", cont, Fila.Item[i].temp);
     }
 
     return 0;

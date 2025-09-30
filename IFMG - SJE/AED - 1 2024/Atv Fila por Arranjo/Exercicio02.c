@@ -38,7 +38,7 @@ int Vazia(TipoFila Fila)
 void Enfileira(TipoItem x, TipoFila *Fila)
 {
     if (Fila->Tras % MaxTam + 1 == Fila->Frente)
-        cout("\nA Fila está cheia\n");
+        printf("\nA Fila está cheia\n");
     else
     {
         Fila->Item[Fila->Tras - 1] = x;
@@ -50,13 +50,13 @@ void Enfileira(TipoItem x, TipoFila *Fila)
 void Imprime(TipoFila Fila)
 {
     if (Vazia(Fila))
-        cout("\nERRO: A Fila está vazia");
+        printf("\nERRO: A Fila está vazia");
     else
     {
-        cout("\n");
+        printf("\n");
         for (int i = Fila.Frente - 1; i <= Fila.Tras - 2; i++)
         {
-            cout("Código: %d\n\n", Fila.Item[i].cod);
+            printf("Código: %d\n\n", Fila.Item[i].cod);
         }
     }
 }
@@ -66,7 +66,7 @@ void DividiFilas(TipoFila *Fila1, TipoFila *Fila2, int *resposta)
     int segundaMetade = (Fila1->Tras - 2) / 2;
     if (Vazia(*Fila1))
     {
-        cout("ERRO: A Fila 1 está Vazia");
+        printf("ERRO: A Fila 1 está Vazia");
         return;
     }
     else
@@ -89,24 +89,24 @@ int main()
     FFVazia(&Fila2);
     do
     {
-        cout("\n\nMENU\n\n");
-        cout("Digite a opção desejada:\n");
-        cout("0 - Sair\n");
-        cout("1 - Enfileirar na Fila 1\n");
-        cout("2 - Dividir a Fila 1\n");
-        cout("3 - Imprimir a Fila 1\n");
-        cout("4 - Imprimir a Fila 2\n");
+        printf("\n\nMENU\n\n");
+        printf("Digite a opção desejada:\n");
+        printf("0 - Sair\n");
+        printf("1 - Enfileirar na Fila 1\n");
+        printf("2 - Dividir a Fila 1\n");
+        printf("3 - Imprimir a Fila 1\n");
+        printf("4 - Imprimir a Fila 2\n");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            cout("PROGRAMA ENCERRADO!\n");
+            printf("PROGRAMA ENCERRADO!\n");
             break;
         }
         case 1:
         {
-            cout("Digite o código:\n");
+            printf("Digite o código:\n");
             scanf("%d", &x.cod);
             Enfileira(x, &Fila1);
             break;
@@ -116,7 +116,7 @@ int main()
             if (resposta == 0)
                 DividiFilas(&Fila1, &Fila2, &resposta);
             else
-                cout("\nERRO: As filas já foram divididas!\n");
+                printf("\nERRO: As filas já foram divididas!\n");
             break;
         }
         case 3:
@@ -130,7 +130,7 @@ int main()
             break;
         }
         default:
-            cout("\n\nOpção Inválida!\n\n");
+            printf("\n\nOpção Inválida!\n\n");
         }
         _getch();
         system("cls");

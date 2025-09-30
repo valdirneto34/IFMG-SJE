@@ -8,7 +8,7 @@ int main()
     pB = &b;
     pS = &s;
     *pS = *pA + *pB;
-    cout("O ponteiro pS vale: %d\n", *pS);
+    printf("O ponteiro pS vale: %d\n", *pS);
 
     return 0;
 }

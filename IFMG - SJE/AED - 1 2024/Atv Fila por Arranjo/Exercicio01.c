@@ -38,7 +38,7 @@ int Vazia(TipoFila Fila)
 void Enfileira(TipoItem x, TipoFila *Fila)
 {
     if (Fila->Tras % MaxTam + 1 == Fila->Frente)
-        cout("\nA Fila está cheia\n");
+        printf("\nA Fila está cheia\n");
     else
     {
         Fila->Item[Fila->Tras - 1] = x;
@@ -72,30 +72,30 @@ int main()
     FFVazia(&Fila2);
     do
     {
-        cout("\n\nMENU\n\n");
-        cout("Digite a opção desejada:\n");
-        cout("0 - Sair\n");
-        cout("1 - Enfileirar na Fila 1\n");
-        cout("2 - Enfileirar na Fila 2\n");
-        cout("3 - Verificar se as duas filas são iguais\n");
+        printf("\n\nMENU\n\n");
+        printf("Digite a opção desejada:\n");
+        printf("0 - Sair\n");
+        printf("1 - Enfileirar na Fila 1\n");
+        printf("2 - Enfileirar na Fila 2\n");
+        printf("3 - Verificar se as duas filas são iguais\n");
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            cout("PROGRAMA ENCERRADO!\n");
+            printf("PROGRAMA ENCERRADO!\n");
             break;
         }
         case 1:
         {
-            cout("Digite o código:\n");
+            printf("Digite o código:\n");
             scanf("%d", &x.cod);
             Enfileira(x, &Fila1);
             break;
         }
         case 2:
         {
-            cout("Digite o código:\n");
+            printf("Digite o código:\n");
             scanf("%d", &x.cod);
             Enfileira(x, &Fila2);
             break;
@@ -104,15 +104,15 @@ int main()
         {
             FilasIguais(&Fila1, &Fila2, &resposta);
             if (resposta == 0)
-                cout("\nAs duas filas são iguais!\n");
+                printf("\nAs duas filas são iguais!\n");
             else if (resposta == 1)
-                cout("\nAs duas filas não são iguais!\n");
+                printf("\nAs duas filas não são iguais!\n");
             else if (resposta == 2)
-                cout("ERRO: Uma das filas está Vazia");
+                printf("ERRO: Uma das filas está Vazia");
             break;
         }
         default:
-            cout("\n\nOpção Inválida!\n\n");
+            printf("\n\nOpção Inválida!\n\n");
         }
         _getch();
         system("cls");

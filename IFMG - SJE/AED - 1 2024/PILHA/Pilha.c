@@ -32,7 +32,7 @@ int Vazia(TipoPilha Pilha)
 void Empilhar(TipoPilha *Pilha, TipoItem *x)
 {
     if (Pilha->Topo >= MaxTam)
-        cout("ERRO: Pilha está cheia");
+        printf("ERRO: Pilha está cheia");
     else
     {
         Pilha->Item[Pilha->Topo] = *x;
@@ -43,11 +43,11 @@ void Empilhar(TipoPilha *Pilha, TipoItem *x)
 void Desempilhar(TipoPilha *Pilha, TipoItem *x)
 {
     if (Vazia(*Pilha))
-        cout("ERRO: Pilha está vazia");
+        printf("ERRO: Pilha está vazia");
     else
     {
         *x = Pilha->Item[Pilha->Topo - 1];
-        cout("O elemento retirado foi o de código %d\n", x->cod);
+        printf("O elemento retirado foi o de código %d\n", x->cod);
         Pilha->Topo--;
     }
 }
@@ -55,13 +55,13 @@ void Desempilhar(TipoPilha *Pilha, TipoItem *x)
 void ImprimeFundoTopo(TipoPilha *Pilha)
 {
     if (Vazia(*Pilha))
-        cout("ERRO: Pilha está vazia");
+        printf("ERRO: Pilha está vazia");
     else
     {
-        cout("\n");
+        printf("\n");
         for (int i = 0; i < Pilha->Topo; i++)
         {
-            cout("Cód: %d - Idade: %d\n\n", Pilha->Item[i].cod, Pilha->Item[i].idade);
+            printf("Cód: %d - Idade: %d\n\n", Pilha->Item[i].cod, Pilha->Item[i].idade);
         }
     }
 }
@@ -69,13 +69,13 @@ void ImprimeFundoTopo(TipoPilha *Pilha)
 void ImprimeTopoFundo(TipoPilha *Pilha)
 {
     if (Vazia(*Pilha))
-        cout("ERRO: Pilha está vazia");
+        printf("ERRO: Pilha está vazia");
     else
     {
-        cout("\n");
+        printf("\n");
         for (int i = Pilha->Topo - 1; i >= 0; i--)
         {
-            cout("Cód: %d - Idade: %d\n\n", Pilha->Item[i].cod, Pilha->Item[i].idade);
+            printf("Cód: %d - Idade: %d\n\n", Pilha->Item[i].cod, Pilha->Item[i].idade);
         }
     }
 }
@@ -92,23 +92,23 @@ int main()
     FPVazia(&Pilha);
     do
     {
-        cout("\n\nMENU\n\n");
-        cout("Digite a opção desejada:\n");
-        cout("0 - Sair\n");
-        cout("1 - Esvaziar Pilha\n");
-        cout("2 - Verificar se a pilha está vazia\n");
-        cout("3 - Inserir elemento na pilha\n");
-        cout("4 - Retirar elemento da pilha\n");
-        cout("5 - Imprimir os elementos da pilha no sentido Fundo_Topo\n");
-        cout("6 - Imprimir os elementos da pilha no sentido Topo_Fundo\n");
-        cout("7 - Verificar tamanho da pilha\n");
+        printf("\n\nMENU\n\n");
+        printf("Digite a opção desejada:\n");
+        printf("0 - Sair\n");
+        printf("1 - Esvaziar Pilha\n");
+        printf("2 - Verificar se a pilha está vazia\n");
+        printf("3 - Inserir elemento na pilha\n");
+        printf("4 - Retirar elemento da pilha\n");
+        printf("5 - Imprimir os elementos da pilha no sentido Fundo_Topo\n");
+        printf("6 - Imprimir os elementos da pilha no sentido Topo_Fundo\n");
+        printf("7 - Verificar tamanho da pilha\n");
 
         scanf("%d", &opcao);
         switch (opcao)
         {
         case 0:
         {
-            cout("PROGRAMA ENCERRADO!\n");
+            printf("PROGRAMA ENCERRADO!\n");
             break;
         }
         case 1:
@@ -120,16 +120,16 @@ int main()
         {
             resposta = Vazia(Pilha);
             if (resposta == 1)
-                cout("Pilha está vazia");
+                printf("Pilha está vazia");
             else
-                cout("Pilha não está vazia");
+                printf("Pilha não está vazia");
             break;
         }
         case 3:
         {
-            cout("Digite o código: ");
+            printf("Digite o código: ");
             scanf("%d", &x.cod);
-            cout("Digite a idade: ");
+            printf("Digite a idade: ");
             scanf("%d", &x.idade);
             Empilhar(&Pilha, &x);
             break;
@@ -151,11 +151,11 @@ int main()
         }
         case 7:
         {
-            cout("O tamanho da pilha é %d", Tamanho(&Pilha));
+            printf("O tamanho da pilha é %d", Tamanho(&Pilha));
             break;
         }
         default:
-            cout("\n\nOpção inválida\n\n");
+            printf("\n\nOpção inválida\n\n");
         }
         _getch();
         system("cls");

@@ -9,9 +9,9 @@ int main()
     pont = &x;
     *pont = y;
 
-    cout("%d\n", x);
-    cout("%d\n", y);
-    cout("%d  %d  %d\n", x, y, *pont);
+    printf("%d\n", x);
+    printf("%d\n", y);
+    printf("%d  %d  %d\n", x, y, *pont);
 
     return 0;
 }
