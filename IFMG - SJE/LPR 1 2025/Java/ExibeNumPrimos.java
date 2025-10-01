@@ -1,17 +1,23 @@
 public class ExibeNumPrimos {
     public static void main(String[] args) {
-        int cont = 0;
+        int contador = 0;
+        int numero = 2;
         System.out.println("Aqui estão os 100 primeiros números primos:");
-        for (int i = 1; i <= 100; i++) {
-            cont = 0;
-            for (int j = 1; j <= i; j++) {
-                if (i % j == 0) {
-                    cont++;
+
+        while (contador < 100) {
+            boolean primo = true;
+
+            for (int i = 2; i <= Math.sqrt(numero); i++) {
+                if (numero % i == 0) {
+                    primo = false;
+                    break;
                 }
             }
-            if (cont == 2) {
-                System.out.print(i + " - ");
+            if (primo) {
+                System.out.print(numero + " ");
+                contador++;
             }
+            numero++;
         }
     }
 }
