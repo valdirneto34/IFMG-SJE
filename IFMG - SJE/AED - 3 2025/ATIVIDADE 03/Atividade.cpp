@@ -15,25 +15,29 @@ using namespace std;
 struct Pessoa
 {
     string nome;
-    float altura_str;
-    int idade_str;
+    float altura;
+    int idade;
 };
 
 Pessoa cadastraPessoa()
 {
     Pessoa p;
+    string altura_str;
     char opc;
     while (true)
     {
         cout << "\nDigite o nome da pessoa: ";
         getline(cin, p.nome);
         cout << "Digite a altura da pessoa em metros: ";
-        cin >> p.altura_str;
+        cin >> altura_str;
         cout << "Digite a idade da pessoa: ";
-        cin >> p.idade_str;
+        cin >> p.idade;
+
+        replace(altura_str.begin(), altura_str.end(), ',', '.');
+        p.altura = stof(altura_str);
         cout << "\nNome: " << p.nome << endl;
-        cout << "Altura: " << p.altura_str << " metros" << endl;
-        cout << "Idade: " << p.idade_str << " anos\n\n";
+        cout << "Altura: " << p.altura << " metros" << endl;
+        cout << "Idade: " << p.idade << " anos\n\n";
 
         while (true)
         {
@@ -41,11 +45,12 @@ Pessoa cadastraPessoa()
             cin >> opc;
             if (opc != 'S' && opc != 's' && opc != 'N' && opc != 'n')
             {
-                cout << "\nOpção inválida! ";
+                cout << "\nOpção inválida!";
                 continue;
             }
             else if (opc == 'S' || opc == 's')
             {
+                cout << "\nPessoa cadastrada com sucesso!";
                 return p;
             }
             else
@@ -94,8 +99,8 @@ int main()
             }
 
             arq << pessoa.nome << endl;
-            arq << pessoa.altura_str << endl;
-            arq << pessoa.idade_str << endl;
+            arq << pessoa.altura << endl;
+            arq << pessoa.idade << endl;
 
             arq.close();
             break;
@@ -128,7 +133,7 @@ int main()
             break;
         }
         }
-        
+
         system("pause");
         system("cls");
 

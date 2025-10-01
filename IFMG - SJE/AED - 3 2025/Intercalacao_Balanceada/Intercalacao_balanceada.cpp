@@ -2,34 +2,28 @@
 #include <string>
 #include <algorithm>
 #include <vector>
+#include <fstream>
 
 using namespace std;
 
 int main()
 {
     int qtd_fitas, qtd_memoria, aux = 0;
-    char entrada_dado;
     string dado = "";
-
-    cout << "Digite a quantidade de memoria disponivel:\n";
-    cin >> qtd_memoria;
-    cout << "Digite a quantidade de fitas disponiveis:\n";
-    cin >> qtd_fitas;
-    while (qtd_fitas % 2 != 0)
+    fstream arq("arquivo.txt", ios::in);
+    if (!arq.is_open())
     {
-        cout << "A quantidade de fitas deve ser par. Digite novamente:\n";
-        cin >> qtd_fitas;
+        cout << "Erro ao abrir o arquivo!" << endl;
+        return 1;
     }
-    cout << "Digite uma palavra para ser ordenada:\n";
-    cin.ignore();
-
+    arq >> qtd_memoria;
+    arq.ignore();
+    arq >> qtd_fitas;
+    arq.ignore();
+    getline(arq, dado);
+    arq.close();
+    
     vector<vector<string>> fitas(qtd_fitas);
-
-    while (cin.get(entrada_dado) && entrada_dado != '\n')
-    {
-        dado += entrada_dado;
-    }
-
     cout << "O tamanho da palavra e " << dado.length() << "." << endl;
 
     // --- Fase de Distribuição Inicial (sem alterações) ---
@@ -211,7 +205,8 @@ int main()
             }
         }
     }
-    cout << endl << endl;
+    cout << endl
+         << endl;
 
     return 0;
 }
