@@ -43,12 +43,13 @@ Pessoa cadastraPessoa()
         {
             cout << "Deseja cadastrar essa pessoa? [S/N]:  ";
             cin >> opc;
-            if (opc != 'S' && opc != 's' && opc != 'N' && opc != 'n')
+            opc = toupper(opc);
+            if (opc != 'S' && opc != 'N')
             {
                 cout << "\nOpção inválida!";
                 continue;
             }
-            else if (opc == 'S' || opc == 's')
+            else if (opc == 'S')
             {
                 cout << "\nPessoa cadastrada com sucesso!";
                 return p;
