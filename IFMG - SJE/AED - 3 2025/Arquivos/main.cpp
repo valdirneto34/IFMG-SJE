@@ -22,6 +22,7 @@ int main() {
     //arq.flush();
     arq.close();
     */
+   
     /*
     ifstream arq;
     arq.open("arquivo.txt", ios::app);

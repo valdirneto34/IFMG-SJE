@@ -43,5 +43,11 @@
 		{
 			"path": "../LPR 1 2025"
 		}
-	]
+	],
+	"settings": {
+		"files.associations": {
+			"*.embeddedhtml": "html",
+			"iostream": "cpp"
+		}
+	}
 }
