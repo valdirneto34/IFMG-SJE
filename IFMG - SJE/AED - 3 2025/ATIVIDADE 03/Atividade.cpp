@@ -60,6 +60,7 @@ Pessoa cadastraPessoa()
 int main()
 {
     SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(CP_UTF8);
     Pessoa pessoa;
     string nome, altura_str, idade_str;
     int opcao;
