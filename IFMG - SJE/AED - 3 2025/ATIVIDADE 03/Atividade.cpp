@@ -124,10 +124,11 @@ int main()
         }
         default:
         {
-
+            cout << "\nOPÇÃO INVÁLIDA!!" << endl;
             break;
         }
         }
+        
         system("pause");
         system("cls");
 
