@@ -47,7 +47,8 @@
 	"settings": {
 		"files.associations": {
 			"*.embeddedhtml": "html",
-			"iostream": "cpp"
+			"iostream": "cpp",
+			"iomanip": "cpp"
 		}
 	}
 }

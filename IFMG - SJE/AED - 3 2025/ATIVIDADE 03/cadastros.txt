@@ -1,5 +1,5 @@
 Valdir de Souza Carvalho Neto
-1.8
+1.80
 21
 Juliana Gabriel Lopes
 1.65
@@ -10,3 +10,6 @@ Sebastião de Souza Carvalho
 Patricia da Silva Costa
 1.72
 20
+Emilio Pereira Souza
+1.68
+65
