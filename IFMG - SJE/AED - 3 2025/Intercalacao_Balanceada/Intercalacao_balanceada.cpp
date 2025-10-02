@@ -1,123 +1,185 @@
 #include <iostream>
 #include <string>
-#include <algorithm>
 #include <vector>
+#include <algorithm>
 #include <fstream>
+#include <cstdio>
 
 using namespace std;
 
-int main()
+bool is_file_empty(const string &filename)
 {
-    int qtd_fitas, qtd_memoria, aux = 0;
-    string dado = "";
-    fstream arq("instrucoes.txt", ios::in);
-    fstream arq1, arq2, arq3, arq4, arq5, arq6;
-    if (!arq.is_open())
+    ifstream file(filename, ios::ate); // Abre o arquivo e posiciona no final
+    if (!file.is_open())
+        return true; // Se não puder abrir, considere vazio/erro
+    return file.tellg() == 0;
+}
+
+void mostrarConteudoDasFitas(int qtd_fitas, const vector<string> &nomes_fitas)
+{
+    for (int i = 0; i < qtd_fitas; ++i)
     {
-        cout << "Erro ao abrir o arquivo!" << endl;
-        return 1;
-    }
-    arq >> qtd_memoria;
-    arq.ignore();
-    arq >> qtd_fitas;
-    arq.ignore();
-    getline(arq, dado);
-    arq.close();
+        cout << "Fita " << i + 1 << " (" << nomes_fitas[i] << "): ";
+        ifstream fita_para_leitura(nomes_fitas[i]);
 
-    vector<vector<string>> fitas(qtd_fitas);
-    cout << "O tamanho da palavra e " << dado.length() << "." << endl;
-
-    // --- Fase de Distribuição Inicial (sem alterações) ---
-    for (int i = 0; i < dado.length(); i += qtd_memoria)
-    {
-        vector<char> memoria_interna;
-        for (int j = 0; j < qtd_memoria && (i + j) < dado.length(); ++j)
+        if (fita_para_leitura.is_open())
         {
-            memoria_interna.push_back(dado[i + j]);
-        }
-        sort(memoria_interna.begin(), memoria_interna.end());
-
-        string bloco(memoria_interna.begin(), memoria_interna.end());
-        fitas[aux].push_back(bloco);
-
-        aux++;
-        if (aux == (qtd_fitas / 2))
-        {
-            aux = 0;
-        }
-    }
-
-    cout << "\nConteudo das fitas apos a escrita balanceada (blocos ordenados):\n";
-    for (int i = 0; i < qtd_fitas; i++)
-    {
-        cout << "Fita " << i + 1 << ": ";
-        for (const auto &bloco : fitas[i])
-        {
-            cout << bloco << " | ";
+            string bloco;
+            while (getline(fita_para_leitura, bloco))
+            {
+                cout << bloco << " | ";
+            }
+            fita_para_leitura.close();
         }
         cout << endl;
     }
+}
 
-    // --- Fase de Intercalação Balanceada ---
+int main()
+{
+    int qtd_fitas, qtd_memoria;
+    string dado = "";
+    ifstream arq_instrucoes("instrucoes.txt", ios::in);
+    if (!arq_instrucoes.is_open())
+    {
+        cout << "Erro ao abrir o arquivo 'instrucoes.txt'!" << endl;
+        return 1;
+    }
+    arq_instrucoes >> qtd_memoria;
+    arq_instrucoes.ignore();
+    arq_instrucoes >> qtd_fitas;
+    arq_instrucoes.ignore();
+    getline(arq_instrucoes, dado);
+    arq_instrucoes.close();
+
+    cout << "Tamanho da memoria interna: " << qtd_memoria << endl;
+    cout << "Quantidade de fitas: " << qtd_fitas << endl;
+    cout << "O tamanho da palavra e " << dado.length() << "." << endl;
+
+    if (qtd_fitas % 2 != 0)
+    {
+        cout << "Erro: A quantidade de fitas deve ser um numero par." << endl;
+        return 1;
+    }
+
+    // --- Preparação dos Nomes de Arquivo ---
+    vector<string> nomes_fitas;
+    for (int i = 0; i < qtd_fitas; ++i)
+    {
+        nomes_fitas.push_back("fita" + to_string(i + 1) + ".txt");
+        // Limpa arquivos de execuções anteriores
+        remove(nomes_fitas[i].c_str());
+    }
+
+    // --- Fase de Distribuição Inicial (Escrevendo nos arquivos) ---
+    int k = qtd_fitas / 2;
+    { // Bloco de escopo para garantir que os arquivos sejam fechados
+        vector<ofstream> fitas_saida(k);
+        for (int i = 0; i < k; ++i)
+        {
+            fitas_saida[i].open(nomes_fitas[i]);
+        }
+
+        int fita_atual = 0;
+        for (size_t i = 0; i < dado.length(); i += qtd_memoria)
+        {
+            vector<char> memoria_interna;
+            for (int j = 0; j < qtd_memoria && (i + j) < dado.length(); ++j)
+            {
+                memoria_interna.push_back(dado[i + j]);
+            }
+            sort(memoria_interna.begin(), memoria_interna.end());
+
+            string bloco(memoria_interna.begin(), memoria_interna.end());
+            fitas_saida[fita_atual] << bloco << endl; // Escreve o bloco no arquivo, um por linha
+
+            fita_atual = (fita_atual + 1) % k;
+        }
+    } // Os destrutores de ofstream fecham os arquivos aqui
+
+    cout << "\n--- Conteudo das fitas apos a distribuicao inicial ---\n";
+    mostrarConteudoDasFitas(qtd_fitas, nomes_fitas);
+
+    // --- Fase de Intercalação Balanceada (Lendo e escrevendo em arquivos) ---
     bool usar_primeira_metade = true;
     int rodada = 0;
-    int k = qtd_fitas / 2;
 
     while (true)
     {
+        // Checar a condição de parada ANTES de iniciar a rodada
+        int fitas_com_dados = 0;
+        for (int i = 0; i < qtd_fitas; ++i)
+        {
+            if (!is_file_empty(nomes_fitas[i]))
+            {
+                fitas_com_dados++;
+            }
+        }
+        if (fitas_com_dados <= 1)
+        {
+            cout << "\n--- Fim da intercalacao ---";
+            break;
+        }
+
+        cout << "\n--- Iniciando rodada " << rodada + 1 << " ---\n";
+
         int inicio_leitura, inicio_escrita;
         if (usar_primeira_metade)
         {
             inicio_leitura = 0;
             inicio_escrita = k;
+            cout << "Lendo das fitas " << inicio_leitura + 1 << "-" << inicio_leitura + k << " e escrevendo nas fitas " << inicio_escrita + 1 << "-" << inicio_escrita + k << endl;
         }
         else
         {
             inicio_leitura = k;
             inicio_escrita = 0;
+            cout << "Lendo das fitas " << inicio_leitura + 1 << "-" << inicio_leitura + k << " e escrevendo nas fitas " << inicio_escrita + 1 << "-" << inicio_escrita + k << endl;
         }
 
+        // Abrir os arquivos de leitura e escrita para esta rodada
+        vector<ifstream> fitas_leitura(k);
+        vector<ofstream> fitas_escrita(k);
         for (int i = 0; i < k; ++i)
         {
-            fitas[inicio_escrita + i].clear();
+            fitas_leitura[i].open(nomes_fitas[inicio_leitura + i]);
+            fitas_escrita[i].open(nomes_fitas[inicio_escrita + i]); // Abre em modo de escrita (truncando)
         }
 
-        vector<int> ponteiros_de_bloco(k, 0);
         int fita_saida_atual = 0;
-
         while (true)
         {
             vector<string> blocos_para_intercalar;
-            vector<int> indices_fitas_origem;
-
             bool ha_blocos_para_ler = false;
+
+            // Tenta ler um bloco de cada fita de entrada
             for (int i = 0; i < k; ++i)
             {
-                int indice_fita_leitura = inicio_leitura + i;
-                if (ponteiros_de_bloco[i] < fitas[indice_fita_leitura].size())
+                string bloco;
+                if (getline(fitas_leitura[i], bloco))
                 {
-                    blocos_para_intercalar.push_back(fitas[indice_fita_leitura][ponteiros_de_bloco[i]]);
-                    indices_fitas_origem.push_back(i);
+                    blocos_para_intercalar.push_back(bloco);
                     ha_blocos_para_ler = true;
+                }
+                else
+                {
+                    // Adiciona um placeholder se a fita acabou, para manter os índices alinhados
+                    blocos_para_intercalar.push_back("");
                 }
             }
 
             if (!ha_blocos_para_ler)
             {
-                break;
+                break; // Nenhuma fita de entrada tem mais blocos
             }
 
-            for (int indice_fita : indices_fitas_origem)
-            {
-                ponteiros_de_bloco[indice_fita]++;
-            }
-
+            // Lógica de intercalação (k-way merge), idêntica à original
             string bloco_intercalado = "";
             vector<int> ponteiros_de_char(blocos_para_intercalar.size(), 0);
 
             while (true)
             {
-                char min_char = '~';
+                char min_char = '~'; // Caractere com valor ASCII alto
                 int indice_bloco_com_min = -1;
 
                 for (int i = 0; i < blocos_para_intercalar.size(); ++i)
@@ -134,76 +196,50 @@ int main()
 
                 if (indice_bloco_com_min == -1)
                 {
-                    break;
+                    break; // Todos os blocos foram consumidos
                 }
 
                 bloco_intercalado += min_char;
                 ponteiros_de_char[indice_bloco_com_min]++;
             }
 
-            fitas[inicio_escrita + fita_saida_atual].push_back(bloco_intercalado);
+            // Escreve o novo bloco intercalado em uma das fitas de saída
+            fitas_escrita[fita_saida_atual] << bloco_intercalado << endl;
             fita_saida_atual = (fita_saida_atual + 1) % k;
         }
 
-        // <-- A CORREÇÃO CRÍTICA ESTÁ AQUI
-        // Limpar as fitas de leitura APÓS a conclusão de toda a intercalação da rodada.
-        // Isso garante que a contagem para a condição de parada seja feita corretamente.
+        // Fecha e limpa os arquivos de leitura da rodada
         for (int i = 0; i < k; ++i)
         {
-            fitas[inicio_leitura + i].clear();
-        }
-
-        // Checar a condição de parada.
-        int fitas_com_dados = 0;
-        for (int i = 0; i < qtd_fitas; ++i)
-        {
-            if (!fitas[i].empty())
-            {
-                fitas_com_dados++;
-            }
-        }
-        if (fitas_com_dados <= 1)
-        {
-            cout << "\n--- Fim da intercalacao ---";
-            // A impressão do estado final foi movida para fora do loop para evitar duplicação.
-            break;
+            fitas_leitura[i].close();
+            fitas_escrita[i].close(); // Garante que tudo foi escrito no disco
+            // Limpa o conteúdo do arquivo de leitura
+            ofstream cleaner(nomes_fitas[inicio_leitura + i], ios::trunc);
+            cleaner.close();
         }
 
         cout << "\n--- Conteudo das fitas apos a rodada " << rodada + 1 << " ---\n";
-        for (int j = 0; j < qtd_fitas; j++)
-        {
-            cout << "Fita " << j + 1 << ": ";
-            for (const auto &bloco : fitas[j])
-            {
-                cout << bloco << " | ";
-            }
-            cout << endl;
-        }
+        mostrarConteudoDasFitas(qtd_fitas, nomes_fitas);
+
         rodada++;
-        usar_primeira_metade = !usar_primeira_metade;
+        usar_primeira_metade = !usar_primeira_metade; // Alterna para o próximo conjunto de fitas
     }
 
-    // Imprimir o estado final das fitas, onde apenas uma conterá o resultado.
-    cout << "\nEstado final das fitas:\n";
-    for (int j = 0; j < qtd_fitas; j++)
+    // --- Impressão do Resultado Final ---
+    cout << "\n\nPalavra ordenada final:\n";
+    for (const auto &nome_fita : nomes_fitas)
     {
-        cout << "Fita " << j + 1 << ": ";
-        for (const auto &bloco : fitas[j])
+        if (!is_file_empty(nome_fita))
         {
-            cout << bloco << " | ";
-        }
-        cout << endl;
-    }
-
-    cout << "\nPalavra ordenada final:\n";
-    for (const auto &fita : fitas)
-    {
-        if (!fita.empty())
-        {
-            for (const auto &bloco : fita)
+            cout << "Resultado encontrado em '" << nome_fita << "':\n";
+            ifstream fita_final(nome_fita);
+            string bloco;
+            while (getline(fita_final, bloco))
             {
                 cout << bloco;
             }
+            fita_final.close();
+            break; // O resultado estará em apenas uma fita
         }
     }
     cout << endl
