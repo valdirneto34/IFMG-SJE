@@ -10,7 +10,8 @@ int main()
 {
     int qtd_fitas, qtd_memoria, aux = 0;
     string dado = "";
-    fstream arq("arquivo.txt", ios::in);
+    fstream arq("instrucoes.txt", ios::in);
+    fstream arq1, arq2, arq3, arq4, arq5, arq6;
     if (!arq.is_open())
     {
         cout << "Erro ao abrir o arquivo!" << endl;
@@ -22,7 +23,7 @@ int main()
     arq.ignore();
     getline(arq, dado);
     arq.close();
-    
+
     vector<vector<string>> fitas(qtd_fitas);
     cout << "O tamanho da palavra e " << dado.length() << "." << endl;
 
