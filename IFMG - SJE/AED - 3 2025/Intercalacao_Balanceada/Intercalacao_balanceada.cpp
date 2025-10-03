@@ -54,6 +54,7 @@ int main()
 
     cout << "Tamanho da memoria interna: " << qtd_memoria << endl;
     cout << "Quantidade de fitas: " << qtd_fitas << endl;
+    cout << "A palavra e: " << dado << endl;
     cout << "O tamanho da palavra e " << dado.length() << "." << endl;
 
     if (qtd_fitas % 2 != 0)
