@@ -11,40 +11,35 @@ void troca(char *a, char *b)
     *b = aux;
 }
 
-void refaz_cima_baixo(vector<char> carac, int k, int N)
+void refaz_cima_baixo(vector<char> &carac, int k, int N)
 {
-    int j; // Variável 'j' não declarada no PDF original
+    int j;
     while (2 * k <= N)
     {
         j = 2 * k;
-        /* encontra maior filho */
         if (j < N && carac[j] < carac[j + 1])
         {
             j++;
         }
-        /* testa se pai é maior que filho */
         if (carac[k] >= carac[j])
         {
             break;
         }
-        /* troca pai e maior filho, repete */
         troca(&carac[k], &carac[j]);
         k = j;
     }
 }
 
-void refaz_baixo_cima(vector<char> carac, int k)
+void refaz_baixo_cima(vector<char> &carac, int k)
 {
-    /* se pai for menor que filho, troca */
-    while (k > 1 && v[k / 2].chave < v[k].chave)
-    { // No PDF, a comparação não inclui '.chave', mas é implícito
-        troca(v[k], v[k / 2]);
-        /* vai para o pai e repete o processo */
+    while (k > 1 && carac[k / 2] < carac[k])
+    {
+        troca(&carac[k], &carac[k / 2]);
         k = k / 2;
     }
 }
 
-void heap_constroi(vector<char> carac, int n)
+void heap_constroi(vector<char> &carac, int n)
 {
     int k = n / 2;
     while (k >= 1)
@@ -55,46 +50,88 @@ void heap_constroi(vector<char> carac, int n)
 }
 
 // Insere um novo item no heap
-void heap_insere(vector<char> carac, int *n, struct item novo)
+void heap_insere(vector<char> &carac, int *n, char novo)
 {
-    *n += 1;
-    v[*n] = novo;
-    refaz_baixo_cima(v, *n);
+    carac.push_back(novo);
+    *n = carac.size() - 1;
+    refaz_baixo_cima(carac, *n);
 }
 
 // Remove o maior item do heap (a raiz)
-char heap_remove_maximo(vector<char> carac, int *n)
+char heap_remove_maximo(vector<char> &carac, int *n)
 {
-    troca(v[1], v[*n]);
+    char maximo = carac[1];
+    troca(&carac[1], &carac[*n]);
     *n -= 1;
-    refaz_cima_baixo(v, 1, *n);
-    return v[*n + 1];
+    carac.pop_back();
+    if (*n > 0)
+    {
+        refaz_cima_baixo(carac, 1, *n);
+    }
+    return maximo;
 }
 
-void heapsort(vector<char> carac, int n)
+void heapsort(vector<char> &carac, int n)
 {
-    heap_constroi(v, n);
+    heap_constroi(carac, n);
     int k = n;
     while (k >= 1)
     {
-        troca(v[k], v[1]);
+        troca(&carac[1], &carac[k]);
         k--;
-        /* elementos de v[1] a v[k] */
-        refaz_cima_baixo(v, 1, k);
+        refaz_cima_baixo(carac, 1, k);
     }
+}
+
+void imprime_vetor(const vector<char> &carac, int n)
+{
+    for (int i = 1; i <= n; i++)
+    {
+        cout << carac[i] << " ";
+    }
+    cout << endl;
 }
 
 int main()
 {
-    vector<char> caracteres;
-    caracteres.push_back('E');
-    caracteres.push_back('Y');
-    caracteres.push_back('O');
-    caracteres.push_back('A');
-    caracteres.push_back('C');
-    caracteres.push_back('F');
-    caracteres.push_back('P');
-    caracteres.push_back('V');
+    vector<char> caracteres = {' ', 'E', 'Y', 'O', 'A', 'C', 'F', 'P', 'V'};
+    int n = caracteres.size() - 1;
+
+    cout << "--------------------------------------------------\n";
+    cout << "Vetor original: ";
+    imprime_vetor(caracteres, n);
+    cout << "--------------------------------------------------\n";
+
+    cout << "1. Construindo o heap (heap_constroi)" << endl;
+    heap_constroi(caracteres, n);
+    cout << "Vetor apos virar um heap: ";
+    imprime_vetor(caracteres, n);
+    cout << "--------------------------------------------------\n";
+
+    cout << "2. Inserindo o caractere 'Z' (heap_insere)" << endl;
+    heap_insere(caracteres, &n, 'Z');
+    cout << "Heap apos inserir 'Z': ";
+    imprime_vetor(caracteres, n);
+    cout << "--------------------------------------------------\n";
+
+    cout << "3. Removendo o elemento maximo (heap_remove_maximo)" << endl;
+    cout << "Elemento maximo removido: " << heap_remove_maximo(caracteres, &n) << endl;
+    cout << "Heap apos remover o maximo: ";
+    imprime_vetor(caracteres, n);
+    cout << "--------------------------------------------------\n";
+
+    cout << "4. Ordenando o vetor com heapsort" << endl;
+    vector<char> vetor_para_ordenar = {' ', 'E', 'Y', 'O', 'A', 'C', 'F', 'P', 'V'};
+    int n_ordenar = vetor_para_ordenar.size() - 1;
+    cout << "Vetor antes do heapsort: ";
+    imprime_vetor(vetor_para_ordenar, n_ordenar);
+
+    heapsort(vetor_para_ordenar, n_ordenar);
+
+    cout << "Vetor ordenado: ";
+    // Após o heapsort, os elementos estão nas posições 1 a n_ordenar
+    imprime_vetor(vetor_para_ordenar, n_ordenar);
+    cout << "--------------------------------------------------\n";
 
     return 0;
 }
