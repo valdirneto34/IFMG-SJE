@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main2 {
+public class ProdutoMain {
     public static void main(String[] args) {
         Produto produto = new Produto();
         Scanner cin = new Scanner(System.in);

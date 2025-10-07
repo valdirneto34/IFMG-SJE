@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main3 {
+public class AlunoMain {
     public static void main(String[] args) {
         Scanner cin = new Scanner(System.in);
         Aluno aluno = new Aluno();
