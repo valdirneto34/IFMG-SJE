@@ -18,17 +18,17 @@ void refaz_cima_baixo(vector<char> carac, int k, int N)
     {
         j = 2 * k;
         /* encontra maior filho */
-        if (j < N && v[j].chave < v[j + 1].chave)
+        if (j < N && carac[j] < carac[j + 1])
         {
             j++;
         }
         /* testa se pai é maior que filho */
-        if (v[k].chave >= v[j].chave)
+        if (carac[k] >= carac[j])
         {
             break;
         }
         /* troca pai e maior filho, repete */
-        troca(v[k], v[j]);
+        troca(&carac[k], &carac[j]);
         k = j;
     }
 }
