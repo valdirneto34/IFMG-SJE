@@ -10,13 +10,12 @@ public class TrianguloMain {
         a.setLadoB(80);
         a.setLadoC(99);
 
-        System.out.println("Triangulo A:");
+        System.out.println("Triângulo A:");
         a.mostra();
-        System.out.println("\nTriangulo B:");
+        System.out.println("\nTriângulo B:");
         b.mostra();
-        System.out.println("\nTriangulo C:");
+        System.out.println("\nTriângulo C:");
         c.mostra();
-
 
     }
 }
