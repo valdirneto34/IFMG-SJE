@@ -50,9 +50,25 @@ public class Triangulo {
         return ladoC;
     }
 
-    public void mostra(){
+    public void mostra() {
         System.out.println("Lado A: " + this.getLadoA());
         System.out.println("Lado B: " + this.getLadoB());
         System.out.println("Lado C: " + this.getLadoC());
+    }
+
+    public double calcularPerimetro() {
+        return (this.ladoA + this.ladoB + this.ladoC);
+    }
+
+    public String tipoTriangulo() {
+        String resposta = "";
+        if (this.ladoA == this.ladoB && this.ladoB == this.ladoC) {
+            resposta = "Equilátero";
+        } else if (this.ladoA != this.ladoB && this.ladoB != this.ladoC && this.ladoC != this.ladoA) {
+            resposta = "Escaleno";
+        } else {
+            resposta = "Isósceles";
+        }
+        return resposta;
     }
 }

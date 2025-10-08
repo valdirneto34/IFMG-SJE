@@ -12,10 +12,19 @@ public class TrianguloMain {
 
         System.out.println("Triângulo A:");
         a.mostra();
+        System.out.println("Perímetro: " + a.calcularPerimetro());
+        System.out.println("Tipo: " + a.tipoTriangulo());
+
         System.out.println("\nTriângulo B:");
         b.mostra();
+        System.out.println("Perímetro: " + b.calcularPerimetro());
+        System.out.println("Tipo: " + b.tipoTriangulo());
+        
         System.out.println("\nTriângulo C:");
         c.mostra();
+        System.out.println("Perímetro: " + c.calcularPerimetro());
+        System.out.println("Tipo: " + c.tipoTriangulo());
+
 
     }
 }
