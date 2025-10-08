@@ -1,11 +1,22 @@
 public class TrianguloMain {
     public static void main(String[] args) {
         Triangulo a = new Triangulo();
-        
+
         Triangulo b = new Triangulo(10, 20, 20);
-        
+
         Triangulo c = new Triangulo(b);
 
-        System.out.println("Tudo certo!");
+        c.setLadoA(50);
+        a.setLadoB(80);
+        a.setLadoC(99);
+
+        System.out.println("Triangulo A:");
+        a.mostra();
+        System.out.println("\nTriangulo B:");
+        b.mostra();
+        System.out.println("\nTriangulo C:");
+        c.mostra();
+
+
     }
 }

@@ -49,4 +49,10 @@ public class Triangulo {
     public double getLadoC() {
         return ladoC;
     }
+
+    public void mostra(){
+        System.out.println("Lado A: " + this.getLadoA());
+        System.out.println("Lado B: " + this.getLadoB());
+        System.out.println("Lado C: " + this.getLadoC());
+    }
 }
