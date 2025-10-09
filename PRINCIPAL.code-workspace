@@ -2,7 +2,7 @@
 	"folders": [
 		{
 			"name": "IAP 2024",
-			"path": "."
+			"path": "PERÍODOS FECHADOS/IAP 2024"
 		},
 		{
 			"name": "PYTHON-CemV",
@@ -33,9 +33,11 @@
 			"path": "../ESTUDOS EM CASA/DART"
 		},
 		{
+			"name": "AED - 3 2025",
 			"path": "AED - 3 2025"
 		},
 		{
+			"name": "LPR 1 2025",
 			"path": "LPR 1 2025"
 		}
 	]
