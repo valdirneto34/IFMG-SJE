@@ -52,18 +52,63 @@ new.valor, new.data_de_pagamento, new.ultima_atualizacao);
 end //
 delimiter ;
 
-select pagamento_id from pagamento order by pagamento_id desc limit 1;
+select * from pagamento order by pagamento_id desc limit 1;
 select * from pagamento_auditoria;
 
 insert into pagamento (pagamento_id, cliente_id, funcionario_id, aluguel_id, valor, data_de_pagamento, ultima_atualizacao) 
 values (16050, 599, 2, 15725, 2.99, '2024-08-23 11:25:00', '2025-02-15 22:24:13');
 -- -------------------------------------------------------------------------------------
 
+-- Questão 3 ---------------------------------------------------------------------------
+create table cliente_auditoria(
+cliente_auditoria_id int primary key auto_increment,
+cliente_id smallint,
+loja_id tinyint,
+primeiro_nome varchar(45),
+ultimo_nome varchar(45),
+email varchar(50),
+endereco_id smallint,
+ativo tinyint,
+data_criacao datetime,
+ultima_atualizacao timestamp
+);
 
+delimiter //
+create trigger TR_cliente_auditoria
+after delete on cliente
+for each row
+begin
+insert into cliente_auditoria values
+(null, old.cliente_id, old.loja_id, old.primeiro_nome, old.ultimo_nome, old.email, 
+old.endereco_id, old.ativo, old.data_criacao, old.ultima_atualizacao);
+end //
+delimiter ;
 
+select * from cliente order by cliente_id desc limit 1;
+select * from cliente_auditoria;
 
+delete from cliente where cliente_id = 600;
+insert into cliente values
+(600, 2, 'VALDIR', 'NETO', 'valdirneto100@sakilacostumer.org', 605, 1, current_date(), current_timestamp());
 
+delete from cliente where cliente_id = 600;
+-- -------------------------------------------------------------------------------------
 
+-- Questão 4 ---------------------------------------------------------------------------
+delimiter //
+create trigger TR_aplicar_desconto
+before insert on pagamento
+for each row
+begin
+if new.valor > 100 then set new.valor = new.valor * 0.9;
+end if;
+end //
+delimiter ;
 
+insert into pagamento (cliente_id, funcionario_id, aluguel_id, valor, data_de_pagamento, ultima_atualizacao)
+values (1, 2, 3, 150.00, now(), current_timestamp());
+
+select * from pagamento order by pagamento_id desc limit 1;
+-- -------------------------------------------------------------------------------------
 
 
