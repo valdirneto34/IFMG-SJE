@@ -1,0 +1,42 @@
+{
+	"folders": [
+		{
+			"name": "IAP 2024",
+			"path": "."
+		},
+		{
+			"name": "PYTHON-CemV",
+			"path": "../ESTUDOS EM CASA/PYTHON-CemV"
+		},
+		{
+			"name": "CPP-CFB",
+			"path": "../ESTUDOS EM CASA/CPP-CFB"
+		},
+		{
+			"name": "PYTHON-CFB",
+			"path": "../ESTUDOS EM CASA/PYTHON-CFB"
+		},
+		{
+			"name": "AED - 1 2024",
+			"path": "PERÍODOS FECHADOS/AED - 1 2024"
+		},
+		{
+			"name": "HTML-CemV",
+			"path": "../ESTUDOS EM CASA/HTML-CemV"
+		},
+		{
+			"name": "AED - 2 2025",
+			"path": "PERÍODOS FECHADOS/AED - 2 2025"
+		},
+		{
+			"name": "DART",
+			"path": "../ESTUDOS EM CASA/DART"
+		},
+		{
+			"path": "AED - 3 2025"
+		},
+		{
+			"path": "LPR 1 2025"
+		}
+	]
+}
