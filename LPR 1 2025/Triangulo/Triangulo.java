@@ -71,4 +71,32 @@ public class Triangulo {
         }
         return resposta;
     }
+
+    public boolean ehTriangulo() {
+        if (ladoA + ladoB > ladoC && ladoB + ladoC > ladoA && ladoA + ladoC > ladoB) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public double calcularArea() {
+        double s = (ladoA + ladoB + ladoC) / 2;
+        double a = Math.sqrt(s * (s - ladoA) * (s - ladoB) * (s - ladoC));
+        return a;
+    }
+
+    public void exibirInformacoes() {
+        System.out.println("Lado A: " + ladoA);
+        System.out.println("Lado B: " + ladoB);
+        System.out.println("Lado C: " + ladoC);
+
+        if (this.ehTriangulo()) {
+            System.out.println("Tipo de triângulo: " + this.tipoTriangulo());
+            System.out.println("Área do triângulo: " + this.calcularArea());
+            System.out.println("Perímetro do triângulo: " + this.calcularPerimetro());
+        } else {
+            System.out.println("O polígono informado não é um triângulo!");
+        }
+    }
 }
