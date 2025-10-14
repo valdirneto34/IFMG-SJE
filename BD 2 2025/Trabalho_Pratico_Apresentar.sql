@@ -361,9 +361,19 @@ INSERT INTO vs_avaliacoes (data_ava, tipo, nota, aluno_id, turma_id, professor_i
 ('2025-02-18', 'Participação', 6.5, 19, 16, 16), -- Participação para Sofia Costa (Aluno 19) na Turma 16 (ING_INT_II_T1) pelo Professor Igor Santos (Professor 16)
 ('2025-02-19', 'Quiz', 7.7, 20, 17, 17);       -- Quiz para Thiago Mendes (Aluno 20) na Turma 17 (ESP_AVA_I_T1) pelo Professor Laura Pereira (Professor 17)
 
-
+-- Habilita a verificação de chaves estrangeiras
+SET FOREIGN_KEY_CHECKS = 1;
 
 use vs_escola_idiomas;
+
+select * from vs_alunos;
+select * from vs_professores;
+select * from vs_avaliacoes;
+select * from vs_turmas;
+select * from vs_cursos;
+select * from vs_formas_pagamento;
+select * from vs_matriculas;
+select * from vs_pagamentos;
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- PRIMEIRO SELECT
 
