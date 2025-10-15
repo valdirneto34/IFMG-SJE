@@ -398,26 +398,33 @@ select * from vs_turmas where dias_semana like 'Ter%' or dias_semana like 'Sab';
 
 -- B)
 -- Busca o nome e cpf do aluno, data e valor do pagamento e o nome da forma de pagamento dos que têm valor maior ou igual a 400 reais.
-select a.nome, a.cpf, p.data_pag, p.valor, fp.nome from vs_pagamentos p join vs_alunos a on p.aluno_id = a.aluno_id join vs_formas_pagamento fp on p.forma_pagamento_id = fp.forma_pagamento_id where (p.valor >= 400);
+select a.nome, a.cpf, p.data_pag, p.valor, fp.nome 
+from vs_pagamentos p join vs_alunos a on p.aluno_id = a.aluno_id join vs_formas_pagamento fp on p.forma_pagamento_id = fp.forma_pagamento_id where (p.valor >= 400);
 
 -- Busca o nome e cpf do aluno, nome do professor e data e nota da avaliação  onde o ID do professor é igual a 1 o tipo da avaliação é Quiz.
-select al.nome as nome_aluno, al.cpf as cpf_aluno, p.nome as nome_professor, av.data_ava, av.nota from vs_alunos al join vs_avaliacoes av on al.aluno_id = av.aluno_id join vs_professores p on av.professor_id = p.professor_id where p.professor_id = 1 and av.tipo like 'Quiz';
+select al.nome as nome_aluno, al.cpf as cpf_aluno, p.nome as nome_professor, av.data_ava, av.nota 
+from vs_alunos al join vs_avaliacoes av on al.aluno_id = av.aluno_id join vs_professores p on av.professor_id = p.professor_id where p.professor_id = 1 and av.tipo like 'Quiz';
 
 -- Busca o nome, cpf do aluno e matrícula de todos os alunos matriculados na turma ALE_BAS_I_T1.
-select distinct a.nome as nome_aluno, a.cpf, m.data_matricula, t.nome as nome_turma from vs_alunos a join vs_matriculas m on a.aluno_id = m.aluno_id join vs_turmas t on m.turma_id = m.turma_id where t.nome like 'ALE_BAS_I_T1';
+select distinct a.nome as nome_aluno, a.cpf, m.data_matricula, t.nome as nome_turma 
+from vs_alunos a join vs_matriculas m on a.aluno_id = m.aluno_id join vs_turmas t on m.turma_id = m.turma_id where t.nome like 'ALE_BAS_I_T1';
 
 -- C) Busca quantas matrículas tem em cada turma, mostrando também o nome da turma e do seu respectivo professor.
-select t.nome as nome_turma, p.nome as nome_professor, count(m.matricula_id) as quantidade_matriculas from vs_turmas t join vs_matriculas m on t.turma_id = m.turma_id join vs_professores p on p.professor_id = t.professor_id group by t.nome, p.nome;
+select t.nome as nome_turma, p.nome as nome_professor, count(m.matricula_id) as quantidade_matriculas 
+from vs_turmas t join vs_matriculas m on t.turma_id = m.turma_id join vs_professores p on p.professor_id = t.professor_id group by t.nome, p.nome;
 
 -- Busca quantas turmas cada curso possui, mostrando também o nome curso e a descrição do mesmo.
-select c.nome as nome_curso, c.descricao, count(t.turma_id) as quantidade_turmas from vs_cursos c join vs_turmas t on c.curso_id = t.curso_id group by c.nome, c.descricao;
+select c.nome as nome_curso, c.descricao, count(t.turma_id) as quantidade_turmas 
+from vs_cursos c join vs_turmas t on c.curso_id = t.curso_id group by c.nome, c.descricao;
 
 -- D)
 -- Busca os cursos que possuem mais de 2 turmas.
-select c.nome as nome_curso, count(t.turma_id) as total_turmas from vs_cursos c join vs_turmas t on c.curso_id = t.curso_id group by c.nome having count(t.turma_id) > 2;
+select c.nome as nome_curso, count(t.turma_id) as total_turmas 
+from vs_cursos c join vs_turmas t on c.curso_id = t.curso_id group by c.nome having count(t.turma_id) > 2;
 
 -- Busca a quantidade de dinheiro recebida de cada aluno, mostrando também o seu nome, CPF e data de nascimento.
-select a.nome as nome_aluno, a.cpf, a.data_nasc, (select sum(p.valor) from vs_pagamentos p where p.aluno_id = a.aluno_id) as total_recebido from vs_alunos a order by nome_aluno;
+select a.nome as nome_aluno, a.cpf, a.data_nasc, (select sum(p.valor) 
+from vs_pagamentos p where p.aluno_id = a.aluno_id) as total_recebido from vs_alunos a order by nome_aluno;
 
 -- E)
 --  Busca quantas provas finais de cada professor de inglês aplicou, mostrando também seu nome, email e salário.
