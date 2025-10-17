@@ -87,7 +87,6 @@ delimiter ;
 select * from cliente order by cliente_id desc limit 1;
 select * from cliente_auditoria;
 
-delete from cliente where cliente_id = 600;
 insert into cliente values
 (600, 2, 'VALDIR', 'NETO', 'valdirneto100@sakilacostumer.org', 605, 1, current_date(), current_timestamp());
 
