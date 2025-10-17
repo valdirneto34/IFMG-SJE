@@ -1,6 +1,6 @@
 import java.util.Scanner;
 
-public class Main1 {
+public class EquacaoSegundoMain {
     public static void main(String[] args) {
         Scanner cin = new Scanner(System.in);
         EquacaoSegundoGrau eq = new EquacaoSegundoGrau();
