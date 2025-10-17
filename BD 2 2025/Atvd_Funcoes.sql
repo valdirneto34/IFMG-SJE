@@ -579,7 +579,6 @@ select datediff(current_date(), c.data_cadastro)/365 into qtd_anos from clientes
 return qtd_anos;
 end //
 delimiter ;
-drop function tempo_cadastro_cliente;
 
 select id_cliente, nome, tempo_cadastro_cliente(id_cliente) as tempo_cadastro from clientes;
 
@@ -607,7 +606,7 @@ join produtos p on p.id_produto = v.id_produto where c.id_cliente = id_cliente;
 return vip;
 end //
 delimiter ;
-drop function verificar_cliente_vip;
+
 select id_cliente, nome, verificar_cliente_vip(id_cliente) as cliente_vip from clientes;
 
 
