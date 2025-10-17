@@ -1,6 +1,6 @@
 use sakila;
 
-create view vw_funcionario as
+create or replace view vw_funcionario as
 select f.title as filme, func.first_name as funcionario
 from film f inner join inventory I on f.film_id = I.film_id
 inner join rental A on I.inventory_id = A.inventory_id
