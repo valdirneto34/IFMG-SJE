@@ -444,7 +444,7 @@ when p.categoria = 'Vestuário' then round((v.quantidade*p.preco*0.85), 2)
 when p.categoria = 'Livros' then round((v.quantidade*p.preco), 2)
 else round((v.quantidade*p.preco*0.95), 2)
 end as valor_com_desconto
-from vendas v join clientes c on c.id_cliente = v.id_cliente join produtos p on p.id_produto = v.id_produto;
+from vendas v join clientes c on c.id_cliente = v.id_cliente join produtos p on p.id_produto = v.id_produto order by v.id_venda;
 
 /*4. Resumo das vendas por categoria Crie uma consulta para gerar um resumo das vendas por
 categoria. A consulta deve mostrar a categoria do produto, o total_vendas (quantidade total de
@@ -499,7 +499,7 @@ JOIN entre as tabelas vendas e produtos para obter o preço do produto e a quant
 comprada.
 Retorne a soma total.*/
 
-delimiter $$
+delimiter //
 create function calcular_total_compras (id_cliente int)
 returns decimal(10, 2)
 deterministic
@@ -508,7 +508,7 @@ declare total_compras decimal(10, 2);
 select sum(p.preco * v.quantidade) into total_compras from vendas v 
 join produtos p on p.id_produto = v.id_produto where v.id_cliente = id_cliente;
 return total_compras;
-end $$
+end //
 delimiter ;
 
 select id_cliente, nome, calcular_total_compras(id_cliente) as total_gasto from clientes;
@@ -523,7 +523,7 @@ JOIN entre as tabelas vendas, produtos e clientes para filtrar pela categoria de
 a média de idade dos clientes.
 O valor retornado deve ser um decimal.*/
 
-delimiter $$
+delimiter //
 create function idade_media_por_categoria (categoria varchar(50))
 returns decimal(10, 2)
 deterministic
@@ -534,7 +534,7 @@ join vendas v on v.id_cliente = c.id_cliente
 join produtos p on p.id_produto = v.id_produto
 where p.categoria = categoria;
 return idade_media;
-end $$
+end //
 delimiter ;
 
 select distinct categoria, idade_media_por_categoria(categoria) as idade_media_categoria from produtos;
@@ -547,7 +547,7 @@ especificado.
 b) Deve retornar um valor inteiro representando o total de produtos comprados.
 Utilize a tabela vendas para somar a coluna quantidade para o id_cliente fornecido.*/
 
-delimiter $$
+delimiter //
 create function calcular_quantidade_vendida_cliente (id_cliente int)
 returns int
 deterministic
@@ -555,7 +555,7 @@ begin
 declare qtd_vendida int;
 select sum(v.quantidade) into qtd_vendida from vendas v where v.id_cliente = id_cliente;
 return qtd_vendida;
-end $$
+end //
 delimiter ;
 
 select nome, calcular_quantidade_vendida_cliente(id_cliente) as qtd_comprada from clientes order by nome;
@@ -569,7 +569,7 @@ b) Deve retornar um valor inteiro representando o tempo de cadastro em anos.
 Utilize a função DATEDIFF ou TIMESTAMPDIFF para calcular a diferença entre datas.
 Considere CURRENT_DATE como a data atual.*/
 
-delimiter $$
+delimiter //
 create function tempo_cadastro_cliente (id_cliente int)
 returns int
 deterministic
@@ -577,7 +577,7 @@ begin
 declare qtd_anos int;
 select datediff(current_date(), c.data_cadastro)/365 into qtd_anos from clientes c where c.id_cliente = id_cliente;
 return qtd_anos;
-end $$
+end //
 delimiter ;
 drop function tempo_cadastro_cliente;
 
@@ -595,7 +595,7 @@ b) "Cliente regular" caso contrário.
 JOIN entre vendas e produtos para calcular o gasto total do cliente.
 Estrutura IF para retornar o status com base nos critérios.*/
 
-delimiter $$
+delimiter //
 create function verificar_cliente_vip (id_cliente int)
 returns varchar(30)
 deterministic
@@ -605,7 +605,7 @@ select if(sum(v.quantidade*p.preco) > 5000 and count(v.id_venda) > 5, 'Cliente V
 from clientes c join vendas v on v.id_cliente = c.id_cliente
 join produtos p on p.id_produto = v.id_produto where c.id_cliente = id_cliente;
 return vip;
-end $$
+end //
 delimiter ;
 drop function verificar_cliente_vip;
 select id_cliente, nome, verificar_cliente_vip(id_cliente) as cliente_vip from clientes;
