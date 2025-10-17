@@ -49,8 +49,8 @@ filmes.*/
 delimiter $$
 create procedure pr_clientes_mais_alugam ()
 begin
-select cliente_id, primeiro_nome, qtd_alugueis from (
-select c.cliente_id, c.primeiro_nome, count(c.cliente_id) as qtd_alugueis,
+select cliente_id, nome, qtd_alugueis from (
+select c.cliente_id, concat(c.primeiro_nome, " ", c.ultimo_nome) as nome, count(c.cliente_id) as qtd_alugueis,
 rank() over (order by count(c.cliente_id) desc) as ranked
 from cliente c join aluguel a on c.cliente_id = a.cliente_id group by c.cliente_id, c.primeiro_nome) as r
 where r.ranked <= 5;
