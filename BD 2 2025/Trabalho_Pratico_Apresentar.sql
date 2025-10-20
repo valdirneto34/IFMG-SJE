@@ -367,17 +367,19 @@ SET FOREIGN_KEY_CHECKS = 1;
 use vs_escola_idiomas;
 -- ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 -- PRIMEIRO SELECT
-
-
-
+select c.nome as nome_curso, p.nome as nome_professor, round(avg(a.nota), 2) as media_das_notas from vs_avaliacoes a join vs_professores p on p.professor_id = a.professor_id 
+join vs_turmas t on t.professor_id = p.professor_id join vs_cursos c on c.curso_id = t.curso_id group by c.nome, p.nome;
 
 -- SEGUNDO SELECT
+select c.nome as nome_curso, fp.descricao as descricao_forma_de_pagamento, sum(p.valor) as valor_arrecadado 
+from vs_pagamentos p join vs_formas_pagamento fp on fp.forma_pagamento_id = p.forma_pagamento_id join vs_alunos a on a.aluno_id = p.aluno_id
+join vs_matriculas m on m.aluno_id = a.aluno_id join vs_turmas t on t.turma_id = m.turma_id 
+join vs_cursos c on c.curso_id = t.curso_id group by c.nome, fp.descricao order by c.nome;
 
-
-
-
--- ALTER TABLE
-
+-- TERCEIRO SELECT
+select p.nome as nome_professor, p.especialidade, count(distinct m.matricula_id) as numero_alunos from vs_turmas t 
+join vs_professores p on p.professor_id = t.professor_id join vs_matriculas m on t.turma_id = m.turma_id 
+join vs_alunos a on m.aluno_id = m.aluno_id group by p.nome, p.especialidade;
 
 
 
