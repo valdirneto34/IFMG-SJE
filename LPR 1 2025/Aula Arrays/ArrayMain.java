@@ -7,12 +7,12 @@ public class ArrayMain {
         int[] A = new int[5];
 
         for(int i = 0; i < A.length; i++){
-            System.out.println("Digite um número:");
+            System.out.print("Digite um número: ");
             A[i] = cin.nextInt();
         }
 
         for(int i = 0; i < A.length; i++){
-            System.out.println(A[i]);
+            System.out.print(A[i] + " ");
         }
 
         cin.close();
