@@ -1,4 +1,4 @@
-public class Ex01Main {
+public class PalavrasMain {
     public static void main(String[] args) {
         Palavras a = new Palavras();
 
