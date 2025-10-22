@@ -1,6 +1,6 @@
-public class PalavrasMain {
+public class Ex02Main {
     public static void main(String[] args) {
-        Palavras a = new Palavras();
+        Ex02 a = new Ex02();
 
         a.add("Valdir de Souza Carvalho Neto");
         a.add("Patrícia da Silva Costa");

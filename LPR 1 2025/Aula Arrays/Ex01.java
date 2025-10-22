@@ -1,9 +1,9 @@
-public class Palavras {
-    private static final int MAX = 5;
+public class Ex01 {
+    private static final int MAX = 50;
     private String[] elementos;
     int qtd;
 
-    Palavras() {
+    Ex01() {
         this.elementos = new String[MAX];
         this.qtd = 0;
     }
@@ -20,7 +20,7 @@ public class Palavras {
 
     public void mostra() {
         for (int i = 0; i < qtd; i++) {
-            System.out.println("p na posição " + i + ": " + elementos[i]);
+            System.out.println("Elemento na posição " + i + ": " + elementos[i]);
         }
     }
 
