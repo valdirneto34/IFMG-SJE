@@ -226,10 +226,33 @@ NEW.preco_unitario na tabela Log_Auditoria_Precos.
 delimiter //
 create trigger trg_log_alteracao_preco
 after update on produtos
+for each row
 begin
-if old.preco_unitario != new.preco_unitario
+if old.preco_unitario != new.preco_unitario then
+insert into log_auditoria_precos values
+(null, old.id_produto, old.preco_unitario, new.preco_unitario, current_user(), current_timestamp());
+end if;
 end //
 delimiter ;
+
+call sp_alterar_preco(1, 4500);
+select * from log_auditoria_precos;
+
+/*
+8. Consulta com CASE WHEN
+i. Crie um SELECT (não é view ou procedure).
+ii. Liste o nome_produto e estoque da tabela Produtos.
+iii. Crie uma coluna virtual chamada status_estoque usando CASE:
+a) WHEN estoque = 0 THEN 'Esgotado'
+b) WHEN estoque < 20 THEN 'Baixo'
+c) ELSE 'Normal'
+*/
+
+select nome_produto, estoque, 
+case when estoque = 0 then 'Esgotado'
+when estoque < 20 then 'Baixo'
+else 'Normal' end as status_estoque
+from produtos;
 
 
 
