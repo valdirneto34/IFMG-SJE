@@ -1,16 +1,16 @@
-public class Stack1 {
+public class Ex01Stack {
 
     private Node top;
     private int size;
 
-    public Stack1() { // Criando uma pilha vazia
+    public Ex01Stack() { // Criando uma pilha vazia
         this.top = null;
         this.size = 0;
     }
 
-    public Stack1(Stack1 copia) {
+    public Ex01Stack(Ex01Stack copia) {
         Node t = copia.top;
-        Stack1 S = new Stack1();
+        Ex01Stack S = new Ex01Stack();
         while (t != null) {
             S.push(t.item);
             t = t.next;
@@ -61,15 +61,17 @@ public class Stack1 {
         if (this.isEmpty()) {
             throw new Exception("A pilha está vazia");
         }
-        String resp = "";
+        String result = "";
         Node t = this.top;
-        Integer aux;
-        while(t != null){
-            aux = t.item;
-            resp += aux.toString() + " - ";
+        while (t != null) {
+            Integer aux = t.item;
+            result += aux.toString();
+            if (t.next != null) {
+                result += ", ";
+            }
             t = t.next;
         }
-        return resp;
+        return result;
     }
 }
 
