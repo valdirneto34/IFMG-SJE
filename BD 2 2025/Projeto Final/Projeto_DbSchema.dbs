@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="Projeto_Final_BD2" database="PostgreSQL" id="16f01159-2c18-4b06-bcda-09f8a589986c" >
+	<schema name="schema_principal" >
+		<table name="alunos" prior="aluno" >
+			<column name="aluno_id" type="integer" mandatory="y" />
+			<index name="pk_alunos" unique="PRIMARY_KEY" >
+				<column name="aluno_id" />
+			</index>
+		</table>
+		<table name="avaliacoes" prior="avaliac" >
+			<column name="avaliacao_id" type="integer" mandatory="y" />
+			<index name="pk_avaliacoes" unique="PRIMARY_KEY" >
+				<column name="avaliacao_id" />
+			</index>
+		</table>
+		<table name="cursos" prior="curso" >
+			<column name="curso_id" type="integer" mandatory="y" />
+			<index name="pk_cursos" unique="PRIMARY_KEY" >
+				<column name="curso_id" />
+			</index>
+		</table>
+		<table name="formas_pagamento" prior="formas_pagamen" >
+			<column name="forma_pagamento_id" type="integer" mandatory="y" />
+			<index name="pk_formas_pagamento" unique="PRIMARY_KEY" >
+				<column name="forma_pagamento_id" />
+			</index>
+		</table>
+		<table name="idiomas" prior="idio" >
+			<column name="idioma_id" type="integer" mandatory="y" />
+			<index name="pk_idiomas" unique="PRIMARY_KEY" >
+				<column name="idioma_id" />
+			</index>
+		</table>
+		<table name="matriculas" prior="matricu" >
+			<column name="matricula_id" type="integer" mandatory="y" />
+			<index name="pk_matriculas" unique="PRIMARY_KEY" >
+				<column name="matricula_id" />
+			</index>
+		</table>
+		<table name="mensalidades" prior="mensalida" >
+			<column name="matricula_id" type="integer" mandatory="y" />
+			<index name="pk_mensalidades" unique="PRIMARY_KEY" >
+				<column name="matricula_id" />
+			</index>
+		</table>
+		<table name="pessoas" prior="pess" >
+			<column name="pessoa_id" type="integer" mandatory="y" />
+			<column name="nome" type="varchar" length="100" />
+			<column name="data_nasc" type="date" />
+			<column name="cpf" type="varchar" length="11" mandatory="y" />
+			<column name="email" type="varchar" length="100" mandatory="y" />
+			<column name="telefone" type="varchar" length="15" />
+			<column name="endereco" type="varchar" length="255" />
+			<index name="pk_pessoas" unique="PRIMARY_KEY" >
+				<column name="pessoa_id" />
+			</index>
+			<index name="cns_cpf_unique" unique="UNIQUE_KEY" >
+				<column name="cpf" />
+			</index>
+			<index name="cns_email_unique" unique="UNIQUE_INDEX" >
+				<column name="email" />
+			</index>
+		</table>
+		<table name="professores" prior="professor" >
+			<column name="professor_id" type="integer" mandatory="y" />
+			<index name="pk_professor" unique="PRIMARY_KEY" >
+				<column name="professor_id" />
+			</index>
+		</table>
+		<table name="salas" prior="sal" >
+			<column name="sala_id" type="integer" mandatory="y" />
+			<index name="pk_salas" unique="PRIMARY_KEY" >
+				<column name="sala_id" />
+			</index>
+		</table>
+		<table name="turmas" prior="tur" >
+			<column name="turma_id" type="integer" mandatory="y" />
+			<index name="pk_turmas" unique="PRIMARY_KEY" >
+				<column name="turma_id" />
+			</index>
+		</table>
+	</schema>
+	<layout name="Default Diagram" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_relation="columns" >
+		<entity schema="schema_principal" name="pessoas" color="C1D8EE" x="152" y="266" />
+		<entity schema="schema_principal" name="alunos" color="C1D8EE" x="323" y="266" />
+		<entity schema="schema_principal" name="professores" color="C1D8EE" x="475" y="266" />
+		<entity schema="schema_principal" name="idiomas" color="C1D8EE" x="323" y="361" />
+		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="494" y="361" />
+		<entity schema="schema_principal" name="salas" color="C1D8EE" x="627" y="266" />
+		<entity schema="schema_principal" name="turmas" color="C1D8EE" x="627" y="361" />
+		<entity schema="schema_principal" name="matriculas" color="C1D8EE" x="779" y="266" />
+		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="779" y="361" />
+		<entity schema="schema_principal" name="formas_pagamento" color="C1D8EE" x="931" y="266" />
+		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="950" y="380" />
+		<callout x="57" y="57" pointer="Round" >
+			<comment><![CDATA[- Clique com o botão direito do mouse no diagrama para criar novas tabelas. 
+- Clique duas vezes nos cabeçalhos da tabela para editar. 
+- Entenda melhor o esquema criando vários diagramas.
+- Salve o design no arquivo de modelo e implante a partir de 'Esquema/Criar no banco de dados'.]]></comment>
+		</callout>
+	</layout>
+</project>
