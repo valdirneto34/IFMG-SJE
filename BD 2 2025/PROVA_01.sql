@@ -35,6 +35,7 @@ FOREIGN KEY (id_produto) REFERENCES Produtos(id_produto)
 );
 
 -- -----------------------------------------------------------------------------------------------------------------------------------
+
 INSERT INTO Clientes (id_cliente, nome_cliente, email, data_cadastro) VALUES
 (1, 'Ana Silva', 'ana.silva@email.com', '2025-01-05'), (2, 'Bruno Souza', 'bruno.souza@email.com', '2025-01-06'),
 (3, 'Carla Mendes', 'carla.mendes@email.com', '2025-01-07'), (4, 'Diego Rocha', 'diego.rocha@email.com', '2025-01-08'),
@@ -85,6 +86,7 @@ INSERT INTO ItensPedido (id_item, id_pedido, id_produto, quantidade, preco_momen
 (21, 20, 22, 1, 259.00), (22, 21, 23, 4, 19.90), (23, 22, 24, 1, 1299.00), (24, 23, 25, 1, 699.00),
 (25, 24, 26, 1, 499.00), (26, 25, 27, 1, 1499.00), (27, 26, 28, 1, 159.00), (28, 27, 29, 1, 599.00),
 (29, 28, 30, 1, 4299.00), (30, 30, 2, 1, 249.00);
+
 -- -----------------------------------------------------------------------------------------------------------------------------------
 
 create or replace view vw_RelatorioVendasCliente as
@@ -171,6 +173,7 @@ SELECT estoque_atual FROM produtos WHERE id_produto = 1;
 update produtos set estoque_atual = 200 where id_produto = 1;
 DELETE FROM itenspedido  WHERE id_pedido = 3 AND id_produto = 1;
 */
+
 -- -----------------------------------------------------------------------------------------------------------------------------------
 
 
