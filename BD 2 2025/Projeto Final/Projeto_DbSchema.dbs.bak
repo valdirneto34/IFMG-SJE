@@ -3,42 +3,72 @@
 	<schema name="schema_principal" >
 		<table name="alunos" prior="aluno" >
 			<column name="aluno_id" type="integer" mandatory="y" />
+			<column name="nivel_proeficiencia_inicial" type="varchar" length="20" />
 			<index name="pk_alunos" unique="PRIMARY_KEY" >
 				<column name="aluno_id" />
 			</index>
 		</table>
 		<table name="avaliacoes" prior="avaliac" >
 			<column name="avaliacao_id" type="integer" mandatory="y" />
+			<column name="matricula_id" type="integer" />
+			<column name="professor_id" type="integer" />
+			<column name="data_avaliacao" type="date" >
+				<defo><![CDATA[CURRENT_DATE]]></defo>
+			</column>
+			<column name="tipo_avaliacao" type="varchar" length="50" />
+			<column name="nota" type="decimal" length="4" decimal="2" />
 			<index name="pk_avaliacoes" unique="PRIMARY_KEY" >
 				<column name="avaliacao_id" />
 			</index>
 		</table>
 		<table name="cursos" prior="curso" >
 			<column name="curso_id" type="integer" mandatory="y" />
+			<column name="idioma_id" type="integer" />
+			<column name="nome_curso" type="varchar" length="100" />
+			<column name="descricao" type="varchar" length="255" />
+			<column name="duracao_meses" type="integer" />
 			<index name="pk_cursos" unique="PRIMARY_KEY" >
 				<column name="curso_id" />
 			</index>
 		</table>
 		<table name="formas_pagamento" prior="formas_pagamen" >
 			<column name="forma_pagamento_id" type="integer" mandatory="y" />
+			<column name="descricao" type="varchar" length="50" />
 			<index name="pk_formas_pagamento" unique="PRIMARY_KEY" >
 				<column name="forma_pagamento_id" />
 			</index>
 		</table>
 		<table name="idiomas" prior="idio" >
 			<column name="idioma_id" type="integer" mandatory="y" />
+			<column name="nome_idioma" type="varchar" length="50" />
 			<index name="pk_idiomas" unique="PRIMARY_KEY" >
 				<column name="idioma_id" />
+			</index>
+			<index name="unq_idiomas_nome_idioma" unique="UNIQUE_INDEX" >
+				<column name="nome_idioma" />
 			</index>
 		</table>
 		<table name="matriculas" prior="matricu" >
 			<column name="matricula_id" type="integer" mandatory="y" />
+			<column name="aluno_id" type="integer" />
+			<column name="turma_id" type="integer" />
+			<column name="data_matricula" type="date" >
+				<defo><![CDATA[CURRENT_DATE]]></defo>
+			</column>
+			<column name="valor_total_curso" type="decimal" length="10" decimal="2" />
 			<index name="pk_matriculas" unique="PRIMARY_KEY" >
 				<column name="matricula_id" />
 			</index>
 		</table>
 		<table name="mensalidades" prior="mensalida" >
 			<column name="matricula_id" type="integer" mandatory="y" />
+			<column name="numero_parcela" type="varchar" />
+			<column name="forma_pagamento_id" type="integer" />
+			<column name="data_vencimento" type="date" />
+			<column name="valor_nominal" type="decimal" length="10" decimal="2" />
+			<column name="status_pag" type="varchar" length="20" />
+			<column name="data_pag" type="date" />
+			<column name="valor_pag" type="decimal" length="10" decimal="2" />
 			<index name="pk_mensalidades" unique="PRIMARY_KEY" >
 				<column name="matricula_id" />
 			</index>
@@ -54,44 +84,59 @@
 			<index name="pk_pessoas" unique="PRIMARY_KEY" >
 				<column name="pessoa_id" />
 			</index>
-			<index name="cns_cpf_unique" unique="UNIQUE_KEY" >
+			<index name="unq_pessoas" unique="UNIQUE_INDEX" >
 				<column name="cpf" />
 			</index>
-			<index name="cns_email_unique" unique="UNIQUE_INDEX" >
+			<index name="unq_pessoas_0" unique="UNIQUE_INDEX" >
 				<column name="email" />
 			</index>
 		</table>
 		<table name="professores" prior="professor" >
 			<column name="professor_id" type="integer" mandatory="y" />
+			<column name="especialidade" type="varchar" length="50" />
+			<column name="data_contratacao" type="date" >
+				<defo><![CDATA[CURRENT_DATE]]></defo>
+			</column>
+			<column name="salario" type="decimal" length="10" decimal="2" />
 			<index name="pk_professor" unique="PRIMARY_KEY" >
 				<column name="professor_id" />
 			</index>
 		</table>
 		<table name="salas" prior="sal" >
 			<column name="sala_id" type="integer" mandatory="y" />
+			<column name="nome_sala" type="varchar" length="30" />
+			<column name="capacidade" type="integer" />
+			<column name="tipo_sala" type="varchar" />
 			<index name="pk_salas" unique="PRIMARY_KEY" >
 				<column name="sala_id" />
 			</index>
 		</table>
 		<table name="turmas" prior="tur" >
 			<column name="turma_id" type="integer" mandatory="y" />
+			<column name="curso_id" type="integer" />
+			<column name="professor_id" type="integer" />
+			<column name="sala_id" type="integer" />
+			<column name="nome_turma" type="varchar" length="50" />
+			<column name="horario" type="varchar" length="100" />
+			<column name="data_inicio" type="date" />
+			<column name="data_fim" type="date" />
 			<index name="pk_turmas" unique="PRIMARY_KEY" >
 				<column name="turma_id" />
 			</index>
 		</table>
 	</schema>
 	<layout name="Default Diagram" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_relation="columns" >
+		<entity schema="schema_principal" name="professores" color="C1D8EE" x="171" y="684" />
+		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="380" y="646" />
+		<entity schema="schema_principal" name="idiomas" color="C1D8EE" x="209" y="551" />
 		<entity schema="schema_principal" name="pessoas" color="C1D8EE" x="152" y="266" />
-		<entity schema="schema_principal" name="alunos" color="C1D8EE" x="323" y="266" />
-		<entity schema="schema_principal" name="professores" color="C1D8EE" x="475" y="266" />
-		<entity schema="schema_principal" name="idiomas" color="C1D8EE" x="323" y="361" />
-		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="494" y="361" />
-		<entity schema="schema_principal" name="salas" color="C1D8EE" x="627" y="266" />
-		<entity schema="schema_principal" name="turmas" color="C1D8EE" x="627" y="361" />
-		<entity schema="schema_principal" name="matriculas" color="C1D8EE" x="779" y="266" />
-		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="779" y="361" />
-		<entity schema="schema_principal" name="formas_pagamento" color="C1D8EE" x="931" y="266" />
-		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="950" y="380" />
+		<entity schema="schema_principal" name="salas" color="C1D8EE" x="589" y="646" />
+		<entity schema="schema_principal" name="turmas" color="C1D8EE" x="551" y="361" />
+		<entity schema="schema_principal" name="matriculas" color="C1D8EE" x="779" y="684" />
+		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="741" y="361" />
+		<entity schema="schema_principal" name="formas_pagamento" color="C1D8EE" x="1007" y="342" />
+		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="1083" y="646" />
+		<entity schema="schema_principal" name="alunos" color="C1D8EE" x="323" y="209" />
 		<callout x="57" y="57" pointer="Round" >
 			<comment><![CDATA[- Clique com o botão direito do mouse no diagrama para criar novas tabelas. 
 - Clique duas vezes nos cabeçalhos da tabela para editar. 
