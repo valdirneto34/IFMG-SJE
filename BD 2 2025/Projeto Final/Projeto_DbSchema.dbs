@@ -23,6 +23,12 @@
 			<index name="pk_avaliacoes" unique="PRIMARY_KEY" >
 				<column name="avaliacao_id" />
 			</index>
+			<constraint name="chk_valor_nota" >
+				<string><![CDATA[nota >= 0 AND nota <= 10.0]]></string>
+			</constraint>
+			<constraint name="chk_tipo_avaliacao" >
+				<string><![CDATA[tipo_avaliacao IN ('Prova', 'Trabalho', 'Quiz', 'Participação')]]></string>
+			</constraint>
 			<fk name="fk_avaliacoes_matriculas" to_schema="schema_principal" to_table="matriculas" >
 				<fk_column name="matricula_id" pk="matricula_id" />
 			</fk>
@@ -39,6 +45,9 @@
 			<index name="pk_cursos" unique="PRIMARY_KEY" >
 				<column name="curso_id" />
 			</index>
+			<constraint name="chk_duracao" >
+				<string><![CDATA[duracao_meses > 0]]></string>
+			</constraint>
 			<fk name="fk_cursos_idiomas" to_schema="schema_principal" to_table="idiomas" >
 				<fk_column name="idioma_id" pk="idioma_id" />
 			</fk>
@@ -68,9 +77,13 @@
 				<defo><![CDATA[CURRENT_DATE]]></defo>
 			</column>
 			<column name="valor_total_curso" type="decimal" length="10" decimal="2" />
+			<column name="status_matricula" type="char" length="20" />
 			<index name="pk_matriculas" unique="PRIMARY_KEY" >
 				<column name="matricula_id" />
 			</index>
+			<constraint name="chk_status" >
+				<string><![CDATA[status_mat IN ('Ativa', 'Inativa', 'Concluída')]]></string>
+			</constraint>
 			<fk name="fk_matriculas_alunos" to_schema="schema_principal" to_table="alunos" >
 				<fk_column name="aluno_id" pk="aluno_id" />
 			</fk>
@@ -91,6 +104,9 @@
 				<column name="matricula_id" />
 				<column name="numero_parcela" />
 			</index>
+			<constraint name="chk_mensalidades_status_pag" >
+				<string><![CDATA[status_pag IN ('Pendente', 'Vencido', 'Pago')]]></string>
+			</constraint>
 			<fk name="fk_mensalidades_formas_pagamento" to_schema="schema_principal" to_table="formas_pagamento" >
 				<fk_column name="forma_pagamento_id" pk="forma_pagamento_id" />
 			</fk>
@@ -115,6 +131,9 @@
 			<index name="unq_pessoas_0" unique="UNIQUE_INDEX" >
 				<column name="email" />
 			</index>
+			<constraint name="chk_email" >
+				<string><![CDATA[email LIKE '%@%.%']]></string>
+			</constraint>
 		</table>
 		<table name="professores" prior="professor" >
 			<column name="professor_id" type="integer" mandatory="y" />
@@ -126,6 +145,9 @@
 			<index name="pk_professor" unique="PRIMARY_KEY" >
 				<column name="professor_id" />
 			</index>
+			<constraint name="chk_salario" >
+				<string><![CDATA[salario > 0]]></string>
+			</constraint>
 			<fk name="fk_professores_pessoas" to_schema="schema_principal" to_table="pessoas" >
 				<fk_column name="professor_id" pk="pessoa_id" />
 			</fk>
@@ -138,6 +160,12 @@
 			<index name="pk_salas" unique="PRIMARY_KEY" >
 				<column name="sala_id" />
 			</index>
+			<constraint name="chk_capacidade" >
+				<string><![CDATA[capacidade > 0]]></string>
+			</constraint>
+			<constraint name="chk_tipo" >
+				<string><![CDATA[tipo_sala IN ('Comum', 'Laboratório', 'Auditório')]]></string>
+			</constraint>
 		</table>
 		<table name="turmas" prior="tur" >
 			<column name="turma_id" type="integer" mandatory="y" />
@@ -164,15 +192,15 @@
 	</schema>
 	<layout name="Default Diagram" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_column_type="y" show_relation="columns" >
 		<entity schema="schema_principal" name="formas_pagamento" color="C1D8EE" x="1178" y="418" />
-		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="323" y="209" />
 		<entity schema="schema_principal" name="idiomas" color="C1D8EE" x="133" y="418" />
-		<entity schema="schema_principal" name="matriculas" color="C1D8EE" x="703" y="57" />
-		<entity schema="schema_principal" name="pessoas" color="C1D8EE" x="57" y="114" />
 		<entity schema="schema_principal" name="alunos" color="C1D8EE" x="323" y="76" />
-		<entity schema="schema_principal" name="professores" color="C1D8EE" x="361" y="551" />
-		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="874" y="570" />
 		<entity schema="schema_principal" name="turmas" color="C1D8EE" x="608" y="285" />
-		<entity schema="schema_principal" name="salas" color="C1D8EE" x="836" y="380" />
 		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="1083" y="57" />
+		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="874" y="570" />
+		<entity schema="schema_principal" name="professores" color="C1D8EE" x="361" y="551" />
+		<entity schema="schema_principal" name="salas" color="C1D8EE" x="836" y="380" />
+		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="323" y="209" />
+		<entity schema="schema_principal" name="pessoas" color="C1D8EE" x="57" y="114" />
+		<entity schema="schema_principal" name="matriculas" color="C1D8EE" x="703" y="57" />
 	</layout>
 </project>
