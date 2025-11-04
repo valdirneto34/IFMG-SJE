@@ -7,6 +7,9 @@
 			<index name="pk_alunos" unique="PRIMARY_KEY" >
 				<column name="aluno_id" />
 			</index>
+			<fk name="fk_alunos_pessoas" to_schema="schema_principal" to_table="pessoas" >
+				<fk_column name="aluno_id" pk="pessoa_id" />
+			</fk>
 		</table>
 		<table name="avaliacoes" prior="avaliac" >
 			<column name="avaliacao_id" type="integer" mandatory="y" />
@@ -20,6 +23,12 @@
 			<index name="pk_avaliacoes" unique="PRIMARY_KEY" >
 				<column name="avaliacao_id" />
 			</index>
+			<fk name="fk_avaliacoes_matriculas" to_schema="schema_principal" to_table="matriculas" >
+				<fk_column name="matricula_id" pk="matricula_id" />
+			</fk>
+			<fk name="fk_avaliacoes_professores" to_schema="schema_principal" to_table="professores" >
+				<fk_column name="professor_id" pk="professor_id" />
+			</fk>
 		</table>
 		<table name="cursos" prior="curso" >
 			<column name="curso_id" type="integer" mandatory="y" />
@@ -30,6 +39,9 @@
 			<index name="pk_cursos" unique="PRIMARY_KEY" >
 				<column name="curso_id" />
 			</index>
+			<fk name="fk_cursos_idiomas" to_schema="schema_principal" to_table="idiomas" >
+				<fk_column name="idioma_id" pk="idioma_id" />
+			</fk>
 		</table>
 		<table name="formas_pagamento" prior="formas_pagamen" >
 			<column name="forma_pagamento_id" type="integer" mandatory="y" />
@@ -59,11 +71,17 @@
 			<index name="pk_matriculas" unique="PRIMARY_KEY" >
 				<column name="matricula_id" />
 			</index>
+			<fk name="fk_matriculas_alunos" to_schema="schema_principal" to_table="alunos" >
+				<fk_column name="aluno_id" pk="aluno_id" />
+			</fk>
+			<fk name="fk_matriculas_turmas" to_schema="schema_principal" to_table="turmas" >
+				<fk_column name="turma_id" pk="turma_id" />
+			</fk>
 		</table>
 		<table name="mensalidades" prior="mensalida" >
 			<column name="matricula_id" type="integer" mandatory="y" />
-			<column name="numero_parcela" type="varchar" />
 			<column name="forma_pagamento_id" type="integer" />
+			<column name="numero_parcela" type="varchar" />
 			<column name="data_vencimento" type="date" />
 			<column name="valor_nominal" type="decimal" length="10" decimal="2" />
 			<column name="status_pag" type="varchar" length="20" />
@@ -72,6 +90,12 @@
 			<index name="pk_mensalidades" unique="PRIMARY_KEY" >
 				<column name="matricula_id" />
 			</index>
+			<fk name="fk_mensalidades_formas_pagamento" to_schema="schema_principal" to_table="formas_pagamento" >
+				<fk_column name="forma_pagamento_id" pk="forma_pagamento_id" />
+			</fk>
+			<fk name="fk_mensalidades_matriculas" to_schema="schema_principal" to_table="matriculas" >
+				<fk_column name="matricula_id" pk="matricula_id" />
+			</fk>
 		</table>
 		<table name="pessoas" prior="pess" >
 			<column name="pessoa_id" type="integer" mandatory="y" />
@@ -101,6 +125,9 @@
 			<index name="pk_professor" unique="PRIMARY_KEY" >
 				<column name="professor_id" />
 			</index>
+			<fk name="fk_professores_pessoas" to_schema="schema_principal" to_table="pessoas" >
+				<fk_column name="professor_id" pk="pessoa_id" />
+			</fk>
 		</table>
 		<table name="salas" prior="sal" >
 			<column name="sala_id" type="integer" mandatory="y" />
@@ -123,25 +150,28 @@
 			<index name="pk_turmas" unique="PRIMARY_KEY" >
 				<column name="turma_id" />
 			</index>
+			<fk name="fk_turmas_cursos" to_schema="schema_principal" to_table="cursos" >
+				<fk_column name="curso_id" pk="curso_id" />
+			</fk>
+			<fk name="fk_turmas_professores" to_schema="schema_principal" to_table="professores" >
+				<fk_column name="professor_id" pk="professor_id" />
+			</fk>
+			<fk name="fk_turmas_salas" to_schema="schema_principal" to_table="salas" >
+				<fk_column name="sala_id" pk="sala_id" />
+			</fk>
 		</table>
 	</schema>
-	<layout name="Default Diagram" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_relation="columns" >
-		<entity schema="schema_principal" name="professores" color="C1D8EE" x="171" y="684" />
-		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="380" y="646" />
-		<entity schema="schema_principal" name="idiomas" color="C1D8EE" x="209" y="551" />
-		<entity schema="schema_principal" name="pessoas" color="C1D8EE" x="152" y="266" />
-		<entity schema="schema_principal" name="salas" color="C1D8EE" x="589" y="646" />
-		<entity schema="schema_principal" name="turmas" color="C1D8EE" x="551" y="361" />
-		<entity schema="schema_principal" name="matriculas" color="C1D8EE" x="779" y="684" />
-		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="741" y="361" />
-		<entity schema="schema_principal" name="formas_pagamento" color="C1D8EE" x="1007" y="342" />
-		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="1083" y="646" />
-		<entity schema="schema_principal" name="alunos" color="C1D8EE" x="323" y="209" />
-		<callout x="57" y="57" pointer="Round" >
-			<comment><![CDATA[- Clique com o botão direito do mouse no diagrama para criar novas tabelas. 
-- Clique duas vezes nos cabeçalhos da tabela para editar. 
-- Entenda melhor o esquema criando vários diagramas.
-- Salve o design no arquivo de modelo e implante a partir de 'Esquema/Criar no banco de dados'.]]></comment>
-		</callout>
+	<layout name="Default Diagram" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_column_type="y" show_relation="columns" >
+		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="1083" y="57" />
+		<entity schema="schema_principal" name="formas_pagamento" color="C1D8EE" x="1178" y="418" />
+		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="323" y="209" />
+		<entity schema="schema_principal" name="idiomas" color="C1D8EE" x="133" y="418" />
+		<entity schema="schema_principal" name="matriculas" color="C1D8EE" x="703" y="57" />
+		<entity schema="schema_principal" name="pessoas" color="C1D8EE" x="57" y="114" />
+		<entity schema="schema_principal" name="alunos" color="C1D8EE" x="323" y="76" />
+		<entity schema="schema_principal" name="professores" color="C1D8EE" x="361" y="551" />
+		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="874" y="570" />
+		<entity schema="schema_principal" name="turmas" color="C1D8EE" x="608" y="285" />
+		<entity schema="schema_principal" name="salas" color="C1D8EE" x="836" y="380" />
 	</layout>
 </project>
