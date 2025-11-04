@@ -80,8 +80,8 @@
 		</table>
 		<table name="mensalidades" prior="mensalida" >
 			<column name="matricula_id" type="integer" mandatory="y" />
+			<column name="numero_parcela" type="integer" mandatory="y" />
 			<column name="forma_pagamento_id" type="integer" />
-			<column name="numero_parcela" type="varchar" />
 			<column name="data_vencimento" type="date" />
 			<column name="valor_nominal" type="decimal" length="10" decimal="2" />
 			<column name="status_pag" type="varchar" length="20" />
@@ -89,6 +89,7 @@
 			<column name="valor_pag" type="decimal" length="10" decimal="2" />
 			<index name="pk_mensalidades" unique="PRIMARY_KEY" >
 				<column name="matricula_id" />
+				<column name="numero_parcela" />
 			</index>
 			<fk name="fk_mensalidades_formas_pagamento" to_schema="schema_principal" to_table="formas_pagamento" >
 				<fk_column name="forma_pagamento_id" pk="forma_pagamento_id" />
@@ -162,7 +163,6 @@
 		</table>
 	</schema>
 	<layout name="Default Diagram" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_column_type="y" show_relation="columns" >
-		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="1083" y="57" />
 		<entity schema="schema_principal" name="formas_pagamento" color="C1D8EE" x="1178" y="418" />
 		<entity schema="schema_principal" name="cursos" color="C1D8EE" x="323" y="209" />
 		<entity schema="schema_principal" name="idiomas" color="C1D8EE" x="133" y="418" />
@@ -173,5 +173,6 @@
 		<entity schema="schema_principal" name="avaliacoes" color="C1D8EE" x="874" y="570" />
 		<entity schema="schema_principal" name="turmas" color="C1D8EE" x="608" y="285" />
 		<entity schema="schema_principal" name="salas" color="C1D8EE" x="836" y="380" />
+		<entity schema="schema_principal" name="mensalidades" color="C1D8EE" x="1083" y="57" />
 	</layout>
 </project>
