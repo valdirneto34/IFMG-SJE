@@ -86,15 +86,17 @@ INSERT INTO ItensPedido (id_item, id_pedido, id_produto, quantidade, preco_momen
 (21, 20, 22, 1, 259.00), (22, 21, 23, 4, 19.90), (23, 22, 24, 1, 1299.00), (24, 23, 25, 1, 699.00),
 (25, 24, 26, 1, 499.00), (26, 25, 27, 1, 1499.00), (27, 26, 28, 1, 159.00), (28, 27, 29, 1, 599.00),
 (29, 28, 30, 1, 4299.00), (30, 30, 2, 1, 249.00);
-
 -- -----------------------------------------------------------------------------------------------------------------------------------
-
 create or replace view vw_RelatorioVendasCliente as
 select c.nome_cliente, pr.nome_produto, ip.quantidade, p.status_pedido, ip.quantidade * ip.preco_momento as subtotal 
 from clientes c join pedidos p on p.id_cliente = c.id_cliente join itenspedido ip on
 ip.id_pedido = p.id_pedido join produtos pr on pr.id_produto = ip.id_produto;
 
 -- select * from vw_RelatorioVendasCliente;
+select v.nome_produto, v.subtotal from vw_RelatorioVendasCliente v where v.status_pedido = 'Pago' or v.status_pedido = 'Enviado'
+order by v.quantidade desc;
+
+select round(avg(subtotal), 2) as media_item_venda from vw_RelatorioVendasCliente where status_pedido = 'Pago';
 
 delimiter //
 create function fn_CalcularTotalPedido(id_pedido_param int)
@@ -109,7 +111,7 @@ end //
 delimiter ;
 
 -- select id_pedido, fn_CalcularTotalPedido(id_pedido) as total_pedido from pedidos;
-
+select id_pedido, avg(fn_CalcularTotalPedido(id_pedido)) as total_pedido from pedidos;
 delimiter //
 create procedure sp_AdicionarItemPedido(IN id_pedido_param INT, IN id_produto_param INT, IN quantidade_param INT)
 begin
@@ -175,7 +177,7 @@ DELETE FROM itenspedido  WHERE id_pedido = 3 AND id_produto = 1;
 */
 
 -- -----------------------------------------------------------------------------------------------------------------------------------
-
+CALL sp_AdicionarItemPedido(30, 30, 15);
 
 
 
