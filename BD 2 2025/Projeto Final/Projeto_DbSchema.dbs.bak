@@ -188,7 +188,6 @@
 		<entity schema="escola_idiomas" name="formas_pagamento" color="C1D8EE" x="1178" y="418" />
 		<entity schema="escola_idiomas" name="idiomas" color="C1D8EE" x="133" y="418" />
 		<entity schema="escola_idiomas" name="alunos" color="C1D8EE" x="323" y="76" />
-		<entity schema="escola_idiomas" name="cursos" color="C1D8EE" x="323" y="209" />
 		<entity schema="escola_idiomas" name="salas" color="C1D8EE" x="836" y="380" />
 		<entity schema="escola_idiomas" name="professores" color="C1D8EE" x="361" y="551" />
 		<entity schema="escola_idiomas" name="pessoas" color="C1D8EE" x="57" y="114" />
@@ -196,5 +195,6 @@
 		<entity schema="escola_idiomas" name="avaliacoes" color="C1D8EE" x="874" y="570" />
 		<entity schema="escola_idiomas" name="matriculas" color="C1D8EE" x="703" y="57" />
 		<entity schema="escola_idiomas" name="mensalidades" color="C1D8EE" x="1083" y="57" />
+		<entity schema="escola_idiomas" name="cursos" color="C1D8EE" x="323" y="209" />
 	</layout>
 </project>
