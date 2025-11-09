@@ -1,0 +1,138 @@
+/* 
+==========================================================
+SCRIPT DDL PARA SGBD MYSQL
+==========================================================
+*/
+
+CREATE DATABASE IF NOT EXISTS escola_idiomas;
+USE escola_idiomas;
+
+CREATE TABLE formas_pagamento ( 
+	forma_pagamento_id INT NOT NULL AUTO_INCREMENT,
+	descricao varchar(50) ,
+	CONSTRAINT pk_formas_pagamento PRIMARY KEY ( forma_pagamento_id )
+);
+
+CREATE TABLE idiomas ( 
+	idioma_id INT NOT NULL AUTO_INCREMENT,
+	nome_idioma varchar(50) ,
+	CONSTRAINT pk_idiomas PRIMARY KEY ( idioma_id )
+);
+
+CREATE UNIQUE INDEX unq_idiomas_nome_idioma ON idiomas ( nome_idioma );
+
+CREATE TABLE pessoas ( 
+	pessoa_id INT NOT NULL AUTO_INCREMENT,
+	nome varchar(100) ,
+	data_nasc date ,
+	cpf varchar(11) NOT NULL ,
+	email varchar(100) NOT NULL ,
+	telefone varchar(15) ,
+	endereco varchar(255) ,
+	CONSTRAINT pk_pessoas PRIMARY KEY ( pessoa_id )
+);
+
+ALTER TABLE pessoas ADD CONSTRAINT chk_email CHECK ( email LIKE '%@%.%' );
+CREATE UNIQUE INDEX unq_pessoas ON pessoas ( cpf );
+CREATE UNIQUE INDEX unq_pessoas_0 ON pessoas ( email );
+
+CREATE TABLE professores ( 
+	professor_id INT NOT NULL ,
+	especialidade varchar(50) ,
+	data_contratacao date ,
+	salario decimal(10,2) ,
+	CONSTRAINT pk_professor PRIMARY KEY ( professor_id ),
+	CONSTRAINT fk_professores_pessoas FOREIGN KEY ( professor_id ) REFERENCES pessoas( pessoa_id ) 
+);
+
+ALTER TABLE professores ADD CONSTRAINT chk_salario CHECK ( salario > 0 );
+
+CREATE TABLE salas ( 
+	sala_id INT NOT NULL AUTO_INCREMENT,
+	nome_sala varchar(30) ,
+	capacidade INT ,
+	tipo_sala varchar(50) ,
+	CONSTRAINT pk_salas PRIMARY KEY ( sala_id )
+);
+
+ALTER TABLE salas ADD CONSTRAINT chk_capacidade CHECK ( capacidade > 0 );
+ALTER TABLE salas ADD CONSTRAINT chk_tipo CHECK ( tipo_sala IN ('Comum', 'Laboratório', 'Auditório') );
+
+CREATE TABLE alunos ( 
+	aluno_id INT NOT NULL ,
+	nivel_proeficiencia_inicial varchar(20) ,
+	CONSTRAINT pk_alunos PRIMARY KEY ( aluno_id ),
+	CONSTRAINT fk_alunos_pessoas FOREIGN KEY ( aluno_id ) REFERENCES pessoas( pessoa_id ) 
+);
+
+CREATE TABLE cursos ( 
+	curso_id INT NOT NULL AUTO_INCREMENT,
+	idioma_id INT ,
+	nome_curso varchar(100) ,
+	descricao varchar(255) ,
+	duracao_meses INT ,
+	CONSTRAINT pk_cursos PRIMARY KEY ( curso_id ),
+	CONSTRAINT fk_cursos_idiomas FOREIGN KEY ( idioma_id ) REFERENCES idiomas( idioma_id ) 
+);
+
+ALTER TABLE cursos ADD CONSTRAINT chk_duracao CHECK ( duracao_meses > 0 );
+
+CREATE TABLE turmas ( 
+	turma_id INT NOT NULL AUTO_INCREMENT,
+	curso_id INT ,
+	professor_id INT ,
+	sala_id INT ,
+	nome_turma varchar(50) ,
+	horario varchar(100) ,
+	data_inicio date ,
+	data_fim date ,
+	CONSTRAINT pk_turmas PRIMARY KEY ( turma_id ),
+	CONSTRAINT fk_turmas_cursos FOREIGN KEY ( curso_id ) REFERENCES cursos( curso_id ) ,
+	CONSTRAINT fk_turmas_professores FOREIGN KEY ( professor_id ) REFERENCES professores( professor_id ) ,
+	CONSTRAINT fk_turmas_salas FOREIGN KEY ( sala_id ) REFERENCES salas( sala_id ) 
+);
+
+CREATE TABLE matriculas ( 
+	matricula_id INT NOT NULL AUTO_INCREMENT,
+	aluno_id INT ,
+	turma_id INT ,
+	data_matricula date ,
+	valor_total_curso decimal(10,2) ,
+	status_mat varchar(20) ,
+	CONSTRAINT pk_matriculas PRIMARY KEY ( matricula_id ),
+	CONSTRAINT fk_matriculas_alunos FOREIGN KEY ( aluno_id ) REFERENCES alunos( aluno_id ) ,
+	CONSTRAINT fk_matriculas_turmas FOREIGN KEY ( turma_id ) REFERENCES turmas( turma_id ) 
+);
+
+ALTER TABLE matriculas ADD CONSTRAINT chk_status CHECK ( status_mat IN ('Ativa', 'Inativa', 'Concluída') );
+
+CREATE TABLE mensalidades ( 
+	matricula_id INT NOT NULL ,
+	numero_parcela INT NOT NULL ,
+	forma_pagamento_id INT ,
+	data_vencimento date ,
+	valor_nominal decimal(10,2) ,
+	status_pag varchar(20) ,
+	data_pag date ,
+	valor_pag decimal(10,2) ,
+	CONSTRAINT pk_mensalidades PRIMARY KEY ( matricula_id, numero_parcela ),
+	CONSTRAINT fk_mensalidades_formas_pagamento FOREIGN KEY ( forma_pagamento_id ) REFERENCES formas_pagamento( forma_pagamento_id ) ,
+	CONSTRAINT fk_mensalidades_matriculas FOREIGN KEY ( matricula_id ) REFERENCES matriculas( matricula_id ) 
+);
+
+ALTER TABLE mensalidades ADD CONSTRAINT chk_mensalidades_status_pag CHECK ( status_pag IN ('Pendente', 'Vencido', 'Pago') );
+
+CREATE TABLE avaliacoes ( 
+	avaliacao_id INT NOT NULL AUTO_INCREMENT,
+	matricula_id INT ,
+	professor_id INT ,
+	data_avaliacao date ,
+	tipo_avaliacao varchar(50) ,
+	nota decimal(4,2) ,
+	CONSTRAINT pk_avaliacoes PRIMARY KEY ( avaliacao_id ),
+	CONSTRAINT fk_avaliacoes_matriculas FOREIGN KEY ( matricula_id ) REFERENCES matriculas( matricula_id ) ,
+	CONSTRAINT fk_avaliacoes_professores FOREIGN KEY ( professor_id ) REFERENCES professores( professor_id ) 
+);
+
+ALTER TABLE avaliacoes ADD CONSTRAINT chk_valor_nota CHECK ( nota >= 0 AND nota <= 10.0 );
+ALTER TABLE avaliacoes ADD CONSTRAINT chk_tipo_avaliacao CHECK ( tipo_avaliacao IN ('Prova', 'Trabalho', 'Quiz', 'Participação') );

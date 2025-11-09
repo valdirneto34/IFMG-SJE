@@ -200,7 +200,7 @@
 			</fk>
 		</table>
 	</schema>
-	<layout name="Default Diagram" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_column_type="y" show_relation="columns" >
+	<layout name="escola_idiomas" id="5f8b30a8-7f00-4b53-ac54-76be7eb3f551" show_column_type="y" show_relation="columns" >
 		<entity schema="escola_idiomas" name="alunos" color="C1D8EE" x="323" y="76" />
 		<entity schema="escola_idiomas" name="professores" color="C1D8EE" x="361" y="551" />
 		<entity schema="escola_idiomas" name="cursos" color="C1D8EE" x="323" y="209" />
