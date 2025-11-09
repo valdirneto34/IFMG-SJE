@@ -73,7 +73,7 @@
 			<column name="turma_id" type="integer" />
 			<column name="data_matricula" type="date" />
 			<column name="valor_total_curso" type="decimal" length="10" decimal="2" />
-			<column name="status_matricula" type="char" length="20" />
+			<column name="status_mat" prior="status_matricula" type="varchar" length="20" />
 			<index name="pk_matriculas" unique="PRIMARY_KEY" >
 				<column name="matricula_id" />
 			</index>
@@ -193,8 +193,8 @@
 		<entity schema="escola_idiomas" name="pessoas" color="C1D8EE" x="57" y="114" />
 		<entity schema="escola_idiomas" name="turmas" color="C1D8EE" x="608" y="285" />
 		<entity schema="escola_idiomas" name="avaliacoes" color="C1D8EE" x="874" y="570" />
-		<entity schema="escola_idiomas" name="matriculas" color="C1D8EE" x="703" y="57" />
 		<entity schema="escola_idiomas" name="mensalidades" color="C1D8EE" x="1083" y="57" />
 		<entity schema="escola_idiomas" name="cursos" color="C1D8EE" x="323" y="209" />
+		<entity schema="escola_idiomas" name="matriculas" color="C1D8EE" x="703" y="57" />
 	</layout>
 </project>
