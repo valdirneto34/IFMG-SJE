@@ -1,2 +1,4 @@
 *.exe
 /.tmp.driveupload
+/Curso Java Swing/PrimeiraJanela/nbproject/private/
+/Curso Java Swing/PrimeiraJanela/build/
