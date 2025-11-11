@@ -40,5 +40,8 @@
 			"name": "LPR 1 2025",
 			"path": "LPR 1 2025"
 		}
-	]
+	],
+	"settings": {
+		"git.autofetch": "all"
+	}
 }
