@@ -4,11 +4,6 @@
 
 using namespace std;
 
-struct Aresta
-{
-    int u, v, p;
-};
-
 struct Vertice
 {
     int u, x, y;
@@ -18,7 +13,8 @@ class Grafo
 {
     // declarar a matriz ou lista
     // declarar uma matriz para as coordenadas
-    vector<Aresta> arestas;
+    int **arestas;
+    vector<vector<int>> arestas2;
     vector<Vertice> vertices;
     // declarar variáveis de controle: número de vértices e arestas, se é direcionado, etc.
     int numVertices, numArestas;
@@ -52,6 +48,22 @@ public:
 
         arq_grafo >> numArestas;
 
+        arestas2.resize(numVertices ,std::vector<int>(numVertices, -1));
+
+        arestas = new int *[numVertices];
+        for (int i = 0; i < numVertices; i++)
+        {
+            arestas[i] = new int[numVertices];
+        }
+
+        for (int i = 0; i < numArestas; i++)
+        {
+            for (int j = 0; j < numArestas; j++)
+            {
+                arestas[i][j] = -1;
+            }
+        }
+
         for (int i = 0; i < numArestas; i++)
         {
             int u, v, p;
@@ -59,15 +71,39 @@ public:
             inserirAresta(u, v, p);
         }
 
+        arq_grafo.close();
         cout << "Grafo importado com sucesso!" << endl;
     }
 
-    void vazio(int qtd, bool direcionado)
+    void vazio(int qtd, bool direcionadoParam)
     {
+        numVertices = qtd;
+        direcionado = direcionadoParam;
+        arestas = new int *[numVertices];
+        for (int i = 0; i < numVertices; i++)
+        {
+            arestas[i] = new int[numVertices];
+        }
+
+        for (int i = 0; i < numArestas; i++)
+        {
+            for (int j = 0; j < numArestas; j++)
+            {
+                arestas[i][j] = -1;
+            }
+        }
     }
 
     void exibirTodasAsAdjacencias()
     {
+        for (int i = 0; i < numArestas; i++)
+        {
+            for (int j = 0; j < numArestas; j++)
+            {
+                cout << "[" << i << ", " << j << "]: " << arestas[i][j] << "  ";
+            }
+            cout << endl;
+        }
     }
 
     bool consultarSeAdjacente(int u, int v)
@@ -76,26 +112,21 @@ public:
 
     void inserirAresta(int u, int v, int p)
     {
-        Aresta aux;
-        aux.u = u;
-        aux.v = v;
-        aux.p = p;
-        arestas.push_back(aux);
+        arestas[u][v] = p;
+        if (!direcionado)
+        {
+            arestas[u][v] = -1;
+        }
     }
 
     void removerAresta(int u, int v)
     {
-        for (int i = 0; i < numArestas; i++)
+        arestas[u][v] = -1;
+        if (!direcionado)
         {
-            if (arestas[i].u == u && arestas[i].v == v)
-            {
-                for (int j = i; j < numArestas - 1; j++)
-                {
-                    arestas[j] = arestas[j + 1];
-                }
-                numArestas--;
-            }
+            arestas[v][u] = -1;
         }
+        numArestas--;
     }
 
     void editarCoordenadaDoVertice(int u, int x, int y)
@@ -148,7 +179,7 @@ public:
 int main()
 {
     Grafo grafo;
-    int opcao;
+    int opcao, u, v, x, y;
     do
     {
         cout << "---------------------- MENU ----------------------" << endl;
@@ -179,7 +210,7 @@ int main()
         }
         case 1:
         {
-            char *arquivo;
+            char arquivo[100];
             cout << "Digite o nome do arquivo para importacao: ";
             cin >> arquivo;
             grafo.importar(arquivo);
@@ -187,10 +218,20 @@ int main()
         }
         case 2:
         {
+            int qtd;
+            bool direcionado;
+            cout << "Digite a quantidade de vertices: ";
+            cin >> qtd;
+            cout << "Digite se o grafo e direcionado [0-nao/1-sim]: ";
+            cin >> direcionado;
+            grafo.vazio(qtd, direcionado);
             break;
         }
         case 3:
         {
+            cout << "------ TODAS AS ADJACENCIAS ------" << endl;
+            grafo.exibirTodasAsAdjacencias();
+            cout << "----------------------------------" << endl;
             break;
         }
         case 4:
@@ -211,6 +252,13 @@ int main()
         }
         case 8:
         {
+            cout << "Digite o vertice que deseja editar: ";
+            cin >> u;
+            cout << "Digite o valor de x: ";
+            cin >> x;
+            cout << "Digite o valor de y: ";
+            cin >> y;
+            grafo.editarCoordenadaDoVertice(u, x, y);
             break;
         }
         case 9:
