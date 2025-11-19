@@ -1,0 +1,28 @@
+/* 
+==========================================================
+SCRIPT CONSULTA PARA AMBOS SGBD
+==========================================================
+*/
+
+-- Para selecionar o SCHEMA (executar comando apenas no PostgreSQL)
+SET search_path TO escola_idiomas;
+
+/*
+4. ESPECIFICAÇÃO TEXTUAL (CONSULTA 4)
+Encontrar alunos que estão simultaneamente com desempenho acadêmico baixo 
+(média de notas inferior a 7.0) e com problemas financeiros (pelo menos uma mensalidade 'Vencida'). 
+Mostrar o nome do aluno, o telefone e a média de notas.
+*/
+
+-- 4. CÓDIGO SQL (CONSULTA 4)
+select p.nome, p.telefone, ROUND(avg(a.nota), 2) as "Media Notas"
+from pessoas p join alunos al on p.pessoa_id = al.aluno_id
+join matriculas m on al.aluno_id = m.aluno_id
+join avaliacoes a on m.matricula_id = a.matricula_id
+group by p.pessoa_id, p.nome, p.telefone 
+having avg(a.nota) < 7.0 and p.pessoa_id in (
+select m_sub.aluno_id 
+from matriculas m_sub
+join mensalidades ms_sub on m_sub.matricula_id = ms_sub.matricula_id
+where ms_sub.status_pag = 'Vencido' 
+);

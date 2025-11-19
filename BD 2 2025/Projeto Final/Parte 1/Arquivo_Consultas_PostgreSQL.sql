@@ -4,7 +4,7 @@ SCRIPT CONSULTAS PARA SGBD POSTGRESQL
 ==========================================================
 */
 
--- Para selecionar o SCHEMA (exigência do PostgreSQL)
+-- Para selecionar o SCHEMA (executar comando apenas no PostgreSQL)
 SET search_path TO escola_idiomas;
 
 /*
@@ -43,10 +43,10 @@ Exibir apenas as turmas que estão com mais de 80% de sua capacidade ocupada.
 */
 
 -- 3. CÓDIGO SQL (CONSULTA 3)
-
-
-
-
+select t.nome_turma, s.nome_sala, s.capacidade, COUNT(m.matricula_id) as "Alunos Matriculados"
+from turmas t join salas s on t.sala_id = s.sala_id join matriculas m on t.turma_id = m.turma_id
+where m.status_mat = 'Ativa' group by t.nome_turma, s.nome_sala, s.capacidade
+having COUNT(m.matricula_id) > (s.capacidade * 0.8);
 
 /*
 4. ESPECIFICAÇÃO TEXTUAL (CONSULTA 4)
@@ -56,8 +56,14 @@ Mostrar o nome do aluno, o telefone e a média de notas.
 */
 
 -- 4. CÓDIGO SQL (CONSULTA 4)
-
-
-
-
-
+select p.nome, p.telefone, ROUND(avg(a.nota), 2) as "Media Notas"
+from pessoas p join alunos al on p.pessoa_id = al.aluno_id
+join matriculas m on al.aluno_id = m.aluno_id
+join avaliacoes a on m.matricula_id = a.matricula_id
+group by p.pessoa_id, p.nome, p.telefone 
+having avg(a.nota) < 7.0 and p.pessoa_id in (
+select m_sub.aluno_id 
+from matriculas m_sub
+join mensalidades ms_sub on m_sub.matricula_id = ms_sub.matricula_id
+where ms_sub.status_pag = 'Vencido' 
+);

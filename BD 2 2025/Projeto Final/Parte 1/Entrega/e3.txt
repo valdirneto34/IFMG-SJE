@@ -1,0 +1,21 @@
+/* 
+==========================================================
+SCRIPT CONSULTA PARA AMBOS SGBD
+==========================================================
+*/
+
+-- Para selecionar o SCHEMA (executar comando apenas no PostgreSQL)
+SET search_path TO escola_idiomas;
+
+/*
+3. ESPECIFICAÇÃO TEXTUAL (CONSULTA 3)
+Listar todas as turmas ativas, mostrando o nome da turma, o nome da sala, 
+a capacidade máxima da sala, e o número de alunos matriculados. 
+Exibir apenas as turmas que estão com mais de 80% de sua capacidade ocupada.
+*/
+
+-- 3. CÓDIGO SQL (CONSULTA 3)
+select t.nome_turma, s.nome_sala, s.capacidade, COUNT(m.matricula_id) as "Alunos Matriculados"
+from turmas t join salas s on t.sala_id = s.sala_id join matriculas m on t.turma_id = m.turma_id
+where m.status_mat = 'Ativa' group by t.nome_turma, s.nome_sala, s.capacidade
+having COUNT(m.matricula_id) > (s.capacidade * 0.8);

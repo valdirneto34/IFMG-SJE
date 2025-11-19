@@ -1,0 +1,22 @@
+/* 
+==========================================================
+SCRIPT CONSULTA PARA AMBOS SGBD
+==========================================================
+*/
+
+-- Para selecionar o SCHEMA (executar comando apenas no PostgreSQL)
+SET search_path TO escola_idiomas;
+
+/*
+2. ESPECIFICAÇÃO TEXTUAL (CONSULTA 2)
+Exibir um relatório de inadimplência, agrupado por curso. 
+Mostrar o nome do curso, o valor total que já deveria ter sido pago (valor nominal de parcelas vencidas), 
+e o valor total que está efetivamente 'Vencido' ou 'Pendente' (que não foi pago).
+*/
+
+-- 2. CÓDIGO SQL (CONSULTA 2)
+select cu.nome_curso as "Nome do curso", sum(me.valor_nominal) as "Valor nominal de parcelas vencidas", 
+sum(case when me.status_pag in ('Pendente', 'Vencido') then me.valor_nominal else 0 end) as "Inadimplência Real"
+from mensalidades me join matriculas ma on ma.matricula_id = me.matricula_id 
+join turmas tu on tu.turma_id = ma.turma_id join cursos cu on cu.curso_id = tu.curso_id 
+where (me.data_vencimento <= now()) group by cu.nome_curso order by cu.nome_curso;

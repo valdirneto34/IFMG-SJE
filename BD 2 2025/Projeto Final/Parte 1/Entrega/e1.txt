@@ -1,0 +1,22 @@
+/* 
+==========================================================
+SCRIPT CONSULTA PARA AMBOS SGBD
+==========================================================
+*/
+
+-- Para selecionar o SCHEMA (executar comando apenas no PostgreSQL)
+SET search_path TO escola_idiomas;
+
+/*
+1. ESPECIFICAÇÃO TEXTUAL (CONSULTA 1)
+Levantar o nome de cada professor, sua especialidade, 
+a média geral das notas que seus alunos obtiveram em suas avaliações, 
+e o número total de avaliações que ele aplicou. Ordenar pela maior média.
+*/
+
+-- 1. CÓDIGO SQL (CONSULTA 1)
+select pe.nome as "Nome do professor", pr.especialidade as "Especialidade", 
+round(avg(av.nota), 2) as "Média geral das notas", count(av.avaliacao_id) as "Número total de avaliações"
+from pessoas pe join professores pr on pr.professor_id = pe.pessoa_id
+join avaliacoes av on av.professor_id = pr.professor_id group by pe.nome, pr.especialidade
+order by avg(av.nota) desc;
