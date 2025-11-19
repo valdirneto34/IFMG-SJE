@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <vector>
 
 using namespace std;
 
@@ -10,15 +11,15 @@ struct Aresta
 
 struct Vertice
 {
-    int vertice, x, y;
+    int u, x, y;
 };
 
 class Grafo
 {
     // declarar a matriz ou lista
     // declarar uma matriz para as coordenadas
-    Aresta *matrizArestas;
-    int **matrizVertices;
+    vector<Aresta> arestas;
+    vector<Vertice> vertices;
     // declarar variáveis de controle: número de vértices e arestas, se é direcionado, etc.
     int numVertices, numArestas;
     bool direcionado;
@@ -42,6 +43,11 @@ public:
         {
             int vertice, x, y;
             arq_grafo >> vertice >> x >> y;
+            Vertice aux;
+            aux.u = vertice;
+            aux.x = x;
+            aux.y = y;
+            vertices.push_back(aux);
         }
 
         arq_grafo >> numArestas;
@@ -70,32 +76,52 @@ public:
 
     void inserirAresta(int u, int v, int p)
     {
-        matrizArestas = new Aresta[numArestas + 1];
-        matrizArestas[numArestas - 1].u = u;
-        matrizArestas[numArestas - 1].v = v;
-        matrizArestas[numArestas - 1].p = p;
+        Aresta aux;
+        aux.u = u;
+        aux.v = v;
+        aux.p = p;
+        arestas.push_back(aux);
     }
 
     void removerAresta(int u, int v)
     {
         for (int i = 0; i < numArestas; i++)
         {
-            if (matrizArestas[i].u == u && matrizArestas[i].v == v)
+            if (arestas[i].u == u && arestas[i].v == v)
             {
                 for (int j = i; j < numArestas - 1; j++)
                 {
-                    matrizArestas[j].u = matrizArestas[j + 1].u;
-                    matrizArestas[j].v = matrizArestas[j + 1].v;
-                    matrizArestas[j].v = matrizArestas[j + 1].v;
+                    arestas[j] = arestas[j + 1];
                 }
-                --numArestas;
-                matrizArestas = new Aresta[numArestas];
+                numArestas--;
             }
         }
     }
 
     void editarCoordenadaDoVertice(int u, int x, int y)
     {
+        bool encontrado = false;
+        if (x >= 0 && y >= 0)
+        {
+            for (int i = 0; i < numVertices; i++)
+            {
+                if (vertices[i].u == u)
+                {
+                    encontrado = true;
+                    vertices[i].x = x;
+                    vertices[i].y = y;
+                }
+            }
+        }
+        else
+        {
+            cout << "Coordenadas inseridas são inválidas!" << endl;
+        }
+
+        if (!encontrado)
+        {
+            cout << "Vertice nao foi encontrado!" << endl;
+        }
     }
 
     int primeiroAdjacenteDoVertice(int u)
