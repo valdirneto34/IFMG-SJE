@@ -42,6 +42,12 @@
 		}
 	],
 	"settings": {
-		"git.autofetch": "all"
+		"git.autofetch": "all",
+		"files.associations": {
+			"*.embeddedhtml": "html",
+			"iostream": "cpp",
+			"exception": "cpp",
+			"iosfwd": "cpp"
+		}
 	}
 }
