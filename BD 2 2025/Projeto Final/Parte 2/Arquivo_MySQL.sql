@@ -15,8 +15,18 @@ return total_divida;
 end //
 delimiter ;
 
-select pessoa_id, p.nome, fc_calcular_divida_ativa(pessoa_id) as divida_total from pessoas p;
--- where pessoa_id = 4 -- para pessoa especifica
+/*
+Este teste valida o cenário positivo. O aluno ID 4 (Gabriela) possui parcelas explicitamente vencidas no script de população. 
+O retorno esperado é a soma exata dessas parcelas, confirmando que a lógica de soma está correta.
+*/
+select pessoa_id, p.nome, fc_calcular_divida_ativa(pessoa_id) as divida_total from pessoas p where pessoa_id = 4;
+ 
+/*
+Este caso testa a robustez da função via COALESCE. O aluno ID 28 tem todas as mensalidades pagas. 
+O sistema não deve retornar NULL nem erro, mas sim o valor numérico 0.00, 
+provando que o tratamento de exceção para conjuntos vazios funciona.
+*/
+select p.nome, fc_calcular_divida_ativa(p.pessoa_id) as divida_total from pessoas p where p.pessoa_id = 28;
  
 -- FUNCTION 2
 drop function if exists fc_media_idioma;
@@ -34,10 +44,20 @@ return media;
 end //
 delimiter ;
 
+/*
+Verifica se os JOINS estão recuperando corretamente as notas. O aluno ID 4 cursou turmas de Inglês. 
+A função deve percorrer todo o caminho relacional e retornar a média aritmética das notas lançadas.
+*/
 select p.nome, i.nome_idioma, fc_media_idioma(p.pessoa_id, i.idioma_id) as media_notas
-from pessoas p
-join idiomas i
-where p.pessoa_id = 4 and i.idioma_id = 1;
+from pessoas p join idiomas i where p.pessoa_id = 4 and i.idioma_id = 1;
+
+/*
+Teste de consistência. O aluno ID 4 nunca se matriculou em Alemão (ID 4). 
+A função deve filtrar, não encontrar registros e retornar 0.00 (graças ao COALESCE), 
+indicando ausência de histórico naquele idioma específico sem quebrar a execução.
+*/
+select p.nome, 'Alemão' as idioma_testado, fc_media_idioma(p.pessoa_id, 4) as media_notas
+from pessoas p where p.pessoa_id = 4;
 -- =============================================================================
 
 
