@@ -1,6 +1,5 @@
 -- =============================================================================
 -- FUNCTION 1
--- =============================================================================
 DROP FUNCTION IF EXISTS fc_calcular_divida_ativa(int);
 
 CREATE OR REPLACE FUNCTION fc_calcular_divida_ativa(param_id_aluno int)
@@ -21,9 +20,7 @@ FROM pessoas p;
 select pessoa_id, p.nome, fc_calcular_divida_ativa(pessoa_id) as divida_total from pessoas p;
 -- where pessoa_id = 4 -- para pessoa especifica
  
--- =============================================================================
 -- FUNCTION 2
--- =============================================================================
 drop function if exists fc_media_idioma(int, int);
 create or replace function fc_media_idioma(param_id_aluno int, param_id_idioma int)
 returns decimal(4,2) as $$
@@ -40,3 +37,44 @@ select p.nome, i.nome_idioma, fc_media_idioma(p.pessoa_id, i.idioma_id) as media
 from pessoas p
 join idiomas i
 where p.pessoa_id = 4 and i.idioma_id = 1;
+-- =============================================================================
+
+
+
+-- =============================================================================
+-- TRANSACTION 1
+
+ 
+-- TRANSACTION 2
+
+-- =============================================================================
+
+
+
+-- =============================================================================
+-- PROCEDURE 1
+
+ 
+-- PROCEDURE 2
+
+-- =============================================================================
+
+
+
+-- =============================================================================
+-- VIEW 1
+
+ 
+-- VIEW 2
+
+-- =============================================================================
+
+
+
+-- =============================================================================
+-- TRIGGER 1
+
+ 
+-- TRIGGER 2
+
+-- =============================================================================
