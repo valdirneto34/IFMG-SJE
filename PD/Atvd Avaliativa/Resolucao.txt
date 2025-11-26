@@ -1,11 +1,20 @@
+=====================================================================
+A senha do cofre é 998877
+
 Hash 1:
 8eb172f1704ca57c5bd3f3a4e2fd2336a7bf4572bf812c10d19673468bdeb3ab
-
-Hash 2:
-26d08efbe5c7326ff5e4b0e5859ebddc5b2bca0c0212be1a5a30c3aca7a19f5d
 
 Criptografia 1:
 ubaotzb7n2FVijY/p0MuTYn/XwFo44X8Z5RQE1ldqU8=
 
+=====================================================================
+
+A senha do cofre é 998877
+
+Hash 2:
+26d08efbe5c7326ff5e4b0e5859ebddc5b2bca0c0212be1a5a30c3aca7a19f5d
+
 Criptografia 2:
 ubaotzb7n2FVijY/p0MuTRM0G01VNr06tYC37DB00JY=
+
+=====================================================================
