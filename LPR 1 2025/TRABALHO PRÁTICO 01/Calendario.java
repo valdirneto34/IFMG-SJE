@@ -64,41 +64,31 @@ public class Calendario {
     }
 
     public void imprimeMes(int mes, int ano) {
-        int matriz[][] = new int[6][7];
         int semanaInicio = diaSemana(1, mes, ano);
         int qtd = diasNoMes(mes, ano);
-        String mesString = "";
         int contador = 1;
+        String mesAno = nomeMes[mes] + " - " + ano;
 
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                matriz[i][j] = 0;
-            }
-        }
-
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 7; j++) {
-                if (i == 0 && j < semanaInicio || contador > qtd) {
-                    matriz[i][j] = 0;
-                } else {
-                    matriz[i][j] = contador;
-                    contador++;
-                }
-            }
-        }
-
-        System.out.printf("%30s\n", nomeMes[mes]);
+        System.out.println("----------------------------------------------------------");
+        System.out.printf("%30s\n", mesAno);
         System.out.println("D\tS\tT\tQ\tQ\tS\tS");
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
-                System.out.printf("%d\t", matriz[i][j]);
+                if (i == 0 && j < semanaInicio || contador > qtd) {
+                    System.out.printf("\t");
+                } else {
+                    System.out.printf("%d\t", contador);
+                    contador++;
+                }
             }
-            System.out.printf("\n");
+            System.out.print("\n");
         }
 
     }
 
     public void imprimeCalenadrio(int ano) {
-
+        for (int i = 1; i <= 12; i++) {
+            imprimeMes(i, ano);
+        }
     }
 }
