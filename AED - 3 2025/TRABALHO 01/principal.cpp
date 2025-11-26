@@ -125,7 +125,7 @@ public:
                 for (int j = 0; j < numVertices; j++)
                 {
                     if (arestas[i][j] != -1)
-                        cout << "[" << indice_para_id[i] << ", " << indice_para_id[j] << "]: " << arestas[i][j] << "  ";
+                        cout << "[" << indice_para_id[i] << ", " << indice_para_id[j] << "]: " << arestas[i][j] << "\t";
                 }
                 cout << endl;
             }
