@@ -20,12 +20,14 @@ interface Notificacao {
 
 // Implementacoes Concretas
 class EmailNotificacao implements Notificacao {
+    @Override
     public void enviar(String msg) {
         System.out.println("Enviando EMAIL: " + msg);
     }
 }
 
 class SMSNotificacao implements Notificacao {
+    @Override
     public void enviar(String msg) {
         System.out.println("Enviando SMS: " + msg);
     }

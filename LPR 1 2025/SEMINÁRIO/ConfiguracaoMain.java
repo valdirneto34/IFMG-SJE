@@ -1,4 +1,4 @@
-class ConfiguracaoMain {
+public class ConfiguracaoMain {
     public static void main(String[] args) {
         // Configuracao c = new Configuracao(); // ERRO!
 
@@ -12,7 +12,7 @@ class ConfiguracaoMain {
     }
 }
 
-public class Configuracao {
+class Configuracao {
     // 1. Atributo estático que guarda a instância única
     private static Configuracao instance;
 
