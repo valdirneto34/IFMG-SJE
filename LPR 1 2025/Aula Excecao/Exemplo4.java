@@ -9,7 +9,7 @@ public class Exemplo4 {
             System.out.println("Falha na conversão.");
         } catch (FileNotFoundException e) {
             System.out.println("Erro: " + e.getMessage() + e.getClass());
-        }finally{
+        } finally {
             System.out.println("Nenhuma novidade");
         }
     }
