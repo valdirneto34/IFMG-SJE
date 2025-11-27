@@ -1,5 +1,3 @@
-import java.util.*;
-
 public class Calendario {
 
     /**
@@ -69,8 +67,8 @@ public class Calendario {
         int contador = 1;
         String mesAno = nomeMes[mes] + " - " + ano;
 
-        System.out.println("----------------------------------------------------------");
-        System.out.printf("%30s\n", mesAno);
+        System.out.println("---------------------------------------------------");
+        System.out.printf("%32s\n\n", mesAno);
         System.out.println("D\tS\tT\tQ\tQ\tS\tS");
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 7; j++) {
@@ -83,10 +81,10 @@ public class Calendario {
             }
             System.out.print("\n");
         }
-
+        System.out.print("\n");
     }
 
-    public void imprimeCalenadrio(int ano) {
+    public void imprimeCalendario(int ano) {
         for (int i = 1; i <= 12; i++) {
             imprimeMes(i, ano);
         }
