@@ -39,7 +39,7 @@ class Personagem {
         return arma;
     }
 
-    void atacar(){
+    void atacar() {
         arma.usar();
     }
 }
