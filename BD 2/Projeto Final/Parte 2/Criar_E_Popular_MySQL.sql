@@ -874,13 +874,6 @@ end //
 delimiter ;
 
 -- TRANSACTION 1
-/*
-Evento (Entrada): Solicitação de transferência de um aluno de sua turma atual para uma nova turma de destino (id_matricula, id_nova_turma).
-Condição (Lógica): Verifica-se a disponibilidade na turma de destino. A regra é: (Capacidade da Sala - Total de Alunos Ativos na Nova Turma) > 0.
-Ação (Saída):
-Se a condição for verdadeira: Executar o UPDATE do turma_id na tabela matriculas e confirmar a transação (COMMIT).
-Se a condição for falsa: Desfazer qualquer alteração (ROLLBACK) e levantar uma exceção informando que não há vagas disponíveis.
-*/
 drop procedure if exists tr_transferir_turma;
 delimiter //
 create procedure tr_transferir_turma(param_matricula_id INT, param_nova_turma_id INT)
@@ -962,3 +955,55 @@ if new.valor_pag is not null and old.status_pag != 'Pago' then
 end if;
 end //
 delimiter ;
+
+-- PROCEDURE 1
+DELIMITER //
+CREATE PROCEDURE sp_gerar_mensalidades(IN p_matricula_id INT)
+BEGIN
+    DECLARE v_duracao_meses INT;
+    DECLARE v_valor_total DECIMAL(10, 2);
+    DECLARE v_valor_parcela DECIMAL(10, 2);
+    DECLARE v_data_matricula DATE;
+    DECLARE v_contador INT DEFAULT 1;
+    DECLARE v_data_vencimento DATE;
+    DECLARE v_curso_id INT;
+
+-- 1. Obter dados da Matrícula e do Curso
+SELECT m.data_matricula, m.valor_total_curso, c.duracao_meses, m.turma_id
+INTO v_data_matricula, v_valor_total, v_duracao_meses, v_curso_id
+FROM matriculas m JOIN turmas t ON m.turma_id = t.turma_id
+JOIN cursos c ON t.curso_id = c.curso_id WHERE m.matricula_id = p_matricula_id;
+
+-- 2. Condição de Validação (Duração do Curso)
+IF v_duracao_meses IS NULL OR v_duracao_meses <= 0 THEN SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Curso não possui duração válida para geração de mensalidades.';
+ELSE SET v_valor_parcela = v_valor_total / v_duracao_meses;
+WHILE v_contador <= v_duracao_meses DO
+SET v_data_vencimento = DATE_ADD(v_data_matricula, INTERVAL v_contador MONTH);
+SET v_data_vencimento = CONCAT(YEAR(v_data_vencimento), '-', MONTH(v_data_vencimento), '-10');
+
+INSERT INTO mensalidades (matricula_id, numero_parcela, data_vencimento, valor_nominal, status_pag)
+VALUES (p_matricula_id, v_contador, v_data_vencimento, v_valor_parcela,'Pendente');
+
+SET v_contador = v_contador + 1;
+END WHILE;
+END IF;
+END //
+DELIMITER ;
+
+-- PROCEDURE 2
+DELIMITER //
+CREATE PROCEDURE sp_aplicar_desconto(IN p_matricula_id INT, IN p_percentual_desconto DECIMAL(5, 2))
+BEGIN
+    DECLARE v_fator_multiplicador DECIMAL(10, 6);
+
+IF p_percentual_desconto IS NULL OR p_percentual_desconto <= 0 OR p_percentual_desconto > 100 THEN 
+SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = 'Percentual de desconto inválido (deve ser entre 0.01 e 100.00). Operação abortada.';
+ELSE SET v_fator_multiplicador = 1 - (p_percentual_desconto / 100);
+UPDATE mensalidades SET valor_nominal = valor_nominal * v_fator_multiplicador
+WHERE matricula_id = p_matricula_id AND status_pag = 'Pendente';
+
+SELECT ROW_COUNT() AS parcelas_atualizadas;
+END IF;
+END //
+DELIMITER ;
+

@@ -980,3 +980,64 @@ CREATE TRIGGER tg_atualizar_status_pagamento
 BEFORE UPDATE ON escola_idiomas.mensalidades
 FOR EACH ROW
 EXECUTE FUNCTION escola_idiomas.fn_atualizar_status_pagamento();
+
+-- PROCEDURE 1
+CREATE OR REPLACE PROCEDURE escola_idiomas.sp_gerar_mensalidades(
+    p_matricula_id INT
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_duracao_meses INT;
+    v_valor_total DECIMAL(10, 2);
+    v_data_matricula DATE;
+    v_valor_parcela DECIMAL(10, 2);
+    v_contador INT := 1;
+    v_data_vencimento DATE;
+BEGIN
+    -- 1. Obter dados da Matrícula e do Curso
+SELECT m.data_matricula, m.valor_total_curso, c.duracao_meses
+INTO v_data_matricula, v_valor_total, v_duracao_meses
+FROM escola_idiomas.matriculas m JOIN escola_idiomas.turmas t ON m.turma_id = t.turma_id
+JOIN escola_idiomas.cursos c ON t.curso_id = c.curso_id
+WHERE m.matricula_id = p_matricula_id;
+
+    -- 2. Condição de Validação (Duração do Curso)
+IF v_duracao_meses IS NULL OR v_duracao_meses <= 0 THEN RAISE EXCEPTION 'Curso não possui duração válida para geração de mensalidades.';
+ELSE v_valor_parcela := v_valor_total / v_duracao_meses;
+WHILE v_contador <= v_duracao_meses LOOP
+v_data_vencimento := (v_data_matricula + (v_contador || ' month')::interval);
+v_data_vencimento := DATE_TRUNC('month', v_data_vencimento) + INTERVAL '9 days'; -- Define o dia 10
+
+INSERT INTO escola_idiomas.mensalidades (matricula_id, numero_parcela, data_vencimento, valor_nominal, status_pag)
+VALUES (p_matricula_id, v_contador, v_data_vencimento, v_valor_parcela, 'Pendente');
+v_contador := v_contador + 1;
+        
+END LOOP;
+END IF;
+END;
+$$;
+
+-- PROCEDURE 2
+CREATE OR REPLACE PROCEDURE escola_idiomas.sp_aplicar_desconto(
+    p_matricula_id INT,
+    p_percentual_desconto DECIMAL
+)
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_fator_multiplicador DECIMAL;
+    v_linhas_afetadas INT;
+BEGIN
+    -- 1. Verificação de Segurança (Percentual de Desconto)
+IF p_percentual_desconto IS NULL OR p_percentual_desconto <= 0 OR p_percentual_desconto > 100 THEN
+RAISE EXCEPTION 'Percentual de desconto inválido (deve ser entre 0.01 e 100.00). Operação abortada.';
+ELSE v_fator_multiplicador := 1 - (p_percentual_desconto / 100);
+UPDATE escola_idiomas.mensalidades SET valor_nominal = valor_nominal * v_fator_multiplicador
+WHERE matricula_id = p_matricula_id AND status_pag = 'Pendente';
+
+GET DIAGNOSTICS v_linhas_afetadas = ROW_COUNT;
+RAISE NOTICE 'Total de % parcelas pendentes atualizadas com desconto de %%%', v_linhas_afetadas, p_percentual_desconto;
+    END IF;
+END;
+$$; 
