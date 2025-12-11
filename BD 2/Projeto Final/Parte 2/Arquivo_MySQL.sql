@@ -28,10 +28,13 @@ men.status_pag = 'Vencido'or(men.status_pag = 'Pendente' and men.data_vencimento
 return total_divida;
 end //
 delimiter ;
+
 /*
 Decisões de Implementação:
-Tratamento de Nulos (COALESCE): A decisão mais crítica desta função foi o uso de COALESCE(SUM(...), 0). Em SQL, a soma de um conjunto vazio resulta em NULL. Para regras de negócio financeiras, retornar NULL pode causar erros de cálculo em aplicações (ex: NULL + 100 = NULL). O COALESCE garante que um aluno sem dívidas retorne 0.00.
-Lógica de Vencimento Dupla: A cláusula WHERE implementa uma verificação de segurança. Não confiamos apenas no status 'Vencido' (que pode depender de uma rotina noturna de atualização). Verificamos também se é 'Pendente' com data passada (data_vencimento < CURRENT_DATE), garantindo que a dívida seja calculada em tempo real, mesmo se o status no banco estiver desatualizado.
+Tratamento de Nulos (COALESCE): A decisão mais crítica desta função foi o uso de COALESCE(SUM(...), 0). Em SQL, a soma de um conjunto vazio resulta em NULL. 
+Para regras de negócio financeiras, retornar NULL pode causar erros de cálculo em aplicações (ex: NULL + 100 = NULL). O COALESCE garante que um aluno sem dívidas retorne 0.00.
+Lógica de Vencimento Dupla: A cláusula WHERE implementa uma verificação de segurança. Não confiamos apenas no status 'Vencido' (que pode depender de uma rotina noturna de atualização).
+ Verificamos também se é 'Pendente' com data passada (data_vencimento < CURRENT_DATE), garantindo que a dívida seja calculada em tempo real, mesmo se o status no banco estiver desatualizado.
 Compatibilidade de Datas: No MySQL utilizamos CURDATE() e no PostgreSQL CURRENT_DATE, respeitando as funções nativas de cada SGBD para capturar a data do servidor.
 */
 
@@ -71,10 +74,13 @@ where ma.aluno_id = param_id_aluno and cu.idioma_id = param_id_idioma;
 return media;
 end //
 delimiter ;
+
 /*
 Decisões de Implementação:
-Navegação entre Tabelas (Joins): A complexidade desta função reside na distância entre a tabela avaliacoes (onde está a nota) e a tabela idiomas (o filtro desejado). Optou-se por uma cadeia de INNER JOINs (Avaliações → Matrículas → Turmas → Cursos) para garantir integridade. Isso assegura que a nota pertence, de fato, àquele aluno naquele contexto específico.
-Abstração de Cursos: A função permite calcular a média de um aluno em "Inglês" (Idioma), independentemente de ele ter feito "Inglês Básico 1" ou "Inglês Avançado". O agrupamento é feito pelo idioma pai, oferecendo uma visão macro do desempenho do estudante.
+Navegação entre Tabelas (Joins): A complexidade desta função reside na distância entre a tabela avaliacoes (onde está a nota) e a tabela idiomas (o filtro desejado). 
+Optou-se por uma cadeia de INNER JOINs (Avaliações → Matrículas → Turmas → Cursos) para garantir integridade. Isso assegura que a nota pertence, de fato, àquele aluno naquele contexto específico.
+Abstração de Cursos: A função permite calcular a média de um aluno em "Inglês" (Idioma), independentemente de ele ter feito "Inglês Básico 1" ou "Inglês Avançado". 
+O agrupamento é feito pelo idioma pai, oferecendo uma visão macro do desempenho do estudante.
 Determinismo: As funções foram marcadas como DETERMINISTIC (no MySQL), informando ao otimizador do banco que, para os mesmos dados de entrada, o resultado será sempre o mesmo, o que pode otimizar a performance em consultas repetitivas.
 */
 
@@ -104,6 +110,69 @@ Ação (Saída):
 Se a condição for verdadeira: Executar o UPDATE do turma_id na tabela matriculas e confirmar a transação (COMMIT).
 Se a condição for falsa: Desfazer qualquer alteração (ROLLBACK) e levantar uma exceção informando que não há vagas disponíveis.
 */
+drop procedure if exists tr_transferir_turma;
+delimiter //
+create procedure tr_transferir_turma(param_matricula_id INT, param_nova_turma_id INT)
+begin
+declare capacidade_sala INT;
+declare alunos_ativos_na_nova_turma INT;
+declare turma_atual_id INT;
+
+start transaction; 
+
+select turma_id into turma_atual_id from matriculas WHERE matricula_id = param_matricula_id;
+
+if turma_atual_id is null then rollback;
+signal sqlstate '45000' set message_text = 'Erro: Matrícula não encontrada.';
+END IF;
+
+select S.capacidade into capacidade_sala from turmas T join salas S on T.sala_id = S.sala_id where T.turma_id = param_nova_turma_id;
+
+select count(M.matricula_id) into alunos_ativos_na_nova_turma from matriculas M where M.turma_id = param_nova_turma_id and M.status_mat = 'Ativa';
+    
+if (alunos_ativos_na_nova_turma + 1) > capacidade_sala then rollback;
+signal sqlstate '45000' set message_text = 'Transferência Falhou: Sala de destino lotada.';
+else update matriculas set turma_id = param_nova_turma_id where matricula_id = param_matricula_id;
+commit;
+end if;
+
+end //
+delimiter ;
+
+/*
+Decisões de Implementação:
+Atomicidade: O conceito transacional é mantido. No MySQL, usamos 'START TRANSACTION', 'COMMIT' e 'ROLLBACK' explícitos. 
+No PostgreSQL, ao usar 'CREATE OR REPLACE PROCEDURE' (PL/pgSQL), o bloco BEGIN/END funciona como uma transação implícita; 
+o 'COMMIT' ocorre automaticamente no final do bloco, a menos que um erro ('RAISE EXCEPTION') seja lançado, o que força um ROLLBACK automático.
+Controle de Erro: A sinalização de erro foi adaptada. No MySQL, utiliza-se SIGNAL SQLSTATE '45000'. 
+No PostgreSQL, o comando é RAISE EXCEPTION, que é o mecanismo nativo para abortar a execução e desfazer a transação.
+Validação de Vaga: A lógica de verificação (contagem de alunos ativos na nova turma vs. capacidade) é mantida, garantindo que a integridade do negócio seja a prioridade.
+*/
+
+/*
+Este teste valida o cenário positivo (Transfêrencia Permitida). 
+- Aluno: Daniel Silva (Matrícula ID 1).
+- Turma Atual: ING-BAS-T01-2025 (ID 1).
+- Turma Destino: ESP-BAS-T04-2025 (ID 18).
+- Ocupação T18: 1 aluno (Matrícula 38). Capacidade: 25. HÁ VAGA.
+O retorno esperado é a Matrícula 1 ter o campo turma_id = 18.
+*/
+call tr_transferir_turma(1, 18); 
+
+-- Verificação (Deve mostrar turma_id = 18)
+select M.matricula_id, T.turma_id, P.nome, T.nome_turma from matriculas M join pessoas P on M.aluno_id = P.pessoa_id join turmas T on M.turma_id = T.turma_id where M.matricula_id = 1;
+ 
+/*
+Este caso testa o bloqueio por lotação (Transação desfeita). 
+Usamos a Turma ID 19 (ITA-RAP-T02-2025) que está lotada.
+A tentativa de mover a Matrícula ID 9 (Lucas) para lá DEVE FALHAR.
+O retorno esperado é o erro 'Transferência Falhou: Sala de destino lotada.' e a Matrícula ID 9 
+DEVE PERMANECER com sua turma original (ID 14) após o ROLLBACK.
+*/
+call tr_transferir_turma(9, 19); 
+
+-- Verificação (Deve mostrar a turma original: turma_id = 14)
+select M.matricula_id, T.turma_id, P.nome, T.nome_turma from matriculas M join pessoas P on M.aluno_id = P.pessoa_id join turmas T on M.turma_id = T.turma_id where M.matricula_id = 9;
 
 -- -------------------------------------------------------------------------------------------------------------------------------------------------
 -- TRANSACTION 2
@@ -116,6 +185,58 @@ Registrar a data_pag com a data atual do sistema.
 Registrar o valor_pag com o montante efetivamente recebido.
 Se qualquer um desses updates falhar, toda a operação é desfeita para evitar inconsistência (ex: constar como pago mas sem data).
 */
+drop procedure if exists tr_realizar_pagamento;
+delimiter //
+create procedure tr_realizar_pagamento(param_matricula_id INT, param_numero_parcela INT, param_valor_pago DECIMAL(10,2))
+begin
+declare linhas_afetadas int default 0;
+
+start transaction;
+
+update mensalidades set status_pag = 'Pago', data_pag = current_date(), valor_pag = param_valor_pago
+where matricula_id = param_matricula_id and numero_parcela = param_numero_parcela;
+
+set linhas_afetadas = row_count();
+
+if linhas_afetadas = 1 then commit;
+else rollback;
+signal sqlstate '45000' set message_text = 'Pagamento Falhou: Parcela não encontrada ou erro na baixa.';
+    end if;
+    
+end //
+delimiter ;
+
+/*
+Decisões de Implementação:
+Atomicidade e Consistência: O comando UPDATE altera os três campos críticos simultaneamente (status_pag, data_pag, valor_pag). 
+Em caso de falha de qualquer natureza (ex: registro não encontrado, falha de integridade), o sistema executa o ROLLBACK, 
+impedindo que a mensalidade fique com status 'Pago' sem o registro da data ou valor, mantendo a consistência (ACID) em ambos os SGBDs.
+Controle de Linhas Afetadas: Para validar a existência da parcela, utilizamos a função de contagem de linhas afetadas (ROW_COUNT() no MySQL/MariaDB e 
+GET DIAGNOSTICS... ROW_COUNT no PostgreSQL). Isso garante que o COMMIT só ocorra se exatamente UMA parcela for atualizada, prevenindo confirmação para registros inexistentes.
+*/
+
+/*
+Este teste valida o cenário positivo (Baixa Bem-sucedida). 
+A mensalidade Matrícula ID 1, Parcela 5, está com status 'Pendente'. 
+O procedimento deve realizar o UPDATE dos três campos cruciais (status, data, valor).
+O retorno esperado é status_pag = 'Pago', data_pag preenchida (data atual) e valor_pag = 300.00.
+*/
+call tr_realizar_pagamento(1, 5, 300.00); 
+
+-- Verificação (Deve mostrar status 'Pago' e data_pag preenchida)
+select matricula_id, numero_parcela, status_pag, data_pag, valor_pag from mensalidades where matricula_id = 1 and numero_parcela = 5;
+ 
+/*
+Este caso testa o bloqueio por registro inexistente. 
+Tentamos realizar a baixa da Parcela 99, que não existe na Matrícula ID 1.
+O procedimento deve retornar 0 linhas afetadas, executar o ROLLBACK 
+e retornar o erro 'Pagamento Falhou: Parcela não encontrada ou erro na baixa.'.
+O retorno esperado é a mensagem de erro.
+*/
+call tr_realizar_pagamento(1, 99, 300.00); 
+
+-- Verificação (Deve retornar 0 linhas)
+select matricula_id, numero_parcela, status_pag, data_pag, valor_pag from mensalidades where matricula_id = 1 and numero_parcela = 99;
 
 -- =================================================================================================================================================
 
@@ -132,7 +253,8 @@ Ação (Saída): Inserir registros na tabela mensalidades correspondentes a cada
 -- PROCEDURE 2
 /*
 Evento (Entrada): A secretaria decide conceder uma bolsa ou desconto a um aluno já matriculado (chamada da procedure passando id_matricula e percentual_desconto).
-Condição (Lógica): O desconto deve ser aplicado apenas sobre as mensalidades cujo status_pag seja 'Pendente'. Parcelas 'Pagas' ou 'Vencidas' devem ser ignoradas para manter a integridade do histórico financeiro e evitar recálculos indevidos de dívidas passadas.
+Condição (Lógica): O desconto deve ser aplicado apenas sobre as mensalidades cujo status_pag seja 'Pendente'. 
+Parcelas 'Pagas' ou 'Vencidas' devem ser ignoradas para manter a integridade do histórico financeiro e evitar recálculos indevidos de dívidas passadas.
 Ação (Saída): Atualizar (UPDATE) o campo valor_nominal das parcelas elegíveis, reduzindo o valor original conforme o percentual informado. Caso o percentual seja inválido (<=0 ou >100), a operação deve ser abortada.
 */
 
@@ -189,11 +311,15 @@ if(alunos_ativos + 1) > capacidade_sala then signal sqlstate '45000' set message
 end if;
 end //
 delimiter ;
+
 /*
 Decisões de Implementação:
-Momento de Execução (BEFORE INSERT): O Trigger é executado antes que o registro seja fisicamente inserido na tabela. Isso permite o bloqueio da operação sem a necessidade de um ROLLBACK custoso (melhor performance).
-Filtro de Status (status_mat = 'Ativa'): A contagem de alunos é rigorosa, considerando apenas matrículas com status 'Ativa'. Isso evita que alunos com matrículas 'Concluídas' ou 'Inativas' sejam contados indevidamente para o cálculo da lotação atual.
-Verificação Preditiva: A condição 'if(alunos_ativos + 1) > capacidade_sala' prevê o estado futuro. O Trigger compara a lotação ANTES da inserção (alunos_ativos) com a capacidade, mas contando o novo aluno (+1), garantindo que a regra de lotação não seja violada.
+Momento de Execução (BEFORE INSERT): O Trigger é executado antes que o registro seja fisicamente inserido na tabela. 
+Isso permite o bloqueio da operação sem a necessidade de um ROLLBACK custoso (melhor performance).
+Filtro de Status (status_mat = 'Ativa'): A contagem de alunos é rigorosa, considerando apenas matrículas com status 'Ativa'. 
+Isso evita que alunos com matrículas 'Concluídas' ou 'Inativas' sejam contados indevidamente para o cálculo da lotação atual.
+Verificação Preditiva: A condição 'if(alunos_ativos + 1) > capacidade_sala' prevê o estado futuro. 
+O Trigger compara a lotação ANTES da inserção (alunos_ativos) com a capacidade, mas contando o novo aluno (+1), garantindo que a regra de lotação não seja violada.
 */
 
 /*
@@ -204,7 +330,7 @@ O sistema deve permitir a inserção de um novo aluno (Aluno ID 29), resultando 
 O retorno esperado é a Matrícula 118 ou superior, com status 'Ativa'.
 */
 INSERT INTO matriculas (aluno_id, turma_id, data_matricula, valor_total_curso, status_mat) VALUES
-(29, 17, CURDATE(), 1800.00, 'Ativa');
+(29, 17, current_date(), 1800.00, 'Ativa');
 
 -- Verificação (Deve retornar o novo registro)
 SELECT M.matricula_id, P.nome AS Aluno, T.nome_turma FROM matriculas M JOIN pessoas P ON 
@@ -219,7 +345,7 @@ O retorno esperado é o erro 'Sala Lotada. Matrícula bloqueada.' e o registro n
 */
 -- ESTE COMANDO DEVE GERAR O ERRO: "Sala Lotada. Matrícula bloqueada."
 INSERT INTO matriculas (aluno_id, turma_id, data_matricula, valor_total_curso, status_mat) VALUES
-(30, 19, CURDATE(), 900.00, 'Ativa');
+(30, 19, current_date(), 900.00, 'Ativa');
 
 -- Verificação (Deve retornar 0 linhas, pois o INSERT foi bloqueado)
 SELECT * FROM matriculas WHERE aluno_id = 30 AND turma_id = 19;
@@ -239,7 +365,7 @@ for each row
 begin
 if new.valor_pag is not null and old.status_pag != 'Pago' then
 	set new.status_pag = 'Pago';
-	if new.data_pag is null then set new.data_pag = curdate();
+	if new.data_pag is null then set new.data_pag = current_date();
 	end if;
 end if;
 end //
@@ -247,9 +373,12 @@ delimiter ;
 
 /*
 Decisões de Implementação:
-Sinalização de Pagamento (NEW.valor_pag): A decisão de disparo do Trigger foca no preenchimento do campo 'valor_pag'. Isso garante que o status financeiro seja automatizado no momento em que a informação contábil mais relevante (o valor recebido) é registrada[cite: 413].
-Controle de Status (OLD.status_pag): A cláusula "AND OLD.status_pag != 'Pago'" impede que o Trigger seja executado desnecessariamente em updates posteriores (como uma correção na forma de pagamento) de uma parcela que já foi quitada. Isso garante eficiência.
-Consistência de Data (CURDATE()): O uso do condicional IF NEW.data_pag IS NULL em conjunto com CURDATE() (ou CURRENT_DATE no PostgreSQL) assegura que todo registro com status 'Pago' tenha uma data de pagamento associada, garantindo consistência mesmo que o operador esqueça de mudar o status manualmente[cite: 414, 415].
+Sinalização de Pagamento (NEW.valor_pag): A decisão de disparo do Trigger foca no preenchimento do campo 'valor_pag'. 
+Isso garante que o status financeiro seja automatizado no momento em que a informação contábil mais relevante (o valor recebido) é registrada[cite: 413].
+Controle de Status (OLD.status_pag): A cláusula "AND OLD.status_pag != 'Pago'" impede que o Trigger seja executado 
+desnecessariamente em updates posteriores (como uma correção na forma de pagamento) de uma parcela que já foi quitada. Isso garante eficiência.
+Consistência de Data (CURDATE()): O uso do condicional IF NEW.data_pag IS NULL em conjunto com CURDATE() (ou CURRENT_DATE no PostgreSQL) 
+assegura que todo registro com status 'Pago' tenha uma data de pagamento associada, garantindo consistência mesmo que o operador esqueça de mudar o status manualmente.
 */
 
 /*
