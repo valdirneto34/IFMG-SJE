@@ -1,4 +1,4 @@
-public class Main {
+public class MainRPG {
     public static void main(String[] args) {
         Personagem p = new Personagem(new Espada());
 
@@ -13,12 +13,14 @@ interface Arma {
 }
 
 class Espada implements Arma {
+    @Override
     public void usar() {
         System.out.println("Espada!");
     }
 }
 
 class Arco implements Arma {
+    @Override
     public void usar() {
         System.out.println("Arco!");
     }
