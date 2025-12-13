@@ -429,28 +429,25 @@ Classificação Financeira (CASE WHEN): Mantém-se o uso de CASE WHEN para categ
 */
 
 /*
-TESTE 1: Validação de Agregação por Curso
+TESTE 1:
 Verifica se o relatório agrupa corretamente pelo nome do curso e se os totais estão corretos.
 Vamos verificar o curso 'Inglês Básico I' (ID 1). 
-Total de alunos ativos: 4 (IDs 4, 10, 12, 16)
-Total Recebido: 6 parcelas * 300.00 = 1800.00
-Total a Receber: 8 parcelas * 300.00 = 2400.00
+Total de alunos ativos: 8
+Total Recebido: 7200.00
+Total a Receber: 10500.00
 */
 SELECT nome_curso, qtd_alunos_ativos, total_recebido, total_a_receber 
-FROM vw_saude_financeira 
-WHERE nome_curso = 'Inglês Básico I';
+FROM vw_saude_financeira WHERE nome_curso = 'Inglês Básico I';
 
 /*
-TESTE 2: Validação de Filtro (Total a Receber para Matrículas Sem Pagamentos)
+TESTE 2:
 Verifica se o curso 'Espanhol Básico' (ID 6) está calculando corretamente. 
-Total de alunos ativos: 2 (IDs 25, 26).
-Todos os 16 pagamentos (8x2) estão 'Pendente' no DML original.
-Total Recebido: 0.00
-Total a Receber: 16 parcelas * 1800.00/8 = 3600.00
+Total de alunos ativos: 5
+Total Recebido: 2100.00
+Total a Receber: 8700.00
 */
 SELECT nome_curso, qtd_alunos_ativos, total_recebido, total_a_receber 
-FROM vw_saude_financeira 
-WHERE nome_curso = 'Espanhol Básico I';
+FROM vw_saude_financeira WHERE nome_curso = 'Espanhol Básico I';
 
 -- -------------------------------------------------------------------------------------------------------------------------------------------------
 -- VIEW 2
@@ -487,8 +484,7 @@ Após a preparação de DML (que adicionou 17 alunos na Turma 19, que já tinha 
 O retorno esperado é ocupacao_atual = 18 e status_lotacao = 'LOTADA'.
 */
 SELECT sala_id, nome_sala, capacidade, ocupacao_atual, status_lotacao
-FROM vw_ocupacao_salas 
-WHERE sala_id = 3;
+FROM vw_ocupacao_salas WHERE sala_id = 3;
 
 /*
 TESTE 2: Validação de Sala Vazia (LEFT JOIN)
@@ -497,8 +493,7 @@ Verifica se uma sala que não possui nenhuma turma (ex: Sala ID 5 - Sala de Reun
 O retorno esperado é ocupacao_atual = 0 e status_lotacao = 'DISPONÍVEL'.
 */
 SELECT sala_id, nome_sala, capacidade, ocupacao_atual, status_lotacao
-FROM vw_ocupacao_salas 
-WHERE sala_id = 5;
+FROM vw_ocupacao_salas WHERE sala_id = 5;
 
 -- =================================================================================================================================================
 
