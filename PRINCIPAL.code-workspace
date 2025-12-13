@@ -1,8 +1,8 @@
 {
 	"folders": [
 		{
-			"name": "IAP 2024",
-			"path": "PERÍODOS FECHADOS/IAP 2024"
+			"name": "IAP",
+			"path": "PERÍODOS FECHADOS/1º P - 2024/IAP"
 		},
 		{
 			"name": "PYTHON-CemV",
@@ -17,28 +17,28 @@
 			"path": "../ESTUDOS EM CASA/PYTHON-CFB"
 		},
 		{
-			"name": "AED - 1 2024",
-			"path": "PERÍODOS FECHADOS/AED - 1 2024"
+			"name": "AEDS 1",
+			"path": "PERÍODOS FECHADOS/2º P - 2024_25/AEDS 1"
 		},
 		{
 			"name": "HTML-CemV",
 			"path": "../ESTUDOS EM CASA/HTML-CemV"
 		},
 		{
-			"name": "AED - 2 2025",
-			"path": "PERÍODOS FECHADOS/AED - 2 2025"
+			"name": "AEDS 2",
+			"path": "PERÍODOS FECHADOS/3º P - 2025/AEDS 2"
 		},
 		{
 			"name": "DART",
 			"path": "../ESTUDOS EM CASA/DART"
 		},
 		{
-			"name": "AED - 3 2025",
-			"path": "AED - 3 2025"
+			"name": "AEDS 3",
+			"path": "AEDS 3"
 		},
 		{
-			"name": "LPR 1 2025",
-			"path": "LPR 1 2025"
+			"name": "LPR 1",
+			"path": "LPR 1"
 		}
 	],
 	"settings": {
