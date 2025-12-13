@@ -1041,3 +1041,23 @@ RAISE NOTICE 'Total de % parcelas pendentes atualizadas com desconto de %%%', v_
     END IF;
 END;
 $$; 
+
+-- VIEW 1
+CREATE OR REPLACE VIEW vw_saude_financeira AS
+SELECT c.nome_curso AS nome_curso, COUNT(DISTINCT m.aluno_id) AS qtd_alunos_ativos,
+COALESCE(SUM(CASE WHEN men.status_pag = 'Pago' THEN men.valor_nominal ELSE 0 END), 0.00) AS total_recebido,
+COALESCE(SUM(CASE WHEN men.status_pag IN ('Pendente', 'Vencido') THEN men.valor_nominal ELSE 0 END), 0.00) AS total_a_receber
+FROM cursos c LEFT JOIN turmas t ON t.curso_id = c.curso_id
+LEFT JOIN matriculas m ON m.turma_id = t.turma_id AND m.status_mat = 'Ativa' 
+LEFT JOIN mensalidades men ON men.matricula_id = m.matricula_id 
+GROUP BY c.nome_curso ORDER BY c.nome_curso;
+
+-- VIEW 2
+CREATE OR REPLACE VIEW vw_ocupacao_salas AS
+SELECT s.sala_id, s.nome_sala, s.capacidade, COUNT(m.matricula_id) AS ocupacao_atual,
+CASE WHEN COUNT(m.matricula_id) >= s.capacidade THEN 'LOTADA'
+ELSE 'DISPONÍVEL' END AS status_lotacao
+FROM salas s LEFT JOIN turmas t ON t.sala_id = s.sala_id
+LEFT JOIN matriculas m ON m.turma_id = t.turma_id
+AND m.status_mat = 'Ativa'
+GROUP BY s.sala_id, s.nome_sala, s.capacidade;
