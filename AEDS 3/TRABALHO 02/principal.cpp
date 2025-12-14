@@ -2,10 +2,9 @@
 #include <iomanip>
 #include <fstream>
 #include <vector>
-#include <map>
 #include <queue>
-#include <windows.h>
 #include <climits>
+#include <windows.h>
 
 using namespace std;
 
@@ -27,6 +26,126 @@ struct ControlBuscaEmLargura
     int u, antecessor, distancia;
 };
 
+struct Aresta
+{
+    int u, v, p;
+};
+
+struct VerticePrim
+{
+    int u, p, antecessor;
+};
+
+class HeapKruskal
+{
+private:
+    void troca(Aresta *a, Aresta *b)
+    {
+        Aresta aux;
+        aux = *a;
+        *a = *b;
+        *b = aux;
+    }
+
+    void refaz_cima_baixo(vector<Aresta> &A, int k, int N)
+    {
+        int j;
+        while (2 * k <= N)
+        {
+            j = 2 * k;
+            if (j < N && A[j].p > A[j + 1].p)
+            {
+                j++;
+            }
+            if (A[k].p <= A[j].p)
+            {
+                break;
+            }
+            troca(&A[k], &A[j]);
+            k = j;
+        }
+    }
+
+public:
+    void heap_constroi(vector<Aresta> &A, int n)
+    {
+        int k = n / 2;
+        while (k >= 1)
+        {
+            refaz_cima_baixo(A, k, n);
+            k--;
+        }
+    }
+
+    Aresta heap_remove_minimo(vector<Aresta> &A, int *n)
+    {
+        Aresta menor = A[1];
+        troca(&A[1], &A[*n]);
+        *n -= 1;
+        A.pop_back();
+        if (*n > 0)
+        {
+            refaz_cima_baixo(A, 1, *n);
+        }
+        return menor;
+    }
+};
+
+class HeapPrim
+{
+private:
+    void troca(VerticePrim *a, VerticePrim *b)
+    {
+        VerticePrim aux;
+        aux = *a;
+        *a = *b;
+        *b = aux;
+    }
+
+    void refaz_cima_baixo(vector<VerticePrim> &A, int k, int N)
+    {
+        int j;
+        while (2 * k <= N)
+        {
+            j = 2 * k;
+            if (j < N && A[j].p > A[j + 1].p)
+            {
+                j++;
+            }
+            if (A[k].p <= A[j].p)
+            {
+                break;
+            }
+            troca(&A[k], &A[j]);
+            k = j;
+        }
+    }
+
+public:
+    void heap_constroi(vector<VerticePrim> &A, int n)
+    {
+        int k = n / 2;
+        while (k >= 1)
+        {
+            refaz_cima_baixo(A, k, n);
+            k--;
+        }
+    }
+
+    VerticePrim heap_remove_minimo(vector<VerticePrim> &A, int *n)
+    {
+        VerticePrim menor = A[1];
+        troca(&A[1], &A[*n]);
+        *n -= 1;
+        A.pop_back();
+        if (*n > 0)
+        {
+            refaz_cima_baixo(A, 1, *n);
+        }
+        return menor;
+    }
+};
+
 class Grafo
 {
 private:
@@ -38,12 +157,21 @@ private:
 
     int getVertice(int vertice) const
     {
-        for (const auto &x : vertices)
+        for (int i = 0; i < vertices.size(); i++)
         {
-            if (x.u == vertice)
-                return vertice;
+            if (vertices[i].u == vertice)
+                return i;
         }
         return -1;
+    }
+
+    int encontrarChefe(int i, vector<int> &pais)
+    {
+        if (pais[i] == i)
+        {
+            return i;
+        }
+        return pais[i] = encontrarChefe(pais[i], pais);
     }
 
     void visitaEmProfundidade(int u_input, int *tempo, vector<ControlBuscaEmProfu> &control)
@@ -92,7 +220,7 @@ private:
                 }
             }
             control[v.u].cor = 'p';
-            cout << "Vértice " << v.u << " finalizado!\n\n";
+            cout << "Vértice " << v.u << " finalizado!\n";
         }
     }
 
@@ -510,6 +638,150 @@ public:
         }
         cout << "--------------------------------------------" << endl;
     }
+
+    void arvoreMininmaKruskal()
+    {
+        HeapKruskal heap;
+        vector<Aresta> S;
+        vector<int> pais;
+        vector<int> nivel;
+        pais.resize(numVertices);
+        nivel.resize(numVertices, 0);
+        for (int i = 0; i < numVertices; i++)
+        {
+            pais[i] = i;
+        }
+
+        vector<Aresta> A;
+        Aresta lixo;
+        lixo.p = -1;
+        A.push_back(lixo);
+        if (direcionado)
+        {
+            for (int i = 0; i < numVertices; i++)
+            {
+                for (int j = 0; j < numVertices; j++)
+                {
+                    if (arestas[i][j] != -1)
+                    {
+                        Aresta aux;
+                        aux.u = i;
+                        aux.v = j;
+                        aux.p = arestas[i][j];
+                        A.push_back(aux);
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < numVertices; i++)
+            {
+                for (int j = i; j < numVertices; j++)
+                {
+                    if (arestas[i][j] != -1)
+                    {
+                        Aresta aux;
+                        aux.u = i;
+                        aux.v = j;
+                        aux.p = arestas[i][j];
+                        A.push_back(aux);
+                    }
+                }
+            }
+        }
+
+        int n = A.size() - 1;
+        heap.heap_constroi(A, n);
+        cout << "\n--- EXECUÇÃO DO ALGORITMO DE KRUSKAL ---\n";
+        while (n >= 1)
+        {
+            Aresta menorAresta = heap.heap_remove_minimo(A, &n);
+
+            int paiU = encontrarChefe(menorAresta.u, pais);
+            int paiV = encontrarChefe(menorAresta.v, pais);
+
+            if (paiU != paiV)
+            {
+                S.push_back(menorAresta);
+                cout << "Aresta Aceita: " << menorAresta.u << " - " << menorAresta.v;
+                cout << " (Peso: " << menorAresta.p << ")" << endl;
+
+                if (nivel[paiU] > nivel[paiV])
+                {
+                    pais[paiV] = paiU;
+                }
+                else
+                {
+                    pais[paiU] = paiV;
+                    if (nivel[paiU] == nivel[paiV])
+                    {
+                        nivel[paiV]++;
+                    }
+                }
+            }
+        }
+        int pesoTotal = 0;
+        for (auto &a : S)
+            pesoTotal += a.p;
+        cout << "----------------------------------------" << endl;
+        cout << "Peso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
+    }
+
+    void arvoreMininaPrim()
+    {
+        HeapPrim heap;
+        vector<VerticePrim> v;
+
+        VerticePrim lixo;
+        lixo.u = -1;
+        v.push_back(lixo);
+
+        for (int i = 0; i < numVertices; i++)
+        {
+            VerticePrim aux;
+            aux.u = vertices[i].u;
+            aux.p = INT_MAX;
+            aux.antecessor = -1;
+            v.push_back(aux);
+        }
+        v[1].antecessor = 0;
+        v[1].p = 0;
+
+        int n = v.size() - 1;
+        heap.heap_constroi(v, n);
+
+        vector<VerticePrim> resultado;
+
+        cout << "\n--- EXECUÇÃO DO ALGORITMO DE PRIM ---\n";
+        while (n >= 1)
+        {
+            VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
+            resultado.push_back(u_removido);
+            for (int k = 1; k <= n; k++)
+            {
+                int v_id = v[k].u;
+                if (arestas[u_removido.u][v_id] != -1)
+                {
+                    int pesoAresta = arestas[u_removido.u][v_id];
+                    if (pesoAresta < v[k].p)
+                    {
+                        v[k].p = pesoAresta;
+                        v[k].antecessor = u_removido.u;
+                    }
+                }
+            }
+            heap.heap_constroi(v, n);
+        }
+        int pesoTotal = 0;
+        for (auto &a : resultado)
+        {
+            printf("Vértice: %2d | Peso: %d | Ant: %2d\n", a.u, a.p, a.antecessor);
+            pesoTotal += a.p;
+        }
+        cout << "-----------------------------------------" << endl;
+        cout << "Peso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
+    }
 };
 
 int main()
@@ -541,8 +813,9 @@ int main()
         cout << "13 - Editar Nome de Vértice" << endl;
         cout << "14 - Efetuar Busca em Profundidade" << endl;
         cout << "15 - Efetuar Busca em Largura" << endl;
-        cout << "16 - Gerar Árvore Mínima" << endl;
-        cout << "17 - Achar Menor Caminho (Dijkstra)" << endl;
+        cout << "16 - Gerar Árvore Mínima (Kruskal)" << endl;
+        cout << "17 - Gerar Árvore Mínima (Prim)" << endl;
+        cout << "18 - Achar Menor Caminho (Dijkstra)" << endl;
         cout << "--------------------------------------------------" << endl;
         cout << "\nDigite sua opção: ";
         cin >> opcao;
@@ -694,6 +967,21 @@ int main()
         case 15:
         {
             grafo.buscaEmLargura();
+            break;
+        }
+        case 16:
+        {
+            grafo.arvoreMininmaKruskal();
+            break;
+        }
+        case 17:
+        {
+            grafo.arvoreMininaPrim();
+            break;
+        }
+        case 18:
+        {
+            cout << "A SER IMPLEMENTADO AINDA!" << endl;
             break;
         }
         default:
