@@ -540,7 +540,10 @@ public:
 
         cout << "\n------------- LEGENDA -------------\n";
         for (auto &x : vertices)
-            cout << "Vértice " << setw(2) << x.u << ": " << x.nome << endl;
+        {
+            cout << "Vértice " << setw(2) << x.u << " (" << setw(3) << x.x << ", ";
+            cout << setw(3) << x.y << "): " << x.nome << endl;
+        }
         cout << "----------------------------------\n";
 
         cout << "\n------------------ MATRIZ DE ADJACÊNCIAS (Pesos) ------------------\n";
@@ -927,15 +930,23 @@ public:
             cout << "\nERRO: Vértice(s) não encontrado(s)!" << endl;
             return;
         }
+
+        vector<VerticePrim> verticesResultado(numVertices);
+        for (int i = 0; i < numVertices; i++)
+        {
+            verticesResultado[i].u = i;
+            verticesResultado[i].p = INT_MAX;
+            verticesResultado[i].antecessor = -1;
+        }
+        verticesResultado[u_input].p = 0;
+
         HeapPrim heap;
         vector<VerticePrim> heapVertices;
         heapVertices.push_back({-1, -1, -1});
 
         for (int i = 0; i < numVertices; i++)
-        {
-            heapVertices.push_back({vertices[i].u, INT_MAX, -1});
-        }
-        heapVertices[u_input + 1].p = 0;
+            heapVertices.push_back({vertices[i].u, (vertices[i].u == u_input ? 0 : INT_MAX), -1});
+
         int n = heapVertices.size() - 1;
         heap.heap_constroi(heapVertices, n);
 
@@ -943,22 +954,27 @@ public:
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(heapVertices, &n);
+
             cout << "\nVértice " << u_removido.u << " descoberto!\n";
             for (int v = 1; v <= n; v++)
             {
                 int v_id = heapVertices[v].u;
-                int indiceRealU = getVertice(u_removido.u);
-                int indiceRealV = getVertice(v_id);
+                int u_real = getVertice(u_removido.u);
+                int v_real = getVertice(v_id);
 
-                if (arestas[indiceRealU][indiceRealV] != -1)
+                if (arestas[u_real][v_real] != -1)
                 {
-                    int peso = arestas[indiceRealU][indiceRealV] + u_removido.p;
-                    if (peso < heapVertices[v].p)
+                    int pesoAresta = arestas[u_real][v_real];
+                    int novaDistancia = u_removido.p + pesoAresta;
+                    if (novaDistancia < heapVertices[v].p)
                     {
-                        cout << "Vértice " << v_id << " recebeu peso " << peso;
+                        cout << "Vértice " << v_id << " recebeu peso " << novaDistancia;
                         cout << " e antecessor " << u_removido.u << ".\n";
-                        heapVertices[v].p = peso;
+                        heapVertices[v].p = novaDistancia;
                         heapVertices[v].antecessor = u_removido.u;
+
+                        verticesResultado[v_id].p = novaDistancia;
+                        verticesResultado[v_id].antecessor = u_removido.u;
                     }
                 }
             }
@@ -967,17 +983,61 @@ public:
         }
 
         cout << "\n----------------------------------------" << endl;
-        cout << "Caminho do vértice " << u_input << " (" << nomeVertice1 << ")";
-        cout << " para o vértice " << v_input << " (" << nomeVertice2 << "): ";
-        cout << "\nPeso Total da Árvore Geradora Mínima: " << heapVertices[v_input].p << endl;
+
+        if (verticesResultado[v_input].p == INT_MAX)
+        {
+            cout << "\nNão existe caminho de " << nomeVertice1 << " para " << nomeVertice2 << "!\n\n";
+            return;
+        }
+
+        cout << "Caminho de " << nomeVertice1 << " (" << u_input << ")";
+        cout << " para " << nomeVertice2 << " (" << v_input << "): ";
+
+        stack<int> pilhaCaminho;
+        int atual = v_input;
+
+        while (atual != -1)
+        {
+            pilhaCaminho.push(atual);
+            if (atual == u_input)
+                break;
+            atual = verticesResultado[atual].antecessor;
+        }
+
+        while (!pilhaCaminho.empty())
+        {
+            cout << pilhaCaminho.top();
+            pilhaCaminho.pop();
+            if (!pilhaCaminho.empty())
+                cout << " --> ";
+        }
+
+        cout << "\n\nPeso Total da Árvore Geradora Mínima: " << verticesResultado[v_input].p << "\n\n";
         /*
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
         cin >> op;
         if (op == 's' || op == 'S')
         {
-            visualizar(arestasSolucao, {}, "Árvore Geradora Mínima (Prim)");
-        }
+            // Cria um vetor de arestas para destacar em vermelho
+             vector<Aresta> arestasCaminho;
+             vector<int> nosCaminho;
+
+             // Recria o caminho para passar para o visualizador (pois a pilha esvaziou)
+             int temp = v_input;
+             while(temp != u_input && temp != -1) {
+                 nosCaminho.push_back(temp);
+                 int pai = verticesResultado[temp].antecessor;
+                 if(pai != -1) {
+                     // Adiciona aresta (pai -> temp)
+                     // O peso '0' aqui é irrelevante para o desenho, serve só para preencher a struct
+                     arestasCaminho.push_back({pai, temp, 0});
+                 }
+                 temp = pai;
+             }
+             nosCaminho.push_back(u_input); // Adiciona a origem
+
+             visualizar(arestasCaminho, nosCaminho, "Caminho Dijkstra: " + nomeVertice1 + " -> " + nomeVertice2);        }
         */
     }
 };

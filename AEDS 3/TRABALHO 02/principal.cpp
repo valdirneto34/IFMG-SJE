@@ -112,7 +112,7 @@ int main()
 
             if (resposta == -1)
                 cout << "\nERRO: Primeiro adjacente não foi encontrado!" << endl;
-            else if (resposta == -2)
+         if (resposta == -2)
                 cout << "\nERRO: Número de vértice inválido!" << endl;
             else
                 cout << "\nPrimeiro adjacente do vértice " << u << " é o: " << resposta << endl;
