@@ -806,11 +806,12 @@ public:
             Aresta menor = heap.heap_remove_minimo(A, &n);
             int paiU = encontrarChefe(menor.u, pais);
             int paiV = encontrarChefe(menor.v, pais);
-
+            printf("\nAnalisando a aresta: (%d, %d) | Peso: %d\n", menor.u, menor.v, menor.p);
             if (paiU != paiV)
             {
+                cout << "Aresta escolhida!" << endl;
                 S.push_back(menor);
-                printf("Aresta: (%d, %d) | Peso: %d\n", menor.u, menor.v, menor.p);
+
                 pesoTotal += menor.p;
                 if (nivel[paiU] > nivel[paiV])
                     pais[paiV] = paiU;
@@ -821,9 +822,17 @@ public:
                         nivel[paiV]++;
                 }
             }
+            else
+                cout << "Aresta rejeitada!" << endl;
+            printf("Aresta (%d, %d) finalizada!\n", menor.u, menor.v);
         }
         cout << "----------------------------------------" << endl;
-        cout << "Peso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
+        cout << "Arestas solução:" << endl;
+        for (auto &a : S)
+        {
+            printf("Aresta: (%2d, %2d) | Peso: %2d\n", a.u, a.v, a.p);
+        }
+        cout << "\nPeso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
 
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
@@ -857,6 +866,7 @@ public:
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
+            cout << "\nAnalisando adjacentes do vértice " << u_removido.u << endl;
             if (u_removido.antecessor != -1)
             {
                 arestasSolucao.push_back({u_removido.antecessor, u_removido.u, u_removido.p});
@@ -873,22 +883,26 @@ public:
                     int peso = arestas[indiceRealU][indiceRealV];
                     if (peso < v[k].p)
                     {
+                        cout << "Vértice " << v_id << " recebeu peso " << peso;
+                        cout << " e antecessor " << u_removido.u << ".\n";
                         v[k].p = peso;
                         v[k].antecessor = u_removido.u;
                     }
                 }
             }
+            cout << "Vértice " << u_removido.u << " finalizado!" << endl;
             heap.heap_constroi(v, n);
         }
 
+        cout << "-----------------------------------------" << endl;
+        cout << "Arestas escolhidas:" << endl;
         int pesoTotal = 0;
         for (auto &a : arestasSolucao)
         {
             printf("Aresta: (%2d, %2d) | Peso: %2d\n", a.u, a.v, a.p);
             pesoTotal += a.p;
         }
-        cout << "-----------------------------------------" << endl;
-        cout << "Peso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
+        cout << "\nPeso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
 
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
@@ -914,63 +928,48 @@ public:
             return;
         }
         HeapPrim heap;
-        vector<VerticePrim> v;
-        vector<VerticePrim> v2;
-        stack<int> S;
-        v.push_back({-1, -1, -1});
+        vector<VerticePrim> heapVertices;
+        heapVertices.push_back({-1, -1, -1});
 
         for (int i = 0; i < numVertices; i++)
         {
-            v.push_back({vertices[i].u, INT_MAX, -1});
-            v2.push_back(v[i]);
+            heapVertices.push_back({vertices[i].u, INT_MAX, -1});
         }
-        v[u_input].p = 0;
-        int n = v.size() - 1;
-        heap.heap_constroi(v, n);
+        heapVertices[u_input].p = 0;
+        int n = heapVertices.size() - 1;
+        heap.heap_constroi(heapVertices, n);
 
         cout << "\n--- EXECUÇÃO DO ALGORITMO DJKSTRA ---\n";
         while (n >= 1)
         {
-            VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
-
-            for (int k = 1; k <= n; k++)
+            VerticePrim u_removido = heap.heap_remove_minimo(heapVertices, &n);
+            cout << "Vértice " << u_removido.u << " descoberto!\n";
+            for (int v = 1; v <= n; v++)
             {
-                int v_id = v[k].u;
-                int indiceRealV = getVertice(v_id);
+                int v_id = heapVertices[v].u;
                 int indiceRealU = getVertice(u_removido.u);
+                int indiceRealV = getVertice(v_id);
 
                 if (arestas[indiceRealU][indiceRealV] != -1)
                 {
-                    int peso = arestas[indiceRealU][indiceRealV] + v[indiceRealU].p;
-                    if (peso < v[k].p)
+                    int peso = arestas[indiceRealU][indiceRealV] + u_removido.p;
+                    if (peso < heapVertices[v].p)
                     {
-                        v[k].p = peso;
-                        v[k].antecessor = u_removido.u;
+                        cout << "Vértice " << v_id << " recebeu peso " << peso;
+                        cout << " e antecessor " << u_removido.u << ".\n";
+                        heapVertices[v].p = peso;
+                        heapVertices[v].antecessor = u_removido.u;
                     }
                 }
             }
-            heap.heap_constroi(v, n);
+            cout << "Vértice " << u_removido.u << " finalizado!\n";
+            heap.heap_constroi(heapVertices, n);
         }
 
+        cout << "\n----------------------------------------" << endl;
         cout << "Caminho do vértice " << u_input << " (" << nomeVertice1 << ")";
         cout << " para o vértice " << v_input << " (" << nomeVertice2 << "): ";
-        int i = v_input;
-        if (v2[i].u != u_input)
-            while (true)
-            {
-                if (v[i].antecessor != -1)
-                {
-                    cout << i << " --> ";
-                    i = v[i].antecessor;
-                }
-                else
-                    break;
-            }
-        else
-            cout << i;
-
-        cout << "\n----------------------------------------" << endl;
-        cout << "Peso Total da Árvore Geradora Mínima: " << v[v_input].p << endl;
+        cout << "\nPeso Total da Árvore Geradora Mínima: " << heapVertices[v_input].p << endl;
         /*
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
