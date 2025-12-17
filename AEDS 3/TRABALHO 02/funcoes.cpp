@@ -8,6 +8,7 @@
 #include <sstream>
 #include <algorithm>
 #include <cmath>
+#include <stack>
 
 using namespace std;
 
@@ -142,6 +143,14 @@ private:
         return -1;
     }
 
+    int getIdPeloDoNomeVertice(string nome)
+    {
+        for (int i = 0; i < vertices.size(); i++)
+            if (vertices[i].nome == nome)
+                return i;
+        return -1;
+    }
+
     int encontrarChefe(int i, vector<int> &pais)
     {
         if (pais[i] == i)
@@ -166,7 +175,7 @@ private:
         control[u_input].cor = 'p';
         (*tempo)++;
         control[u_input].tempoTermino = *tempo;
-        cout << "Vértice " << u_input << " finalizado!\n";
+        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") finalizado!\n";
     }
 
     void visitaEmLargura(int u_input, vector<ControlBuscaEmLargura> &control)
@@ -195,7 +204,7 @@ private:
                 }
             }
             control[v.u].cor = 'p';
-            cout << "Vértice " << v.u << " finalizado!\n";
+            cout << "Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado!\n";
         }
     }
 
@@ -204,7 +213,7 @@ public:
     {
         if (vertices.empty())
         {
-            cout << "\nERRO: Grafo vazio!" << endl;
+            cout << "\nERRO: Grafo não existe!" << endl;
             return;
         }
 
@@ -215,7 +224,6 @@ public:
             ss << v.u << " " << v.x << " " << v.y << " " << v.nome << "\n";
         ss << contArestas << "\n";
 
-        // Exporta arestas
         if (!direcionado)
         {
             for (int i = 0; i < numVertices; i++)
@@ -489,7 +497,6 @@ public:
         for (int i = 0; i < numVertices; i++)
         {
             Vertice v;
-            int temp;
             arq >> v.u >> v.x >> v.y;
             getline(arq, linha);
             if (!linha.empty())
@@ -531,13 +538,20 @@ public:
             return;
         }
 
-        cout << "\n------------------ MATRIZ DE ADJACÊNCIAS (Pesos) ------------------\n\n";
+        cout << "\n------------- LEGENDA -------------\n";
+        for (auto &x : vertices)
+            cout << "Vértice " << setw(2) << x.u << ": " << x.nome << endl;
+        cout << "----------------------------------\n";
+
+        cout << "\n------------------ MATRIZ DE ADJACÊNCIAS (Pesos) ------------------\n";
         if (arestas.empty())
             return;
         cout << "\n   ";
         for (int i = 0; i < numVertices; i++)
             cout << setw(4) << i;
         cout << "\n";
+        cout << "      " << setfill('-');
+        cout << setw(numVertices * 4) << "" << setfill(' ') << endl;
         for (int i = 0; i < numVertices; i++)
         {
             cout << setw(2) << i << "|";
@@ -553,7 +567,7 @@ public:
         cout << "\n-------------------------------------------------------------------" << endl;
     }
 
-    bool consultarSeAdjacente(int u_input, int v_input) const
+    bool consultarSeAdjacente(int u_input, int v_input)
     {
         int u = getVertice(u_input), v = getVertice(v_input);
         if (u == -1 || v == -1)
@@ -721,6 +735,11 @@ public:
 
     void buscaEmLargura()
     {
+        if (vertices.empty())
+        {
+            cout << "\nERRO: Grafo não existe!" << endl;
+            return;
+        }
         while (!fila.empty())
             fila.pop();
 
@@ -753,8 +772,14 @@ public:
 
     void arvoreMininmaKruskal()
     {
+        if (vertices.empty())
+        {
+            cout << "\nERRO: Grafo não existe!" << endl;
+            return;
+        }
         HeapKruskal heap;
         vector<Aresta> S;
+        int pesoTotal = 0;
         vector<int> pais(numVertices);
         vector<int> nivel(numVertices, 0);
         for (int i = 0; i < numVertices; i++)
@@ -785,7 +810,8 @@ public:
             if (paiU != paiV)
             {
                 S.push_back(menor);
-                cout << "Aresta: " << menor.u << "-" << menor.v << " (" << menor.p << ")\n";
+                printf("Aresta: (%d, %d) | Peso: %d\n", menor.u, menor.v, menor.p);
+                pesoTotal += menor.p;
                 if (nivel[paiU] > nivel[paiV])
                     pais[paiV] = paiU;
                 else
@@ -796,10 +822,6 @@ public:
                 }
             }
         }
-
-        int pesoTotal = 0;
-        for (auto &a : S)
-            pesoTotal += a.p;
         cout << "----------------------------------------" << endl;
         cout << "Peso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
 
@@ -814,6 +836,11 @@ public:
 
     void arvoreMininaPrim()
     {
+        if (vertices.empty())
+        {
+            cout << "\nERRO: Grafo não existe!" << endl;
+            return;
+        }
         HeapPrim heap;
         vector<VerticePrim> v;
         v.push_back({-1, -1, -1});
@@ -826,7 +853,7 @@ public:
 
         vector<Aresta> arestasSolucao;
 
-        cout << "\n--- EXECUÇÃO DO ALGORITMO DE PRIM ---\n";
+        cout << "\n---- EXECUÇÃO DO ALGORITMO DE PRIM -----\n";
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
@@ -857,10 +884,10 @@ public:
         int pesoTotal = 0;
         for (auto &a : arestasSolucao)
         {
-            cout << "Aresta: " << a.u << "-" << a.v << " (" << a.p << ")\n";
+            printf("Aresta: (%2d, %2d) | Peso: %2d\n", a.u, a.v, a.p);
             pesoTotal += a.p;
         }
-        cout << "----------------------------------------" << endl;
+        cout << "-----------------------------------------" << endl;
         cout << "Peso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
 
         char op;
@@ -872,7 +899,86 @@ public:
         }
     }
 
-    void dijkstra()
+    void dijkstra(string nomeVertice1, string nomeVertice2)
     {
+        if (vertices.empty())
+        {
+            cout << "\nERRO: Grafo não existe!" << endl;
+            return;
+        }
+        int u_input = getIdPeloDoNomeVertice(nomeVertice1), v_input = getIdPeloDoNomeVertice(nomeVertice2);
+
+        if (u_input == -1 || v_input == -1)
+        {
+            cout << "\nERRO: Vértice(s) não encontrado(s)!" << endl;
+            return;
+        }
+        HeapPrim heap;
+        vector<VerticePrim> v;
+        vector<VerticePrim> v2;
+        stack<int> S;
+        v.push_back({-1, -1, -1});
+
+        for (int i = 0; i < numVertices; i++)
+        {
+            v.push_back({vertices[i].u, INT_MAX, -1});
+            v2.push_back(v[i]);
+        }
+        v[u_input].p = 0;
+        int n = v.size() - 1;
+        heap.heap_constroi(v, n);
+
+        cout << "\n--- EXECUÇÃO DO ALGORITMO DJKSTRA ---\n";
+        while (n >= 1)
+        {
+            VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
+
+            for (int k = 1; k <= n; k++)
+            {
+                int v_id = v[k].u;
+                int indiceRealV = getVertice(v_id);
+                int indiceRealU = getVertice(u_removido.u);
+
+                if (arestas[indiceRealU][indiceRealV] != -1)
+                {
+                    int peso = arestas[indiceRealU][indiceRealV] + v[indiceRealU].p;
+                    if (peso < v[k].p)
+                    {
+                        v[k].p = peso;
+                        v[k].antecessor = u_removido.u;
+                    }
+                }
+            }
+            heap.heap_constroi(v, n);
+        }
+
+        cout << "Caminho do vértice " << u_input << " (" << nomeVertice1 << ")";
+        cout << " para o vértice " << v_input << " (" << nomeVertice2 << "): ";
+        int i = v_input;
+        if (v2[i].u != u_input)
+            while (true)
+            {
+                if (v[i].antecessor != -1)
+                {
+                    cout << i << " --> ";
+                    i = v[i].antecessor;
+                }
+                else
+                    break;
+            }
+        else
+            cout << i;
+
+        cout << "\n----------------------------------------" << endl;
+        cout << "Peso Total da Árvore Geradora Mínima: " << v[v_input].p << endl;
+        /*
+        char op;
+        cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
+        cin >> op;
+        if (op == 's' || op == 'S')
+        {
+            visualizar(arestasSolucao, {}, "Árvore Geradora Mínima (Prim)");
+        }
+        */
     }
 };

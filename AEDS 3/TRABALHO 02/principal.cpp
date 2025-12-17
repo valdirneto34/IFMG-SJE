@@ -10,8 +10,7 @@ int main()
     SetConsoleOutputCP(CP_UTF8);
     system("cls");
     Grafo grafo;
-    string nomeVertice;
-    string arquivo;
+    string nomeVertice, arquivo, verticeOrigem, verticeDestino;
     int opcao, resposta, u, v, x, y, p;
     do
     {
@@ -178,7 +177,11 @@ int main()
         }
         case 18:
         {
-            grafo.dijkstra();
+            cout << "Digite o nome do vértice de origem: ";
+            cin >> verticeOrigem;
+            cout << "Digite o nome do vértice de origem: ";
+            cin >> verticeDestino;
+            grafo.dijkstra(verticeOrigem, verticeDestino);
             break;
         }
         case 19:
