@@ -935,7 +935,7 @@ public:
         {
             heapVertices.push_back({vertices[i].u, INT_MAX, -1});
         }
-        heapVertices[u_input].p = 0;
+        heapVertices[u_input + 1].p = 0;
         int n = heapVertices.size() - 1;
         heap.heap_constroi(heapVertices, n);
 
@@ -943,7 +943,7 @@ public:
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(heapVertices, &n);
-            cout << "Vértice " << u_removido.u << " descoberto!\n";
+            cout << "\nVértice " << u_removido.u << " descoberto!\n";
             for (int v = 1; v <= n; v++)
             {
                 int v_id = heapVertices[v].u;
