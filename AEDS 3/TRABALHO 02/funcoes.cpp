@@ -705,11 +705,13 @@ public:
 
     void editarNomeVertice(int u_input)
     {
+        string novoNome;
         int u = getVertice(u_input);
         if (u != -1)
         {
             cout << "Novo nome: ";
-            cin >> vertices[u].nome;
+            getline(cin >> ws, novoNome);
+            vertices[u].nome = novoNome;
         }
     }
 
@@ -1013,31 +1015,33 @@ public:
         }
 
         cout << "\n\nPeso Total da Árvore Geradora Mínima: " << verticesResultado[v_input].p << "\n\n";
-        /*
+
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
         cin >> op;
         if (op == 's' || op == 'S')
         {
             // Cria um vetor de arestas para destacar em vermelho
-             vector<Aresta> arestasCaminho;
-             vector<int> nosCaminho;
+            vector<Aresta> arestasCaminho;
+            vector<int> nosCaminho;
 
-             // Recria o caminho para passar para o visualizador (pois a pilha esvaziou)
-             int temp = v_input;
-             while(temp != u_input && temp != -1) {
-                 nosCaminho.push_back(temp);
-                 int pai = verticesResultado[temp].antecessor;
-                 if(pai != -1) {
-                     // Adiciona aresta (pai -> temp)
-                     // O peso '0' aqui é irrelevante para o desenho, serve só para preencher a struct
-                     arestasCaminho.push_back({pai, temp, 0});
-                 }
-                 temp = pai;
-             }
-             nosCaminho.push_back(u_input); // Adiciona a origem
+            // Recria o caminho para passar para o visualizador (pois a pilha esvaziou)
+            int temp = v_input;
+            while (temp != u_input && temp != -1)
+            {
+                nosCaminho.push_back(temp);
+                int pai = verticesResultado[temp].antecessor;
+                if (pai != -1)
+                {
+                    // Adiciona aresta (pai -> temp)
+                    // O peso '0' aqui é irrelevante para o desenho, serve só para preencher a struct
+                    arestasCaminho.push_back({pai, temp, 0});
+                }
+                temp = pai;
+            }
+            nosCaminho.push_back(u_input); // Adiciona a origem
 
-             visualizar(arestasCaminho, nosCaminho, "Caminho Dijkstra: " + nomeVertice1 + " -> " + nomeVertice2);        }
-        */
+            visualizar(arestasCaminho, nosCaminho, "Caminho Dijkstra: " + nomeVertice1 + " -> " + nomeVertice2);
+        }
     }
 };
