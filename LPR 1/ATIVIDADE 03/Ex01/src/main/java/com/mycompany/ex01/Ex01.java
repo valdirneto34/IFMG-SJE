@@ -49,6 +49,7 @@ public class Ex01 {
                 System.out.println("-------------------------------");
 
                 conn.close();
+                scan.close();
             } catch (SQLException ex) {
                 System.out.println("Erro do BD: " + ex.getMessage());
             }
