@@ -177,9 +177,9 @@ int main()
         }
         case 18:
         {
-            cout << "Digite o nome do vértice de origem: ";
+            cout << "Digite o nome do vértice de ORIGEM: ";
             cin >> verticeOrigem;
-            cout << "Digite o nome do vértice de origem: ";
+            cout << "Digite o nome do vértice de DESTINO: ";
             cin >> verticeDestino;
             grafo.dijkstra(verticeOrigem, verticeDestino);
             break;

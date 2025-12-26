@@ -21,7 +21,7 @@ struct Vertice
 struct ControlBuscaEmProfu
 {
     char cor;
-    int u, antecessor, tempoDescoberta, tempoTermino;
+    int u, antecessor, tempoDesc, tempoTer;
 };
 
 struct ControlBuscaEmLargura
@@ -131,7 +131,6 @@ class Grafo
 private:
     vector<vector<int>> arestas;
     vector<Vertice> vertices;
-    queue<int> fila;
     int numVertices, numArestas, contArestas;
     bool direcionado;
 
@@ -162,8 +161,8 @@ private:
     {
         control[u_input].cor = 'c';
         (*tempo)++;
-        control[u_input].tempoDescoberta = *tempo;
-        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto!\n";
+        control[u_input].tempoDesc = *tempo;
+        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto no tempo " << *tempo << endl;
         for (int v = 0; v < numVertices; v++)
         {
             if (arestas[u_input][v] != -1 && control[v].cor == 'b')
@@ -174,11 +173,11 @@ private:
         }
         control[u_input].cor = 'p';
         (*tempo)++;
-        control[u_input].tempoTermino = *tempo;
-        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") finalizado!\n";
+        control[u_input].tempoTer = *tempo;
+        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") finalizado no tempo " << *tempo << endl;
     }
 
-    void visitaEmLargura(int u_input, vector<ControlBuscaEmLargura> &control)
+    void visitaEmLargura(int u_input, vector<ControlBuscaEmLargura> &control, queue<int> &fila)
     {
         control[u_input].cor = 'c';
         control[u_input].distancia = 0;
@@ -717,6 +716,11 @@ public:
 
     void buscaEmProfundidade()
     {
+        if (vertices.empty())
+        {
+            cout << "\nERRO: Grafo não existe!" << endl;
+            return;
+        }
         int tempo = 0;
         vector<ControlBuscaEmProfu> c(numVertices);
         for (int i = 0; i < numVertices; i++)
@@ -725,28 +729,31 @@ public:
             c[i].cor = 'b';
             c[i].antecessor = -1;
         }
+        cout << "------- INÍCIO DA EXECUÇÃO ------\n";
         for (int i = 0; i < numVertices; i++)
             if (c[i].cor == 'b')
                 visitaEmProfundidade(i, &tempo, c);
+        cout << "-------- FIM DA EXECUÇÃO --------\n";
 
-        cout << "\n\n------ VÉRTICES APÓS A EXECUÇÃO ------" << endl;
+        cout << "\n\n-------- VÉRTICES APÓS A EXECUÇÃO --------" << endl;
+        cout << "Vértice | Cor | Ant | Desc | Tér | Nome" << endl;
+        cout << "--------------------------------------------" << endl;
         for (int i = 0; i < numVertices; i++)
         {
-            printf("Vértice: %2d | Cor: %c | Ant: %2d | Descoberta: %2d | Término: %2d\n",
-                   c[i].u, c[i].cor, c[i].antecessor, c[i].tempoDescoberta, c[i].tempoTermino);
+            cout << "   " << setw(3) << c[i].u << "  |  " << c[i].cor;
+            cout << "  | " << setw(3) << c[i].antecessor << " | " << setw(3) << c[i].tempoDesc;
+            cout << " | " << setw(3) << c[i].tempoTer << " | " << vertices[i].nome << endl;
         }
-        cout << "--------------------------------------------" << endl;
     }
 
     void buscaEmLargura()
     {
+        queue<int> fila;
         if (vertices.empty())
         {
             cout << "\nERRO: Grafo não existe!" << endl;
             return;
         }
-        while (!fila.empty())
-            fila.pop();
 
         vector<ControlBuscaEmLargura> c(numVertices);
         for (int i = 0; i < numVertices; i++)
@@ -758,19 +765,24 @@ public:
         }
         for (int i = 0; i < numVertices; i++)
             if (c[i].cor == 'b')
-                visitaEmLargura(i, c);
+                visitaEmLargura(i, c, fila);
 
         cout << "\nFila: ";
         while (!fila.empty())
         {
-            cout << fila.front() << ", ";
+            cout << fila.front();
             fila.pop();
+            if (!fila.empty())
+                cout << " -> ";
         }
         cout << "\n\n------ VÉRTICES APÓS A EXECUÇÃO ------" << endl;
+        cout << "Vértice | Cor | Ant | Dist | Nome" << endl;
+        cout << "--------------------------------------------" << endl;
         for (int i = 0; i < numVertices; i++)
         {
-            printf("Vértice: %2d | Cor: %c | Ant: %2d | Distância: %2d\n",
-                   c[i].u, c[i].cor, c[i].antecessor, c[i].distancia);
+            cout << "   " << setw(3) << c[i].u << "  |  " << c[i].cor;
+            cout << "  | " << setw(3) << c[i].antecessor << " | " << setw(4) << c[i].distancia;
+            cout << " | " << setw(3) << vertices[i].nome << endl;
         }
         cout << "--------------------------------------------" << endl;
     }
@@ -805,7 +817,8 @@ public:
         int n = A.size() - 1;
         heap.heap_constroi(A, n);
 
-        cout << "\n--- EXECUÇÃO DO ALGORITMO DE KRUSKAL ---\n";
+        cout << endl
+             << "----- EXECUÇÃO DO ALGORITMO DE KRUSKAL -----" << endl;
         while (n >= 1)
         {
             Aresta menor = heap.heap_remove_minimo(A, &n);
@@ -831,13 +844,16 @@ public:
                 cout << "Aresta rejeitada!" << endl;
             printf("Aresta (%d, %d) finalizada!\n", menor.u, menor.v);
         }
-        cout << "----------------------------------------" << endl;
-        cout << "Arestas solução:" << endl;
+        cout << "\n-------------- FIM DA EXECUÇÃO -------------" << endl;
+        cout << "\n===== ARESTAS ESCOLHIDAS =====" << endl;
         for (auto &a : S)
         {
-            printf("Aresta: (%2d, %2d) | Peso: %2d\n", a.u, a.v, a.p);
+            cout << "Aresta: " << a.u << " (" << vertices[a.u].nome << ") ";
+            cout << "-> " << a.v << " (" << vertices[a.v].nome << ")";
+            cout << " | Peso: " << a.p << endl;
         }
         cout << "\nPeso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
+        cout << "==============================" << endl;
 
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
@@ -867,7 +883,8 @@ public:
 
         vector<Aresta> arestasSolucao;
 
-        cout << "\n---- EXECUÇÃO DO ALGORITMO DE PRIM -----\n";
+        cout << endl
+             << "---- EXECUÇÃO DO ALGORITMO DE PRIM -----" << endl;
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
@@ -899,16 +916,20 @@ public:
             heap.heap_constroi(v, n);
         }
 
-        cout << "-----------------------------------------" << endl;
-        cout << "Arestas escolhidas:" << endl;
+        cout << "----------- FIM DA EXECUÇÃO -----------" << endl;
+        cout << "\n===== ARESTAS ESCOLHIDAS =====" << endl;
         int pesoTotal = 0;
+        int i = 0;
         for (auto &a : arestasSolucao)
         {
-            printf("Aresta: (%2d, %2d) | Peso: %2d\n", a.u, a.v, a.p);
+            i++;
+            cout << i << "ª Aresta Adicionada: " << a.u << " (" << vertices[a.u].nome << ")";
+            cout << " -> " << a.u << " (" << vertices[a.v].nome << ")";
+            cout << " | Peso: " << a.p << endl;
             pesoTotal += a.p;
         }
         cout << "\nPeso Total da Árvore Geradora Mínima: " << pesoTotal << endl;
-
+        cout << "==============================" << endl;
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
         cin >> op;
@@ -925,9 +946,9 @@ public:
             cout << "\nERRO: Grafo não existe!" << endl;
             return;
         }
-        int u_input = getIdPeloDoNomeVertice(nomeVertice1), v_input = getIdPeloDoNomeVertice(nomeVertice2);
+        int origem = getIdPeloDoNomeVertice(nomeVertice1), destino = getIdPeloDoNomeVertice(nomeVertice2);
 
-        if (u_input == -1 || v_input == -1)
+        if (origem == -1 || destino == -1)
         {
             cout << "\nERRO: Vértice(s) não encontrado(s)!" << endl;
             return;
@@ -940,19 +961,19 @@ public:
             verticesResultado[i].p = INT_MAX;
             verticesResultado[i].antecessor = -1;
         }
-        verticesResultado[u_input].p = 0;
+        verticesResultado[origem].p = 0;
 
         HeapPrim heap;
         vector<VerticePrim> heapVertices;
         heapVertices.push_back({-1, -1, -1});
 
         for (int i = 0; i < numVertices; i++)
-            heapVertices.push_back({vertices[i].u, (vertices[i].u == u_input ? 0 : INT_MAX), -1});
+            heapVertices.push_back({vertices[i].u, (vertices[i].u == origem ? 0 : INT_MAX), -1});
 
         int n = heapVertices.size() - 1;
         heap.heap_constroi(heapVertices, n);
 
-        cout << "\n--- EXECUÇÃO DO ALGORITMO DJKSTRA ---\n";
+        cout << "\n---- EXECUÇÃO DO ALGORITMO DJKSTRA ----" << endl;
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(heapVertices, &n);
@@ -983,39 +1004,38 @@ public:
             cout << "Vértice " << u_removido.u << " finalizado!\n";
             heap.heap_constroi(heapVertices, n);
         }
+        cout << "\n------- FIM DO ALGORITMO DJKSTRA -------" << endl;
+        cout << "\n====== RESULTADO ======" << endl;
 
-        cout << "\n----------------------------------------" << endl;
-
-        if (verticesResultado[v_input].p == INT_MAX)
+        if (verticesResultado[destino].p == INT_MAX)
         {
-            cout << "\nNão existe caminho de " << nomeVertice1 << " para " << nomeVertice2 << "!\n\n";
+            cout << "Não existe caminho de " << nomeVertice1 << " para " << nomeVertice2 << "!\n\n";
             return;
         }
 
-        cout << "Caminho de " << nomeVertice1 << " (" << u_input << ")";
-        cout << " para " << nomeVertice2 << " (" << v_input << "): ";
+        cout << "Caminho de " << nomeVertice1 << " (" << origem << ")";
+        cout << " para " << nomeVertice2 << " (" << destino << "):\n";
 
-        stack<int> pilhaCaminho;
-        int atual = v_input;
+        vector<int> caminho;
+        int atual = destino;
 
         while (atual != -1)
         {
-            pilhaCaminho.push(atual);
-            if (atual == u_input)
+            caminho.push_back(atual);
+            if (atual == origem)
                 break;
             atual = verticesResultado[atual].antecessor;
         }
 
-        while (!pilhaCaminho.empty())
+        for (int i = caminho.size() - 1; i >= 0; i--)
         {
-            cout << pilhaCaminho.top();
-            pilhaCaminho.pop();
-            if (!pilhaCaminho.empty())
-                cout << " --> ";
+            cout << vertices[caminho[i]].nome << " (" << caminho[i] << ")";
+            if (i > 0)
+                cout << " -> ";
         }
 
-        cout << "\n\nPeso Total da Árvore Geradora Mínima: " << verticesResultado[v_input].p << "\n\n";
-
+        cout << "\n\nPeso Total da Árvore Geradora Mínima: " << verticesResultado[destino].p << "\n\n";
+        cout << "=======================" << endl;
         char op;
         cout << "\nDeseja visualizar a Árvore Mínima? (s/n): ";
         cin >> op;
@@ -1026,8 +1046,8 @@ public:
             vector<int> nosCaminho;
 
             // Recria o caminho para passar para o visualizador (pois a pilha esvaziou)
-            int temp = v_input;
-            while (temp != u_input && temp != -1)
+            int temp = destino;
+            while (temp != origem && temp != -1)
             {
                 nosCaminho.push_back(temp);
                 int pai = verticesResultado[temp].antecessor;
@@ -1039,7 +1059,7 @@ public:
                 }
                 temp = pai;
             }
-            nosCaminho.push_back(u_input); // Adiciona a origem
+            nosCaminho.push_back(origem); // Adiciona a origem
 
             visualizar(arestasCaminho, nosCaminho, "Caminho Dijkstra: " + nomeVertice1 + " -> " + nomeVertice2);
         }
