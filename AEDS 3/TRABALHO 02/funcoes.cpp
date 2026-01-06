@@ -480,15 +480,15 @@ public:
 
     void importar(const char *nome_arquivo)
     {
-        vertices.clear();
-        arestas.clear();
-        contArestas = 0;
         ifstream arq(nome_arquivo);
         if (!arq.is_open())
         {
             cout << "Erro ao abrir arquivo!";
             return;
         }
+        vertices.clear();
+        arestas.clear();
+        contArestas = 0;
         string linha;
         getline(arq, linha);
         direcionado = (linha.find("sim") != string::npos);
@@ -782,7 +782,7 @@ public:
         {
             cout << "   " << setw(3) << c[i].u << "  |  " << c[i].cor;
             cout << "  | " << setw(3) << c[i].antecessor << " | " << setw(4) << c[i].distancia;
-            cout << " | " << setw(3) << vertices[i].nome << endl;
+            cout << " | " << vertices[i].nome << endl;
         }
         cout << "--------------------------------------------" << endl;
     }
