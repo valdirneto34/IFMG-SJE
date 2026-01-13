@@ -1,0 +1,48 @@
+direcionado=nao
+20
+0 10 10 NovaYork
+1 20 15 Toronto
+2 35 20 Londres
+3 50 10 Paris
+4 70 15 Berlim
+5 85 20 Roma
+6 15 40 Madri
+7 30 45 Lisboa
+8 50 40 Cairo
+9 75 45 Dubai
+10 90 40 Toquio
+11 10 70 Pequim
+12 25 75 Seul
+13 45 70 Sidney
+14 65 75 Moscou
+15 85 70 CidadedoMexico
+16 20 90 BuenosAires
+17 40 95 Santiago
+18 60 90 RiodeJaneiro
+19 80 95 SaoPaulo
+25
+0 1 10
+0 6 15
+1 2 5
+2 3 8
+3 4 12
+4 5 7
+5 10 9
+6 7 10
+6 11 20
+7 8 6
+8 3 4
+8 13 11
+9 4 5
+9 14 8
+10 15 10
+11 12 7
+12 13 9
+13 14 6
+14 19 15
+15 19 12
+16 11 5
+16 17 4
+17 12 8
+18 13 10
+19 18 7

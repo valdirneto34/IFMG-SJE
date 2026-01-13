@@ -177,7 +177,7 @@ int main()
         }
         case 18:
         {
-            cout << "Digite o nome do vértice de ORIGEM: ";
+            cout << "Digite o nome do vértice de ORIGEM: "; 
             cin >> verticeOrigem;
             cout << "Digite o nome do vértice de DESTINO: ";
             cin >> verticeDestino;

@@ -924,7 +924,7 @@ public:
         {
             i++;
             cout << i << "ª Aresta Adicionada: " << a.u << " (" << vertices[a.u].nome << ")";
-            cout << " -> " << a.u << " (" << vertices[a.v].nome << ")";
+            cout << " -> " << a.v << " (" << vertices[a.v].nome << ")";
             cout << " | Peso: " << a.p << endl;
             pesoTotal += a.p;
         }
