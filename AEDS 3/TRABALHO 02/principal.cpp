@@ -1,5 +1,4 @@
-#include <iostream>
-#include "funcoes.cpp";
+#include "funcoesGrafo.cpp";
 #include "menu.cpp";
 
 using namespace std;
@@ -112,10 +111,13 @@ int main()
 
             if (resposta == -1)
                 cout << "\nERRO: Primeiro adjacente não foi encontrado!" << endl;
-         if (resposta == -2)
+            if (resposta == -2)
                 cout << "\nERRO: Número de vértice inválido!" << endl;
             else
-                cout << "\nPrimeiro adjacente do vértice " << u << " é o: " << resposta << endl;
+            {
+                cout << "\nPrimeiro adjacente do vértice " << u << " (" << grafo.getNomePeloIdVertice(u) << ") " << " é o: " << resposta;
+                cout << " (" << grafo.getNomePeloIdVertice(resposta) << ")" << endl;
+            }
             break;
         }
         case 10:
@@ -131,7 +133,10 @@ int main()
             else if (resposta == -2)
                 cout << "\nERRO: Número de vértice inválido!" << endl;
             else
-                cout << "\nPróximo adjacente do vértice " << u << " é o: " << resposta << endl;
+            {
+                cout << "\nPróximo adjacente do vértice " << u << " (" << grafo.getNomePeloIdVertice(u) << ")" << " é o: " << resposta;
+                cout << " (" << grafo.getNomePeloIdVertice(resposta) << ")" << endl;
+            }
             break;
         }
         case 11:
@@ -177,7 +182,7 @@ int main()
         }
         case 18:
         {
-            cout << "Digite o nome do vértice de ORIGEM: "; 
+            cout << "Digite o nome do vértice de ORIGEM: ";
             cin >> verticeOrigem;
             cout << "Digite o nome do vértice de DESTINO: ";
             cin >> verticeDestino;
