@@ -127,20 +127,25 @@ public class Main extends javax.swing.JFrame {
                 String senha = tfSenha.getText();
 
                 // Preparar o comadndo sql
-                String sql = "select * from clientes where email = (?) and senha = (?);";
+                String sql = "select * from usuario where email = ? and senha = ?;";
 
                 // Preparar o comadndo sql
                 PreparedStatement stmt = conn.prepareStatement(sql);
                 stmt.setString(1, email);
                 stmt.setString(2, senha);
 
-                ResultSet rs = stmt.executeQuery(sql);
+                ResultSet rs = stmt.executeQuery();
+
                 String resultadoFormatado = "";
-                if (rs.getString(email) != null && rs.getString(senha) != null) {
+
+                if (rs.next()) {
+
                     resultadoFormatado = String.format("Seja bem-vindo %s!", email);
                 } else {
-                    resultadoFormatado = String.format("E-mail %s não encontrado!", email);
+                    resultadoFormatado = String.format("E-mail ou senha incorretos!");
                 }
+
+                System.out.println(3);
 
                 conn.close();
 
