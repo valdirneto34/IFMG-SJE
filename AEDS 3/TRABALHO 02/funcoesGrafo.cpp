@@ -102,10 +102,12 @@ public:
         }
 
         cout << "\n------------- LEGENDA -------------\n";
+        cout << " ID " << "| (  X,   Y)" << " | NOME" << endl;
+        cout << "-------------------------\n";
         for (auto &x : vertices)
         {
-            cout << "Vértice " << setw(2) << x.u << " (" << setw(3) << x.x << ", ";
-            cout << setw(3) << x.y << "): " << x.nome << endl;
+            cout << setw(3) << x.u << " | (" << setw(3) << x.x << ", ";
+            cout << setw(3) << x.y << ") | " << x.nome << endl;
         }
         cout << "----------------------------------\n";
 
@@ -216,17 +218,23 @@ public:
             return;
         }
         int qtd = 0;
-        string adj = "\nAdjacentes de " + to_string(u) + " (" + getNomePeloIdVertice(u) + "):\n";
+        stringstream aux;
+        aux << "\n- LISTA DE ADJACÊNCIAS DO VÉRTICE " << u << " (" << getNomePeloIdVertice(u) << ") -\n";
+        aux << setw(3) << "ID" << " | NOME\n-----------------\n";
         for (int j = 0; j < numVertices; j++)
             if (arestas[u][j] != -1)
             {
                 qtd++;
-                adj += to_string(vertices[j].u) + " (" + getNomePeloIdVertice(vertices[j].u) + ")" + "\n";
+                aux << setw(3) << vertices[j].u << " | " << getNomePeloIdVertice(vertices[j].u) << "\n";
             }
         if (qtd == 0)
             cout << "\nVértice não possui adjacentes!" << endl;
         else
-            cout << adj << endl;
+        {
+            aux << "-----------------\nTotal de adjacentes: " << qtd << "\n";
+            aux << "-------------------------------------------------\n";
+            cout << aux.str() << endl;
+        }
     }
 
     void exportar(const char *nome)
@@ -293,19 +301,19 @@ public:
             c[i].cor = 'b';
             c[i].antecessor = -1;
         }
-        cout << "------- INÍCIO DA EXECUÇÃO ------\n";
+        cout << "\n------- INÍCIO DA BUSCA EM PROFUNDIDADE ------\n";
         for (int i = 0; i < numVertices; i++)
             if (c[i].cor == 'b')
                 visitaEmProfundidade(i, &tempo, c);
-        cout << "-------- FIM DA EXECUÇÃO --------\n";
+        cout << "-------- FIM DA BUSCA EM PROFUNDIDADE --------\n";
 
-        cout << "\n\n-------- VÉRTICES APÓS A EXECUÇÃO --------" << endl;
-        cout << "Vértice | Cor | Ant | Desc | Tér | Nome" << endl;
+        cout << "\n-------- VÉRTICES APÓS A EXECUÇÃO --------" << endl;
+        cout << "  ID | Cor | Ant | Desc | Tér | Nome" << endl;
         cout << "--------------------------------------------" << endl;
         for (int i = 0; i < numVertices; i++)
         {
-            cout << "   " << setw(3) << c[i].u << "  |  " << c[i].cor;
-            cout << "  | " << setw(3) << c[i].antecessor << " | " << setw(3) << c[i].tempoDesc;
+            cout << setw(4) << c[i].u << " |  " << c[i].cor;
+            cout << "  | " << setw(3) << c[i].antecessor << " | " << setw(4) << c[i].tempoDesc;
             cout << " | " << setw(3) << c[i].tempoTer << " | " << vertices[i].nome << endl;
         }
         cout << "--------------------------------------------" << endl;
@@ -317,7 +325,7 @@ private:
         control[u_input].cor = 'c';
         (*tempo)++;
         control[u_input].tempoDesc = *tempo;
-        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto no tempo " << *tempo << endl;
+        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA) no tempo " << *tempo << endl;
         for (int v = 0; v < numVertices; v++)
         {
             if (arestas[u_input][v] != -1 && control[v].cor == 'b')
@@ -329,7 +337,7 @@ private:
         control[u_input].cor = 'p';
         (*tempo)++;
         control[u_input].tempoTer = *tempo;
-        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") finalizado no tempo " << *tempo << endl;
+        cout << "   Vértice " << u_input << " (" << vertices[u_input].nome << ") finalizado (PRETO) no tempo " << *tempo << endl;
     }
 
 public:
@@ -350,10 +358,11 @@ public:
             c[i].cor = 'b';
             c[i].distancia = INT_MAX;
         }
+        cout << "\n------- INÍCIO DA BUSCA EM LARGURA ------\n";
         for (int i = 0; i < numVertices; i++)
             if (c[i].cor == 'b')
                 visitaEmLargura(i, c, fila);
-
+        cout << "-------- FIM DA BUSCA EM LARGURA --------\n";
         cout << "\nFila: ";
         while (!fila.empty())
         {
@@ -363,12 +372,12 @@ public:
                 cout << " -> ";
         }
         cout << "\n\n------ VÉRTICES APÓS A EXECUÇÃO ------" << endl;
-        cout << "Vértice | Cor | Ant | Dist | Nome" << endl;
+        cout << "  ID | Cor | Ant | Dist | Nome" << endl;
         cout << "--------------------------------------------" << endl;
         for (int i = 0; i < numVertices; i++)
         {
-            cout << "   " << setw(3) << c[i].u << "  |  " << c[i].cor;
-            cout << "  | " << setw(3) << c[i].antecessor << " | " << setw(4) << c[i].distancia;
+            cout << setw(4) << c[i].u << " |  " << c[i].cor;
+            cout << "  | " << setw(3) << c[i].antecessor << " |" << setw(4) << c[i].distancia;
             cout << " | " << vertices[i].nome << endl;
         }
         cout << "--------------------------------------------" << endl;
@@ -382,7 +391,7 @@ private:
         queue<Vertice> f;
         f.push(vertices[u_input]);
         fila.push(vertices[u_input].u);
-        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto!\n";
+        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA)!\n";
 
         while (!f.empty())
         {
@@ -397,11 +406,11 @@ private:
                     control[k].distancia = control[v.u].distancia + 1;
                     f.push(vertices[k]);
                     fila.push(vertices[k].u);
-                    cout << "Vértice " << vertices[k].u << " (" << vertices[k].nome << ") descoberto!\n";
+                    cout << "Vértice " << vertices[k].u << " (" << vertices[k].nome << ") descoberto (CINZA)!\n";
                 }
             }
             control[v.u].cor = 'p';
-            cout << "Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado!\n";
+            cout << "   Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO)!\n";
         }
     }
 
@@ -436,8 +445,7 @@ public:
         int n = A.size() - 1;
         heap.heap_constroi(A, n);
 
-        cout << endl
-             << "----- EXECUÇÃO DO ALGORITMO DE KRUSKAL -----" << endl;
+        cout << "\n----- EXECUÇÃO DO ALGORITMO DE KRUSKAL -----" << endl;
         while (n >= 1)
         {
             Aresta menor = heap.heap_remove_minimo(A, &n);
@@ -463,7 +471,7 @@ public:
                 cout << "Aresta rejeitada!" << endl;
             printf("Aresta (%d, %d) finalizada!\n", menor.u, menor.v);
         }
-        cout << "\n-------------- FIM DA EXECUÇÃO -------------" << endl;
+        cout << "\n-------------- FIM DO ALGORITMO DE KRUSKAL -------------" << endl;
         cout << "\n===== ARESTAS ESCOLHIDAS =====" << endl;
         for (auto &a : S)
         {
@@ -502,8 +510,7 @@ public:
 
         vector<Aresta> arestasSolucao;
 
-        cout << endl
-             << "---- EXECUÇÃO DO ALGORITMO DE PRIM -----" << endl;
+        cout << "\n---- EXECUÇÃO DO ALGORITMO DE PRIM -----" << endl;
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
@@ -535,7 +542,7 @@ public:
             heap.heap_constroi(v, n);
         }
 
-        cout << "----------- FIM DA EXECUÇÃO -----------" << endl;
+        cout << "----------- FIM DO ALGORITMO DE PRIM -----------" << endl;
         cout << "\n===== ARESTAS ESCOLHIDAS =====" << endl;
         int pesoTotal = 0;
         int i = 0;

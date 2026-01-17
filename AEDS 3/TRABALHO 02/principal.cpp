@@ -24,8 +24,9 @@ int main()
         }
         case 1:
         {
-            cout << "\nDigite o nome do arquivo para importação: ";
-            cin >> arquivo;
+            // cout << "\nDigite o nome do arquivo para importação: ";
+            // cin >> arquivo;
+            arquivo = "grafo.txt";
             grafo.importar(arquivo.c_str());
             break;
         }
@@ -52,9 +53,9 @@ int main()
             cout << "Digite o vértice de destino: ";
             cin >> v;
             if (grafo.consultarSeAdjacente(u, v))
-                cout << "\nVértices são adjacentes!" << endl;
+                cout << "\nVértices " << u << " (" << grafo.getNomePeloIdVertice(u) << ")" << " e " << v << " (" << grafo.getNomePeloIdVertice(v) << ")" << " são adjacentes!" << endl;
             else
-                cout << "\nVértices não são adjacentes!" << endl;
+                cout << "\nVértices " << u << " (" << grafo.getNomePeloIdVertice(u) << ")" << " e " << v << " (" << grafo.getNomePeloIdVertice(v) << ")" << " não são adjacentes!" << endl;
             break;
         }
         case 5:
@@ -183,9 +184,10 @@ int main()
         case 18:
         {
             cout << "Digite o nome do vértice de ORIGEM: ";
-            cin >> verticeOrigem;
+            cin.ignore();
+            getline(cin, verticeOrigem);
             cout << "Digite o nome do vértice de DESTINO: ";
-            cin >> verticeDestino;
+            getline(cin, verticeDestino);
             grafo.dijkstra(verticeOrigem, verticeDestino);
             break;
         }

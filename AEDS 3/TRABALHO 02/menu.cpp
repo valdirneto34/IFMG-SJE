@@ -17,7 +17,6 @@ int menu()
     cout << "8 - Editar Coordenadas de Vértice" << endl;
     cout << "9 - Consultar Primeiro Adjacente de Vértice" << endl;
     cout << "10 - Consultar Próximo Adjacente de Vértice" << endl;
-    cout << "     a Partir de um Adjacente Informado" << endl;
     cout << "11 - Lista Completa de Adjacentes de um Vértice" << endl;
     cout << "12 - Exportar Grafo para Arquivo de Texto" << endl;
     cout << "13 - Editar Nome de Vértice" << endl;
