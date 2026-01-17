@@ -24,9 +24,8 @@ int main()
         }
         case 1:
         {
-            // cout << "\nDigite o nome do arquivo para importação: ";
-            // cin >> arquivo;
-            arquivo = "grafo.txt";
+            cout << "\nDigite o nome do arquivo para importação: ";
+            cin >> arquivo;
             grafo.importar(arquivo.c_str());
             break;
         }
