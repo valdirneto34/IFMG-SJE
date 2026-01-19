@@ -90,10 +90,13 @@ public:
         direcionado = dir;
         for (int i = 0; i < qtd; i++)
         {
-            vertices.push_back({to_string(i), i, i * 10, i * 10});
+            vertices.push_back({to_string(i), i, rand() % 100, rand() % 100});
         }
         arestas.resize(numVertices, vector<int>(numVertices, -1));
-        cout << "Grafo vazio criado!" << endl;
+        cout << "Grafo vazio criado com sucesso!" << endl;
+        cout << "Número de vértices: " << numVertices << endl;
+        cout << "Número de arestas: " << contArestas << endl;
+        cout << "Direcionado: " << (direcionado ? "Sim" : "Não") << "\n\n";
     }
 
     void exibirTodasAsAdjacencias() const
