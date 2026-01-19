@@ -75,7 +75,10 @@ public:
             inserirAresta(u, v, p);
         }
         arq.close();
-        cout << "Grafo importado com sucesso!" << endl;
+        cout << "\nGrafo importado com sucesso!" << endl;
+        cout << "Número de vértices: " << numVertices << endl;
+        cout << "Número de arestas: " << contArestas << endl;
+        cout << "Direcionado: " << (direcionado ? "Sim" : "Não") << "\n\n";
     }
 
     void vazio(int qtd, bool dir)
@@ -469,7 +472,6 @@ public:
             }
             else
                 cout << "Aresta rejeitada!" << endl;
-            printf("Aresta (%d, %d) finalizada!\n", menor.u, menor.v);
         }
         cout << "\n-------------- FIM DO ALGORITMO DE KRUSKAL -------------" << endl;
         cout << "\n===== ARESTAS ESCOLHIDAS =====" << endl;
@@ -514,7 +516,7 @@ public:
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
-            cout << "\nAnalisando adjacentes do vértice " << u_removido.u << endl;
+            cout << "\nAnalisando adjacentes não finalizados do vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ")" << endl;
             if (u_removido.antecessor != -1)
             {
                 arestasSolucao.push_back({u_removido.antecessor, u_removido.u, u_removido.p});
@@ -531,14 +533,13 @@ public:
                     int peso = arestas[indiceRealU][indiceRealV];
                     if (peso < v[k].p)
                     {
-                        cout << "Vértice " << v_id << " recebeu peso " << peso;
-                        cout << " e antecessor " << u_removido.u << ".\n";
+                        cout << "   Adjacente " << v_id << " (" << vertices[v_id].nome << ") recebeu peso " << peso << endl;
                         v[k].p = peso;
                         v[k].antecessor = u_removido.u;
                     }
                 }
             }
-            cout << "Vértice " << u_removido.u << " finalizado!" << endl;
+            cout << "Vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ") finalizado" << endl;
             heap.heap_constroi(v, n);
         }
 
@@ -604,7 +605,7 @@ public:
         {
             VerticePrim u_removido = heap.heap_remove_minimo(heapVertices, &n);
 
-            cout << "\nVértice " << u_removido.u << " descoberto!\n";
+            cout << "\nAnalisando adjacentes não finalizados do vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ")" << endl;
             for (int v = 1; v <= n; v++)
             {
                 int v_id = heapVertices[v].u;
@@ -617,8 +618,7 @@ public:
                     int novaDistancia = u_removido.p + pesoAresta;
                     if (novaDistancia < heapVertices[v].p)
                     {
-                        cout << "Vértice " << v_id << " recebeu peso " << novaDistancia;
-                        cout << " e antecessor " << u_removido.u << ".\n";
+                        cout << "   Adjacente " << v_id << " (" << vertices[v_id].nome << ") recebeu peso " << novaDistancia << endl;
                         heapVertices[v].p = novaDistancia;
                         heapVertices[v].antecessor = u_removido.u;
 
