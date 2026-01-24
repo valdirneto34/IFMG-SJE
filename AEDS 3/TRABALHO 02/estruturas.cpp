@@ -1,15 +1,10 @@
 #include <iostream>
-#include <vector>
 #include <iomanip>
 #include <fstream>
 #include <vector>
 #include <queue>
 #include <climits>
 #include <windows.h>
-#include <sstream>
-#include <algorithm>
-#include <cmath>
-#include <stack>
 
 using namespace std;
 
