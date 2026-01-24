@@ -331,7 +331,7 @@ private:
         control[u_input].cor = 'c';
         (*tempo)++;
         control[u_input].tempoDesc = *tempo;
-        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA) no tempo " << *tempo << endl;
+        cout << "-> Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA) no tempo " << *tempo << endl;
         for (int v = 0; v < numVertices; v++)
         {
             if (arestas[u_input][v] != -1 && control[v].cor == 'b')
@@ -343,7 +343,7 @@ private:
         control[u_input].cor = 'p';
         (*tempo)++;
         control[u_input].tempoTer = *tempo;
-        cout << "   Vértice " << u_input << " (" << vertices[u_input].nome << ") finalizado (PRETO) no tempo " << *tempo << endl;
+        cout << "   -> Vértice " << u_input << " (" << vertices[u_input].nome << ") finalizado (PRETO) no tempo " << *tempo << endl;
     }
 
 public:
@@ -397,7 +397,7 @@ private:
         queue<Vertice> f;
         f.push(vertices[u_input]);
         fila.push(vertices[u_input].u);
-        cout << "Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA)!\n";
+        cout << "-> Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA)!\n";
 
         while (!f.empty())
         {
@@ -412,11 +412,11 @@ private:
                     control[k].distancia = control[v.u].distancia + 1;
                     f.push(vertices[k]);
                     fila.push(vertices[k].u);
-                    cout << "Vértice " << vertices[k].u << " (" << vertices[k].nome << ") descoberto (CINZA)!\n";
+                    cout << "-> Vértice " << vertices[k].u << " (" << vertices[k].nome << ") descoberto (CINZA)!\n";
                 }
             }
             control[v.u].cor = 'p';
-            cout << "   Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO)!\n";
+            cout << "   -> Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO)!\n";
         }
     }
 
@@ -457,10 +457,10 @@ public:
             Aresta menor = heap.heap_remove_minimo(A, &n);
             int paiU = encontrarChefe(menor.u, pais);
             int paiV = encontrarChefe(menor.v, pais);
-            printf("\nAnalisando a aresta: (%d, %d) | Peso: %d\n", menor.u, menor.v, menor.p);
+            printf("\n- Analisando a aresta: (%d, %d) | Peso: %d\n", menor.u, menor.v, menor.p);
             if (paiU != paiV)
             {
-                cout << "Aresta escolhida!" << endl;
+                cout << "   -> Aresta escolhida!" << endl;
                 S.push_back(menor);
 
                 pesoTotal += menor.p;
@@ -474,7 +474,7 @@ public:
                 }
             }
             else
-                cout << "Aresta rejeitada!" << endl;
+                cout << "   -> Aresta rejeitada!" << endl;
         }
         cout << "\n-------------- FIM DO ALGORITMO DE KRUSKAL -------------" << endl;
         cout << "\n===== ARESTAS ESCOLHIDAS =====" << endl;
@@ -519,7 +519,7 @@ public:
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
-            cout << "\nAnalisando adjacentes não finalizados do vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ")" << endl;
+            cout << "\n- Analisando adjacentes não finalizados do vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ")" << endl;
             if (u_removido.antecessor != -1)
             {
                 arestasSolucao.push_back({u_removido.antecessor, u_removido.u, u_removido.p});
@@ -536,13 +536,13 @@ public:
                     int peso = arestas[indiceRealU][indiceRealV];
                     if (peso < v[k].p)
                     {
-                        cout << "   Adjacente " << v_id << " (" << vertices[v_id].nome << ") recebeu peso " << peso << endl;
+                        cout << "   -> Adjacente " << v_id << " (" << vertices[v_id].nome << ") recebeu peso " << peso << endl;
                         v[k].p = peso;
                         v[k].antecessor = u_removido.u;
                     }
                 }
             }
-            cout << "Vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ") finalizado" << endl;
+            cout << "- Vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ") finalizado" << endl;
             heap.heap_constroi(v, n);
         }
 
@@ -608,7 +608,7 @@ public:
         {
             VerticePrim u_removido = heap.heap_remove_minimo(heapVertices, &n);
 
-            cout << "\nAnalisando adjacentes não finalizados do vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ")" << endl;
+            cout << "\n- Analisando adjacentes não finalizados do vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ")" << endl;
             for (int v = 1; v <= n; v++)
             {
                 int v_id = heapVertices[v].u;
@@ -621,7 +621,8 @@ public:
                     int novaDistancia = u_removido.p + pesoAresta;
                     if (novaDistancia < heapVertices[v].p)
                     {
-                        cout << "   Adjacente " << v_id << " (" << vertices[v_id].nome << ") recebeu peso " << novaDistancia << endl;
+                        cout << "   -> Adjacente " << v_id << " (" << vertices[v_id].nome << ") recebeu peso " << novaDistancia << " = ";
+                        cout << u_removido.p << " + " << pesoAresta << "\n";
                         heapVertices[v].p = novaDistancia;
                         heapVertices[v].antecessor = u_removido.u;
 
@@ -630,7 +631,7 @@ public:
                     }
                 }
             }
-            cout << "Vértice " << u_removido.u << " finalizado!\n";
+            cout << "- Vértice " << u_removido.u << " finalizado!\n";
             heap.heap_constroi(heapVertices, n);
         }
         cout << "\n------- FIM DO ALGORITMO DJKSTRA -------" << endl;
