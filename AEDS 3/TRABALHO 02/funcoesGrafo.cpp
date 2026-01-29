@@ -331,7 +331,10 @@ private:
         control[u_input].cor = 'c';
         (*tempo)++;
         control[u_input].tempoDesc = *tempo;
-        cout << "-> Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA) no tempo " << *tempo << endl;
+        if (control[u_input].antecessor != -1)
+            cout << "-> Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA) no tempo " << *tempo << " recebe antecessor " << control[u_input].antecessor << " (" << vertices[control[u_input].antecessor].nome << ")" << endl;
+        else
+            cout << "-> Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA) no tempo " << *tempo << " é um ponto de partida" << endl;
         for (int v = 0; v < numVertices; v++)
         {
             if (arestas[u_input][v] != -1 && control[v].cor == 'b')
@@ -364,7 +367,7 @@ public:
             c[i].cor = 'b';
             c[i].distancia = INT_MAX;
         }
-        cout << "\n------- INÍCIO DA BUSCA EM LARGURA ------\n";
+        cout << "\n------- INÍCIO DA BUSCA EM LARGURA ------";
         for (int i = 0; i < numVertices; i++)
             if (c[i].cor == 'b')
                 visitaEmLargura(i, c, fila);
@@ -392,31 +395,38 @@ public:
 private:
     void visitaEmLargura(int u_input, vector<ControlBuscaEmLargura> &control, queue<int> &fila)
     {
+        int cont = 0;
         control[u_input].cor = 'c';
         control[u_input].distancia = 0;
         queue<Vertice> f;
         f.push(vertices[u_input]);
         fila.push(vertices[u_input].u);
-        cout << "-> Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA)!\n";
+        cout << "\n# Vértice " << u_input << " (" << vertices[u_input].nome << ") descoberto (CINZA) é um ponto de partida\n";
 
         while (!f.empty())
         {
             Vertice v = f.front();
             f.pop();
+            cout << "\n- Analisando adjacentes não visitados do vértice " << v.u << " (" << vertices[v.u].nome << ")\n";
+            cont = 0;
             for (int k = 0; k < numVertices; k++)
             {
                 if (arestas[v.u][k] != -1 && control[k].cor == 'b')
                 {
+                    cont++;
                     control[k].cor = 'c';
                     control[k].antecessor = v.u;
                     control[k].distancia = control[v.u].distancia + 1;
                     f.push(vertices[k]);
                     fila.push(vertices[k].u);
-                    cout << "-> Vértice " << vertices[k].u << " (" << vertices[k].nome << ") descoberto (CINZA)!\n";
+                    cout << "   -> Vértice " << vertices[k].u << " (" << vertices[k].nome << ") descoberto (CINZA)\n";
                 }
             }
             control[v.u].cor = 'p';
-            cout << "   -> Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO)!\n";
+            if (cont == 0)
+                cout << "- Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO) não possui adjacentes não visitados\n";
+            else
+                cout << "- Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO)\n";
         }
     }
 
@@ -544,6 +554,16 @@ public:
             }
             cout << "- Vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ") finalizado" << endl;
             heap.heap_constroi(v, n);
+            if (u_removido.antecessor != -1)
+            {
+                cout << "# Aresta sendo adicionada à árvore: ";
+                cout << u_removido.antecessor << " (" << vertices[u_removido.antecessor].nome << ") -> ";
+                cout << u_removido.u << " (" << vertices[u_removido.u].nome << ") | Peso: " << u_removido.p << endl;
+            }
+            else
+            {
+                cout << "# Nenhuma aresta adicionada à árvore. ";
+            }
         }
 
         cout << "----------- FIM DO ALGORITMO DE PRIM -----------" << endl;
