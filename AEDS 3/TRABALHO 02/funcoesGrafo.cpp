@@ -47,7 +47,7 @@ public:
         ifstream arq(nome_arquivo);
         if (!arq.is_open())
         {
-            cout << "Erro ao abrir arquivo!";
+            cout << "Erro ao abrir arquivo!\n";
             return;
         }
         vertices.clear();
@@ -569,7 +569,7 @@ public:
             }
             else
             {
-                cout << "# Nenhuma aresta adicionada à árvore. ";
+                cout << "# Nenhuma aresta adicionada à árvore.\n";
             }
         }
 

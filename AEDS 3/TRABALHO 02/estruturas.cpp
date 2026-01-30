@@ -95,10 +95,13 @@ private:
         while (2 * k <= N)
         {
             j = 2 * k;
-            if (j < N && A[j].p > A[j + 1].p)
+
+            if (j < N && (A[j].p > A[j + 1].p || (A[j].p == A[j + 1].p && A[j].u > A[j + 1].u)))
                 j++;
-            if (A[k].p <= A[j].p)
+
+            if (A[k].p < A[j].p || (A[k].p == A[j].p && A[k].u <= A[j].u))
                 break;
+
             troca(&A[k], &A[j]);
             k = j;
         }
