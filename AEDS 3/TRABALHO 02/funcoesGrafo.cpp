@@ -424,7 +424,7 @@ private:
             }
             control[v.u].cor = 'p';
             if (cont == 0)
-                cout << "- Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO) não possui adjacentes não visitados\n";
+                cout << "- Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO) não possuía adjacentes não visitados\n";
             else
                 cout << "- Vértice " << v.u << " (" << vertices[v.u].nome << ") finalizado (PRETO)\n";
         }
@@ -529,6 +529,13 @@ public:
         while (n >= 1)
         {
             VerticePrim u_removido = heap.heap_remove_minimo(v, &n);
+
+            if (u_removido.p == INT_MAX)
+            {
+                u_removido.p = 0;
+                cout << "\n--- Iniciando nova Árvore/Componente no vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ") ---" << endl;
+            }
+            
             cout << "\n- Analisando adjacentes não finalizados do vértice " << u_removido.u << " (" << vertices[u_removido.u].nome << ")" << endl;
             if (u_removido.antecessor != -1)
             {
