@@ -13,7 +13,7 @@ void loop() {
   lcd.setCursor(0, 1);
   lcd.print("ROBOTICA");
 }*/
-/*
+
 #include <LiquidCrystal_I2C.h>
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
@@ -39,8 +39,8 @@ void loop() {
   contaDez();
   delay(1000);
 }
-*/
 
+/*
 #include <Wire.h>
 
 void setup() {
@@ -87,3 +87,4 @@ void loop() {
   }
   delay(5000);  // Wait 5 seconds for next scan
 }
+*/

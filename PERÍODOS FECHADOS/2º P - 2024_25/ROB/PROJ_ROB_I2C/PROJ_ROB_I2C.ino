@@ -221,7 +221,7 @@ void loop() {
     if (PESO_ATUAL < 0.005 || PESO_ATUAL > 0.04 || EMERGENCIA) {
       exibirEstado("    OPERACAO", "   CANCELADA", "todos");
       delay(3000);
-      digitalWrite(RELE, HIGH);  /Garante que o relé esteja DESLIGADO (HIGH)
+      digitalWrite(RELE, HIGH); //Garante que o relé esteja DESLIGADO (HIGH)
       return;
     } else if (PESO_ATUAL > 0.008 && PESO_ATUAL < 0.015) {
       MAX_PESO = 0.2 + PESO_ATUAL;

@@ -2,13 +2,20 @@
 #include <LiquidCrystal_I2C.h>
 #include <HX711.h>
 
-#define DOUT A0
-#define CLK A1
+#define DOUT 6
+#define CLK 7
 float calibration_factor = 447530.00, peso;
 HX711 balanca;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
+String lastMsg1;
+String lastMsg2;
 
 void ImpMsg(String msg1, String msg2) {
+  if (msg1 == lastMsg1 && msg2 == lastMsg2) {
+    return;
+  }
+  lastMsg1 = msg1;
+  lastMsg2 = msg2;
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print(msg1);
@@ -31,11 +38,11 @@ void setup() {
 void loop() {
   peso = balanca.get_units(3);
   if (peso > 0.008 && peso < 0.015) {
-    ImpMsg("Pote", "Pequeno");
+    ImpMsg("POTE", "PEQUENO");
   } else if (peso > 0.018 && peso < 0.022) {
-    ImpMsg("Pote", "Medio");
+    ImpMsg("POTE", "MEDIO");
   } else if (peso > 0.032 && peso < 0.036) {
-    ImpMsg("Pote", "Grande");
+    ImpMsg("POTE", "GRANDE");
   } else {
     ImpMsg("AGUARDANDO", "RECIPIENTE"); // Exibe a mensagem padrão se nenhuma condição for atendida
   }
