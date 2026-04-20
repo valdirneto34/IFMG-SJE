@@ -2,8 +2,8 @@
  * @file Enchedor_Automatico.ino
  * @brief Sistema de enchimento automático com controle de peso.
  * @author Valdir de Souza Carvalho Neto
- * @date 27/08/2025
- * @version 2.1
+ * @date 20/04/2026
+ * @version 1.0
  *
  * Este código implementa um sistema de enchimento automático que utiliza um sensor de peso (HX711)
  * para controlar o enchimento de recipientes. O sistema mede o peso do recipiente, inicia o
@@ -12,6 +12,11 @@
  * para interromper o processo imediatamente e um botão de reset dedicado para retomar a operação.
  * A lógica de controle do relé foi ajustada para operar com módulos que ATIVAM com LOW
  * e DESATIVAM com HIGH.
+ *
+ * Novas funcionalidades na versão 1.2:
+ * - Retomada de enchimento interrompido (emergência ou timeout)
+ * - Detecção automática de pote parcialmente cheio
+ * - Opção de continuar ou cancelar enchimento anterior
  *
  * Hardware Necessário:
  * - Arduino Uno
@@ -23,86 +28,103 @@
  * - Botão de Reset (físico, com pull-up interno/externo, aciona interrupção em LOW)
  *
  * Conexões Essenciais:
- * - HX711: DOUT (A0), CLK (A1) 
+ * - HX711: DOUT (6), CLK (7) 
  * - LCD I2C: SDA (A4), SCL (A5)
- * - Relé: Pino Digital 4 (Conectado ao pino de controle do módulo relé. A fonte na COM, e o fio da bomba no NA)
+ * - Relé: Pino Digital 12 (Conectado ao pino de controle do módulo relé. A fonte na COM, e o fio da bomba no NA)
  * - LED Vermelho: Pino Digital 8
  * - LED Amarelo: Pino Digital 9
  * - LED Verde: Pino Digital 10
- * - Botão de Emergência: Pino Digital 2 (conectado ao GND, usando INPUT_PULLUP)
- * - Botão de Reset: Pino Digital 3 (conectado ao GND, usando INPUT_PULLUP)
+ * - Botão de Emergência: Pino Digital 3 (conectado ao GND, usando INPUT_PULLUP)
+ * - Botão de Reset: Pino Digital 2 (conectado ao GND, usando INPUT_PULLUP)
  */
 
 // Inclusão de bibliotecas
-#include <Wire.h>               // Necessária para comunicação I2C (para o LCD)
-#include <LiquidCrystal_I2C.h>  // Biblioteca para o display LCD I2C
-#include <HX711.h>              // Biblioteca para o sensor de peso HX711
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+#include <HX711.h>
 
 /** Definição dos pinos do Arduino. */
 #define LED_VERMELHO 8
 #define LED_AMARELO 9
 #define LED_VERDE 10
-#define DOUT 6             // Pino de dados do HX711
-#define CLK 7              // Pino de clock do HX711
-#define RELE 12              // Pino de controle do relé
-#define BOTAO_EMERGENCIA 3  // Pino para o botão de emergência (com interrupção)
-#define BOTAO_RESET 2       // Pino para o botão de reset (com interrupção)
+#define DOUT 6
+#define CLK 7
+#define RELE 12
+#define BOTAO_EMERGENCIA 3
+#define BOTAO_RESET 2
 
-/** Constantes e variáveis globais. */
-// Fator de calibração da balança
-float const CALIBRATION_FACTOR = 447530.00;
-float MAX_PESO;    // Peso máximo a ser atingido para o enchimento
-float PESO_ATUAL;  // Peso atual lido pelo sensor
-// Variável volátil para o estado de emergência (compartilhada entre ISR e loop)
+/** Constantes do sistema */
+#define CALIBRATION_FACTOR 447530.00
+#define PESO_MIN_PEQUENO 0.008
+#define PESO_MAX_PEQUENO 0.015
+#define PESO_MIN_MEDIO 0.018
+#define PESO_MAX_MEDIO 0.022
+#define PESO_MIN_GRANDE 0.032
+#define PESO_MAX_GRANDE 0.036
+#define PESO_MIN_VALIDO 0.005
+#define PESO_MAX_VALIDO 0.040
+#define ENCHIMENTO_PEQUENO 0.2
+#define ENCHIMENTO_MEDIO 0.5
+#define ENCHIMENTO_GRANDE 1.0
+#define TIMEOUT_ENCHIMENTO 60000  // 60 segundos
+#define MARGEM_RETOMADA 0.010     // Margem de 10g para identificar mesmo pote
+
+/** Estrutura para salvar estado do enchimento interrompido */
+struct EnchimentoPendente {
+  bool pendente = false;
+  float pesoInicial;
+  float pesoAlvo;
+  float pesoAtualSalvo;
+  String tipoPote;
+};
+
+/** Variáveis globais. */
+float MAX_PESO;
+float PESO_ATUAL;
 volatile bool EMERGENCIA = false;
-
-// Variável volátil para controle de debounce na interrupção do botão de reset
-volatile unsigned long ultimoTempoBotaoReset = 0;
-// Tempo mínimo entre detecções de pressionamento para debounce do reset (em milissegundos)
-const unsigned long TEMPO_DEBOUNCE_RESET = 200;
-
-// Flag para garantir que as mensagens de emergência no LCD sejam exibidas apenas uma vez
 bool displayEmergenciaJaMostrado = false;
+EnchimentoPendente enchimentoPendente;
+
+
+String msg1, msg2;
 
 /** Instâncias dos objetos. */
-HX711 balanca;  // Objeto para o sensor de peso
-// Objeto para o LCD I2C (endereço 0x27, 16 colunas, 2 linhas)
+HX711 balanca;
 LiquidCrystal_I2C lcd(0x27, 16, 2);
 
 /**
- * @brief Exibe mensagens no display LCD e controla as cores dos LEDs.
- * Esta função otimiza a escrita no LCD para evitar piscar, atualizando apenas se a mensagem
- * ou cor mudou.
- * @param msg1 Mensagem da primeira linha do LCD (padrão "sa" para sem alteração).
- * @param msg2 Mensagem da segunda linha do LCD (padrão "sa" para sem alteração).
- * @param cor Cor dos LEDs ("vermelho", "amarelo", "verde", "todos" ou "sa" para sem alteração).
- *
- * As cores dos LEDs indicam o estado do sistema:
- * - Vermelho: Aguardando recipiente / Estado inicial.
- * - Amarelo: Enchendo recipiente.
- * - Verde: Recipiente cheio.
- * - Todos: Operação cancelada ou emergência acionada.
+ * @brief Função auxiliar para delay com verificação de emergência.
  */
-void exibirEstado(const String& msg1 = "sa", const String& msg2 = "sa", const String& cor = "sa") {
-  // Variáveis estáticas para guardar o último estado exibido e evitar reescrita desnecessária
+bool delayComEmergencia(unsigned long ms) {
+  unsigned long startTime = millis();
+  while ((millis() - startTime) < ms) {
+    if (EMERGENCIA) {
+      return true;
+    }
+    delay(10);
+  }
+  return false;
+}
+
+/**
+ * @brief Exibe mensagens no display LCD e controla as cores dos LEDs.
+ */
+void exibirEstado(const String& msg1, const String& msg2, const String& cor) {
   static String lastMsg1 = "";
   static String lastMsg2 = "";
   static String lastCor = "";
 
-  // Verifica se a mensagem da primeira linha ou da segunda linha mudou
-  if (msg1 != "sa" && (msg1 != lastMsg1 || msg2 != lastMsg2)) {
-    lcd.clear();          // Limpa o LCD para exibir a nova mensagem
-    lcd.setCursor(0, 0);  // Posiciona o cursor na primeira linha
-    lcd.print(msg1);      // Imprime a primeira mensagem
-    lcd.setCursor(0, 1);  // Posiciona o cursor na segunda linha
-    lcd.print(msg2);      // Imprime a segunda mensagem
-    lastMsg1 = msg1;      // Atualiza o último estado da primeira mensagem
-    lastMsg2 = msg2;      // Atualiza o último estado da segunda mensagem
+  if (msg1 != lastMsg1 || msg2 != lastMsg2) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(msg1);
+    lcd.setCursor(0, 1);
+    lcd.print(msg2);
+    lastMsg1 = msg1;
+    lastMsg2 = msg2;
   }
 
-  // Verifica se a cor dos LEDs mudou
-  if (cor != "sa" && cor != lastCor) {
-    // Apaga todos os LEDs e acende apenas os da cor especificada
+  if (cor != lastCor) {
     digitalWrite(LED_VERMELHO, LOW);
     digitalWrite(LED_VERDE, LOW);
     digitalWrite(LED_AMARELO, LOW);
@@ -113,179 +135,335 @@ void exibirEstado(const String& msg1 = "sa", const String& msg2 = "sa", const St
       digitalWrite(LED_VERDE, HIGH);
     } else if (cor == "amarelo") {
       digitalWrite(LED_AMARELO, HIGH);
-    } else if (cor == "todos") {  // Acende todos os LEDs para indicar emergência/cancelamento
+    } else if (cor == "todos") {
       digitalWrite(LED_VERMELHO, HIGH);
       digitalWrite(LED_VERDE, HIGH);
       digitalWrite(LED_AMARELO, HIGH);
     }
-    lastCor = cor;  // Atualiza o último estado da cor
+    lastCor = cor;
   }
 }
 
 /**
- * @brief Função da Rotina de Serviço de Interrupção (ISR) para o Botão de Emergência.
- * Acionada na borda de queda (FALLING) do pino do botão de emergência.
- * Sua única responsabilidade é ATIVAR o estado de emergência.
- * O debounce é intencionalmente omitido aqui para resposta imediata.
+ * @brief Identifica o tipo de pote VAZIO baseado no peso.
  */
-void handleEmergencyButton() {
-  digitalWrite(RELE, HIGH);             // Desliga a bomba (relé ATIVA com LOW, DESATIVA com HIGH)
-  EMERGENCIA = true;                    // Define o estado de emergência como verdadeiro
-  displayEmergenciaJaMostrado = false;  // Reseta a flag para exibir as mensagens de emergência
+String identificarPoteVazio(float peso) {
+  if (peso > PESO_MIN_PEQUENO && peso < PESO_MAX_PEQUENO) {
+    return "PEQUENO";
+  } else if (peso > PESO_MIN_MEDIO && peso < PESO_MAX_MEDIO) {
+    return "MEDIO";
+  } else if (peso > PESO_MIN_GRANDE && peso < PESO_MAX_GRANDE) {
+    return "GRANDE";
+  }
+  return "DESCONHECIDO";
 }
 
 /**
- * @brief Função da Rotina de Serviço de Interrupção (ISR) para o Botão de Reset.
- * Acionada na borda de queda (FALLING) do pino do botão de reset.
- * Inclui um mecanismo de debounce para evitar múltiplos resets por um único toque.
+ * @brief Obtém o tipo do pote (do pendente ou identifica se for vazio).
+ */
+String obterTipoPote(float peso, bool podeSerParcial = false) {
+  // Se temos um enchimento pendente e o peso é similar, usa o tipo salvo
+  if (enchimentoPendente.pendente) {
+    float diferenca = abs(peso - enchimentoPendente.pesoAtualSalvo);
+    if (diferenca < MARGEM_RETOMADA) {
+      return enchimentoPendente.tipoPote;  // ← Usa o tipo já conhecido!
+    }
+  }
+  // Caso contrário, tenta identificar como pote vazio
+  return identificarPoteVazio(peso);
+}
+
+/**
+ * @brief Calcula o peso alvo baseado no peso do pote vazio.
+ * @param peso Peso atual do pote vazio
+ * @return Peso alvo para enchimento, ou 0 se pote desconhecido
+ */
+float obterPesoAlvo(float peso) {
+  if (peso > PESO_MIN_PEQUENO && peso < PESO_MAX_PEQUENO) {
+    return ENCHIMENTO_PEQUENO + peso;
+  } else if (peso > PESO_MIN_MEDIO && peso < PESO_MAX_MEDIO) {
+    return ENCHIMENTO_MEDIO + peso;
+  } else if (peso > PESO_MIN_GRANDE && peso < PESO_MAX_GRANDE) {
+    return ENCHIMENTO_GRANDE + peso;
+  }
+  return 0;
+}
+
+/**
+ * @brief Salva o estado atual do enchimento para possível retomada.
+ */
+void salvarEnchimentoPendente(float pesoInicial, float pesoAlvo, float pesoAtual, String tipoPote) {
+  enchimentoPendente.pendente = true;
+  enchimentoPendente.pesoInicial = pesoInicial;
+  enchimentoPendente.pesoAlvo = pesoAlvo;
+  enchimentoPendente.pesoAtualSalvo = pesoAtual;
+  enchimentoPendente.tipoPote = tipoPote;
+}
+
+/**
+ * @brief Limpa o estado de enchimento pendente.
+ */
+void limparEnchimentoPendente() {
+  enchimentoPendente.pendente = false;
+}
+
+/**
+ * @brief Executa o processo de enchimento.
+ * @param pesoInicial Peso inicial do pote vazio
+ * @param pesoAlvo Peso alvo a ser atingido
+ * @param continuar Deve pular a contagem regressiva?
+ * @return true se completou com sucesso, false se interrompido
+ */
+bool executarEnchimento(float pesoInicial, float pesoAlvo, bool continuar = false) {
+  String tipoPote = obterTipoPote(pesoInicial);
+
+  // Se não for continuação, faz a contagem regressiva
+  if (!continuar) {
+    exibirEstado("   INICIANDO", "     EM 3", "amarelo");
+    if (delayComEmergencia(1000)) {
+      salvarEnchimentoPendente(pesoInicial, pesoAlvo, pesoInicial, tipoPote);
+      return false;
+    }
+    exibirEstado("   INICIANDO", "     EM 2", "amarelo");
+    if (delayComEmergencia(1000)) {
+      salvarEnchimentoPendente(pesoInicial, pesoAlvo, pesoInicial, tipoPote);
+      return false;
+    }
+    exibirEstado("   INICIANDO", "     EM 1", "amarelo");
+    if (delayComEmergencia(1000)) {
+      salvarEnchimentoPendente(pesoInicial, pesoAlvo, pesoInicial, tipoPote);
+      return false;
+    }
+  } else {
+    // Mensagem para continuação
+    exibirEstado(" COMPLETANDO...", " " + tipoPote, "amarelo");
+    delayComEmergencia(1500);
+  }
+
+  // Atualiza peso atual
+  PESO_ATUAL = balanca.get_units(3);
+
+  // Verifica se o pote ainda está presente
+  if (PESO_ATUAL < PESO_MIN_VALIDO) {
+    exibirEstado("    OPERACAO", "   CANCELADA", "todos");
+    delayComEmergencia(2000);
+    limparEnchimentoPendente();
+    return false;
+  }
+
+  // Atualiza o peso alvo se necessário (caso o peso tenha mudado)
+  if (continuar) {
+    pesoAlvo = obterPesoAlvo(PESO_ATUAL);
+  }
+
+  // Exibe informações do enchimento
+  String msg1 = " PESO: " + String(PESO_ATUAL, 3) + " KG";
+  String msg2 = " MAX: " + String(pesoAlvo, 3) + " KG";
+  exibirEstado(msg1, msg2, "amarelo");
+
+  // Liga a bomba
+  digitalWrite(RELE, LOW);
+  delay(100);
+
+  // Loop de enchimento
+  unsigned long tempoInicio = millis();
+  float ultimoPesoSalvo = PESO_ATUAL;
+  unsigned long ultimaAtualizacao = 0;
+
+  while (PESO_ATUAL < pesoAlvo && !EMERGENCIA) {
+    // Verifica timeout
+    if ((millis() - tempoInicio) > TIMEOUT_ENCHIMENTO) {
+      digitalWrite(RELE, HIGH);
+      delay(100);
+      exibirEstado("TEMPO ESGOTADO", "CANC. ENCHIMENTO", "todos");
+      salvarEnchimentoPendente(pesoInicial, pesoAlvo, PESO_ATUAL, tipoPote);
+      delayComEmergencia(4000);
+      return false;
+    }
+
+    PESO_ATUAL = balanca.get_units(3);
+
+    // Verifica se o pote foi removido durante enchimento
+    if (PESO_ATUAL < PESO_MIN_VALIDO) {
+      digitalWrite(RELE, HIGH);
+      delay(100);
+      exibirEstado(" POTE REMOVIDO", "CANC. ENCHIMENTO", "todos");
+      salvarEnchimentoPendente(pesoInicial, pesoAlvo, ultimoPesoSalvo, tipoPote);
+      delayComEmergencia(4000);
+      return false;
+    }
+
+    // Atualiza display a cada 500ms para não sobrecarregar
+    if (millis() - ultimaAtualizacao > 500) {
+      msg1 = " PESO: " + String(PESO_ATUAL, 3) + " KG";
+      msg2 = " MAX: " + String(pesoAlvo, 3) + " KG";
+      exibirEstado(msg1, msg2, "amarelo");
+      ultimaAtualizacao = millis();
+    }
+
+    ultimoPesoSalvo = PESO_ATUAL;
+    delay(50);
+  }
+
+  // Desliga a bomba
+  digitalWrite(RELE, HIGH);
+  delay(100);
+
+  // Verifica se foi interrompido por emergência
+  if (EMERGENCIA) {
+    salvarEnchimentoPendente(pesoInicial, pesoAlvo, PESO_ATUAL, tipoPote);
+    return false;
+  }
+
+  // Enchimento concluído com sucesso
+  limparEnchimentoPendente();
+  exibirEstado("   RECIPIENTE", "     CHEIO", "verde");
+  delayComEmergencia(3000);
+
+  return true;
+}
+
+/**
+ * @brief ISR para o Botão de Emergência.
+ */
+void handleEmergencyButton() {
+  digitalWrite(RELE, HIGH);
+  EMERGENCIA = true;
+  displayEmergenciaJaMostrado = false;
+}
+
+/**
+ * @brief ISR para o Botão de Reset.
  */
 void handleResetButton() {
-  // Implementa um debounce simples para o botão de reset dentro da ISR
-  if (millis() - ultimoTempoBotaoReset > TEMPO_DEBOUNCE_RESET) {
-    if (EMERGENCIA) {                       // O reset só tem efeito se o sistema estiver em emergência
-      EMERGENCIA = false;                   // Desativa o estado de emergência
-      displayEmergenciaJaMostrado = false;  // Reseta a flag para exibir mensagens normais após o reset
-    }
-    ultimoTempoBotaoReset = millis();  // Atualiza o tempo do último reset válido
+  if (EMERGENCIA) {
+    EMERGENCIA = false;
+    displayEmergenciaJaMostrado = false;
   }
 }
 
 /**
  * @brief Configura o hardware e inicializa o sistema.
- * É executada uma única vez ao ligar ou reiniciar o Arduino.
  */
 void setup() {
-  // Configura os pinos dos botões como entrada com pull-up interno
   pinMode(BOTAO_EMERGENCIA, INPUT_PULLUP);
   pinMode(BOTAO_RESET, INPUT_PULLUP);
 
-  // Anexa as funções de interrupção aos pinos dos botões
-  // FALLING: Detecta a transição de HIGH para LOW (quando o botão é pressionado com pull-up)
   attachInterrupt(digitalPinToInterrupt(BOTAO_EMERGENCIA), handleEmergencyButton, FALLING);
   attachInterrupt(digitalPinToInterrupt(BOTAO_RESET), handleResetButton, FALLING);
 
-  // Inicializa a comunicação I2C e o display LCD
-  Wire.begin();     // Inicia a biblioteca Wire para comunicação I2C
-  lcd.init();       // Inicializa o display LCD
-  lcd.backlight();  // Liga a luz de fundo do LCD
-  lcd.clear();      // Limpa o conteúdo do LCD
+  Wire.begin();
+  lcd.init();
+  lcd.backlight();
+  lcd.clear();
 
-  // Configura os pinos dos LEDs e do relé como saída
   pinMode(LED_VERMELHO, OUTPUT);
   pinMode(LED_VERDE, OUTPUT);
   pinMode(LED_AMARELO, OUTPUT);
   pinMode(RELE, OUTPUT);
 
-  // Garante que todos os LEDs e o relé comecem desligados.
   digitalWrite(LED_VERMELHO, LOW);
   digitalWrite(LED_VERDE, LOW);
   digitalWrite(LED_AMARELO, LOW);
-  digitalWrite(RELE, HIGH);  // Relé começa DESLIGADO (HIGH)
+  digitalWrite(RELE, HIGH);
 
-  // Inicializa o sensor de peso HX711
   balanca.begin(DOUT, CLK);
-  balanca.set_scale(CALIBRATION_FACTOR);  // Aplica o fator de calibração
-  balanca.tare();                         // Zera a balança (subtrai o peso atual como referência)
+  delay(100);
+  balanca.set_scale(CALIBRATION_FACTOR);
+  balanca.tare(20);
 
-  // Define o estado inicial do sistema como não-emergência e exibe a mensagem de aguardo
   EMERGENCIA = false;
   displayEmergenciaJaMostrado = false;
+
   exibirEstado("   AGUARDANDO", "   RECIPIENTE", "vermelho");
 }
 
 /**
  * @brief Loop principal do programa.
- * É executado repetidamente enquanto o Arduino estiver ligado.
  */
 void loop() {
-  // O estado de EMERGENCIA é verificado em cada iteração do loop para controle do fluxo.
-
-  /** Obtém a média de 3 leituras do sensor de peso para maior estabilidade. */
   PESO_ATUAL = balanca.get_units(3);
 
-  /**
-   * Bloco principal de operação: enchimento automático.
-   * Só é executado se o sistema NÃO estiver em estado de EMERGÊNCIA.
-   */
-  if (PESO_ATUAL > 0.005 && PESO_ATUAL < 0.040 && !EMERGENCIA) {
-    /** Inicia a sequência de inicialização com uma contagem regressiva no LCD. */
-    exibirEstado("   INICIANDO", "     EM 3");
-    delay(1000);  // Espera 1 segundo
-    exibirEstado("   INICIANDO", "     EM 2");
-    delay(1000);  // Espera 1 segundo
-    exibirEstado("   INICIANDO", "     EM 1");
-    delay(1000);  // Espera 1 segundo
+  // Tratamento de emergência (prioridade máxima)
+  if (EMERGENCIA) {
+    digitalWrite(RELE, HIGH);
 
-    PESO_ATUAL = balanca.get_units(3);  // Recalcula o peso após a contagem regressiva
-
-    if (PESO_ATUAL < 0.005 || PESO_ATUAL > 0.04 || EMERGENCIA) {
-      exibirEstado("    OPERACAO", "   CANCELADA", "todos");
-      delay(3000);
-      digitalWrite(RELE, HIGH); //Garante que o relé esteja DESLIGADO (HIGH)
-      return;
-    } else if (PESO_ATUAL > 0.008 && PESO_ATUAL < 0.015) {
-      MAX_PESO = 0.2 + PESO_ATUAL;
-    } else if (PESO_ATUAL > 0.018 && PESO_ATUAL < 0.022) {
-      MAX_PESO = 0.5 + PESO_ATUAL;
-    } else if (PESO_ATUAL > 0.032 && PESO_ATUAL < 0.036) {
-      MAX_PESO = 1.0 + PESO_ATUAL;
-    } else {
-      exibirEstado("     PESO", "  DESCONHECIDO", "todos");
-      delay(3000);
-      digitalWrite(RELE, HIGH);  //Garante que o relé esteja DESLIGADO (HIGH)
-      return;
-    }
-
-    // Exibe o peso atual e o peso máximo no LCD e acende o LED amarelo (enchendo)
-    exibirEstado(" PESO: " + String(PESO_ATUAL, 3) + " KG", " MAX: " + String(MAX_PESO, 3) + " KG", "amarelo");
-    digitalWrite(RELE, LOW); /** Inicia o processo de enchimento LIGANDO o relé (LOW) */
-
-    /**
-     * Loop de monitoramento do peso durante o enchimento.
-     * Continua enchendo enquanto o peso for menor que o máximo e a emergência não for acionada.
-     */
-    while (PESO_ATUAL < MAX_PESO && !EMERGENCIA) {
-      PESO_ATUAL = balanca.get_units(3);  // Atualiza o peso
-      // Atualiza o display com o peso em tempo real (exibirEstado gerencia a otimização)
-      exibirEstado(" PESO: " + String(PESO_ATUAL, 3) + " KG", " MAX: " + String(MAX_PESO, 3) + " KG");
-      delay(50);  // Pequeno atraso para estabilização da leitura e atualização do LCD
-    }
-
-    digitalWrite(RELE, HIGH); /** Finaliza o enchimento DESLIGANDO o relé (HIGH) */
-
-    /** Verifica se a emergência foi acionada durante o enchimento. */
-    if (EMERGENCIA) {
-      return;  // Se sim, o sistema entra no bloco de emergência na próxima iteração do loop
-    }
-
-    /** Exibe mensagem de recipiente cheio e aguarda antes de reiniciar o ciclo. */
-    exibirEstado("   RECIPIENTE", "     CHEIO", "verde");  // LED verde aceso
-    delay(3000);                                           // Exibe a mensagem por 3 segundos
-  }
-  /**
-   * Bloco de tratamento de emergência.
-   * É executado se a variável EMERGENCIA for 'true'.
-   */
-  else if (EMERGENCIA) {
-    digitalWrite(RELE, HIGH);  // !!! Garante que o relé esteja DESLIGADO (HIGH) durante a emergência
-
-    // Exibe as mensagens de emergência APENAS UMA VEZ
     if (!displayEmergenciaJaMostrado) {
-      exibirEstado("   EMERGENCIA", "   ACIONADA", "todos");  // Acende todos os LEDs
-      delay(2000);                                            // Exibe a mensagem "EMERGENCIA ACIONADA" por 2 segundos
-      exibirEstado("  APERTE BOTAO", "   DE RESET");          // Mensagem para o usuário reiniciar
-      displayEmergenciaJaMostrado = true;                     // Marca que as mensagens já foram exibidas
+      exibirEstado(" EM  EMERGENCIA", "  APERTE RESET", "todos");
+      displayEmergenciaJaMostrado = true;
     }
-    // O loop continua executando este bloco, mas o LCD não piscará,
-    // pois 'displayEmergenciaJaMostrado' é true.
-    // O sistema aguarda o pressionamento do botão de reset (que aciona a interrupção).
+    return;
   }
-  /**
-   * Bloco de estado de aguardo.
-   * É executado quando o sistema não está enchendo nem em emergência.
-   */
-  else {
-    exibirEstado("   AGUARDANDO", "   RECIPIENTE", "vermelho");  // LED vermelho aceso
-    delay(500);                                                  // Pequeno atraso para reduzir o consumo de recursos e evitar piscar
+
+  // Verifica se há um enchimento pendente
+  if (enchimentoPendente.pendente && PESO_ATUAL > PESO_MIN_VALIDO && PESO_ATUAL < enchimentoPendente.pesoAlvo) {
+    // Verifica se é realmente o mesmo pote
+    float diferenca = abs(PESO_ATUAL - enchimentoPendente.pesoAtualSalvo);
+
+    if (diferenca < MARGEM_RETOMADA) {
+      // É o mesmo pote! Calcula quanto falta para completar
+      float faltante = enchimentoPendente.pesoAlvo - PESO_ATUAL;
+      int percentual = (int)((PESO_ATUAL - enchimentoPendente.pesoInicial) / (enchimentoPendente.pesoAlvo - enchimentoPendente.pesoInicial) * 100);
+
+      // Mostra status do enchimento pendente
+      String msg1 = "POTE " + String(percentual) + "% CHEIO";
+      String msg2 = "FALTA " + String(faltante, 3) + " KG";
+      exibirEstado(msg1, msg2, "amarelo");
+      delayComEmergencia(4000);
+
+      // Pergunta se quer continuar
+      exibirEstado("CONTINUAR? AGORA", "TIRE P/ CANCELAR", "amarelo");
+
+      // Aguarda decisão por 5 segundos
+      unsigned long tempoDecisao = millis();
+      bool continuar = true;
+
+      while ((millis() - tempoDecisao) < 5000) {
+        PESO_ATUAL = balanca.get_units(3);
+        // Se removeu o pote, cancela
+        if (PESO_ATUAL < PESO_MIN_VALIDO) {
+          continuar = false;
+          break;
+        }
+
+        if (EMERGENCIA) return;
+        delay(100);
+      }
+
+      // Se ainda tem peso, continua o enchimento
+      PESO_ATUAL = balanca.get_units(3);
+      if (continuar && PESO_ATUAL > PESO_MIN_VALIDO) {
+        executarEnchimento(enchimentoPendente.pesoInicial, enchimentoPendente.pesoAlvo, true);  // true = continuar sem contagem
+      } else {
+        exibirEstado("  ENCHIMENTO", "   CANCELADO", "todos");
+        limparEnchimentoPendente();
+        delayComEmergencia(2000);
+      }
+      return;
+    } else {
+      // É um pote diferente - ignora o pendente
+      limparEnchimentoPendente();
+    }
+  }
+
+  // Fluxo normal: aguardando pote
+  if (PESO_ATUAL > PESO_MIN_VALIDO && PESO_ATUAL < PESO_MAX_VALIDO) {
+    MAX_PESO = obterPesoAlvo(PESO_ATUAL);
+
+    if (MAX_PESO > 0) {
+      // Verifica se o pote já está cheio
+      if (PESO_ATUAL >= MAX_PESO) {
+        exibirEstado("  POTE JA ESTA", "     CHEIO", "verde");
+        delayComEmergencia(2000);
+        return;
+      }
+
+      // Inicia enchimento normal
+      executarEnchimento(PESO_ATUAL, MAX_PESO, false);
+    }
+  } else {
+    // Estado de aguardo
+    exibirEstado("   AGUARDANDO", "   RECIPIENTE", "vermelho");
+    delayComEmergencia(500);
   }
 }
