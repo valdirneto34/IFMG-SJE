@@ -42,8 +42,8 @@
 #define LED_VERMELHO 8
 #define LED_AMARELO 9
 #define LED_VERDE 10
-#define DOUT A0             // Pino de dados do HX711
-#define CLK A1              // Pino de clock do HX711
+#define DOUT 6             // Pino de dados do HX711
+#define CLK 7              // Pino de clock do HX711
 #define RELE 12              // Pino de controle do relé
 #define BOTAO_EMERGENCIA 3  // Pino para o botão de emergência (com interrupção)
 #define BOTAO_RESET 2       // Pino para o botão de reset (com interrupção)

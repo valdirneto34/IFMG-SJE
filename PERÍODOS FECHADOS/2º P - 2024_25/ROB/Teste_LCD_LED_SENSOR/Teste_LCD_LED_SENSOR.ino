@@ -27,6 +27,7 @@ void ImpMsg(String msg1, String msg2, int led) {
         digitalWrite(LED_Y, 1);
         digitalWrite(LED_G, 1);
         digitalWrite(RELE, 1);
+        break;
       }
     case 1:
       {
