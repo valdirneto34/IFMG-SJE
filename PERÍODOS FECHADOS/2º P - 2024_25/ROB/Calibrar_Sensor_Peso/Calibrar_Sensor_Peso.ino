@@ -6,8 +6,8 @@
  Baseado em https://www.hackster.io/MOHAN_CHANDALURU/hx711-load-cell-amplifier-interface-with-arduino-fa47f3
 */
 #include "HX711.h"                 // Biblioteca HX711
-#define DOUT A0                    // HX711 DATA OUT = pino A0 do Arduino
-#define CLK A1                     // HX711 SCK IN = pino A1 do Arduino
+#define DOUT 6                    // HX711 DATA OUT = pino A0 do Arduino
+#define CLK 7                     // HX711 SCK IN = pino A1 do Arduino
 HX711 balanca;                     // define instancia balança HX711
 // 7997710.00
 float calibration_factor = 447530.00;  // fator de calibração para teste inicial
