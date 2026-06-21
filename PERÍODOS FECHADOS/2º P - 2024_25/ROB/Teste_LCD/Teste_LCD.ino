@@ -7,11 +7,23 @@ void setup() {
   lcd.clear();
 }
 
+void contaDez() {
+  for (int i = 0; i <= 10; i++) {
+    lcd.clear();
+    lcd.setCursor(0, 0);
+    lcd.print(String(i));
+    delay(1000);
+  }
+}
+
 void loop() {
   lcd.setCursor(0, 0);
   lcd.print("PROJETO");
   lcd.setCursor(0, 1);
   lcd.print("ROBOTICA");
+  delay(5000);
+  contaDez();
+  delay(1000);
 }*/
 
 #include <LiquidCrystal_I2C.h>
@@ -31,7 +43,7 @@ void setup() {
   lcd.clear();
 }
 void loop() {
-  lcd.home();
+  lcd.setCursor(0, 0);
   lcd.print("PROJETO");
   lcd.setCursor(0, 1);
   lcd.print("ROBOTICA");
