@@ -1,0 +1,5 @@
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.GeneratedMSBuildEditorConfig.editorconfig
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.AssemblyInfoInputs.cache
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.AssemblyInfo.cs
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.csproj.CoreCompileInputs.cache
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.sourcelink.json
