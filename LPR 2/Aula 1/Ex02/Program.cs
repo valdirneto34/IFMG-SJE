@@ -1,13 +1,16 @@
-﻿using System;
-class Program
+﻿class Program
 {
     static void Main()
     {
-        int numero = 0;
+        int numero;
         do
         {
             Console.Write("Digite um número inteiro positivo: ");
-            int.TryParse(Console.ReadLine(), out numero);
+            bool resultado = int.TryParse(Console.ReadLine(), out numero);
+            if (!resultado || numero <= 0)
+            {
+                Console.WriteLine("ERRO! Digite um número válido!");
+            }
         } while (numero <= 0);
 
         for (int i = 1; i <= 10; i++)

@@ -1,20 +1,28 @@
+# --- Arquivos do Sistema e Nuvem ---
 *.exe
-/.tmp.drivedownload
-/.tmp.driveupload
-/.vscode
+*.dll
+*.pdb
+.tmp.drivedownload/
+.tmp.driveupload/
+.vscode/
+
+# --- Projetos Java (Maven, NetBeans, Eclipse) ---
+**/target/
+**/build/
+**/nbproject/private/
+.mtj.tmp/
+*.jar
+*.war
+*.ear
+
+# --- Projetos C# / .NET (Visual Studio, Rider) ---
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# --- Arquivos específicos ---
 /AEDS 3/TRABALHO 02/visualizacao.html
-/LPR 1/Aula DB/DBTest/nbproject/private/
-/LPR 1/Aula DB/DBTest/build/
-/LPR 1/ATIVIDADE 03/Ex01/target/
-/LPR 1/ATIVIDADE 03/Ex02/target/
-/LPR 1/Aula Swing 2/GUITest/target/
-/LPR 1/Aula Swing/GUIHello2/nbproject/private/
-/LPR 1/Aula Swing/GUIHello2/build/
-/LPR 1/Aula Swing/GUIHello/nbproject/private/
-/LPR 1/Aula Swing/GUIHello/build/
-/LPR 1/Aula Swing 3/Teste/target/
-/LPR 1/TRABALHO PRÁTICO 02/Ex01/target/
-/LPR 1/TRABALHO PRÁTICO 02/Ex02/target/
-/LPR 1/TRABALHO PRÁTICO 03/TelaLogin/target/
-/SOP/Aula Thread/ExServidorSemThread/target/
-/SOP/Aula Thread/ExServidorComThread/target/

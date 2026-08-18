@@ -1,5 +1,4 @@
-﻿using System;
-class Program
+﻿class Program
 {
     static void Main()
     {
@@ -9,15 +8,19 @@ class Program
         {
             Console.Write("Digite um número inteiro positivo (0 para SAIR): ");
             bool resultado = double.TryParse(Console.ReadLine(), out numero);
-            if (!resultado)
+            if (numero == 0)
             {
-                Console.Write("Número inválido! ");
+                break;
+            }
+            if (!resultado || numero < 0)
+            {
+                Console.WriteLine("Número inválido! ");
             }
             else
             {
                 numeros.Add(numero);
             }
-        } while (numero != 0);
+        } while (true);
 
         int quantidade = numeros.Count;
         double soma = 0;
@@ -40,7 +43,7 @@ class Program
 
         Console.WriteLine($"Quantidade: {quantidade}");
         Console.WriteLine($"Soma......: {soma}");
-        Console.WriteLine($"Média.....: {media:2F}");
+        Console.WriteLine($"Média.....: {media:F2}");
         Console.WriteLine($"Menor.....: {menor}");
         Console.WriteLine($"Maior.....: {maior}");
     }
