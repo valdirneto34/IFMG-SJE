@@ -3,3 +3,13 @@ D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.A
 D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.AssemblyInfo.cs
 D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.csproj.CoreCompileInputs.cache
 D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.sourcelink.json
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\bin\Debug\net8.0\Ex03.exe
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\bin\Debug\net8.0\Ex03.deps.json
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\bin\Debug\net8.0\Ex03.runtimeconfig.json
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\bin\Debug\net8.0\Ex03.dll
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\bin\Debug\net8.0\Ex03.pdb
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.dll
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\refint\Ex03.dll
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.pdb
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\Ex03.genruntimeconfig.cache
+D:\usuarios\0082934\Documents\IFMG-SJE\LPR 2\Aula 1\Ex03\obj\Debug\net8.0\ref\Ex03.dll

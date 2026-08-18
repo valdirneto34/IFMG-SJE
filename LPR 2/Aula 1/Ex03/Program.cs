@@ -4,16 +4,44 @@ class Program
     static void Main()
     {
         double numero = 0;
-        double[] valores;
+        List<double> numeros = new List<double>();
         do
         {
-            Console.Write("Digite um número inteiro positivo: ");
-            double.TryParse(Console.ReadLine(), out valores.a);
+            Console.Write("Digite um número inteiro positivo (0 para SAIR): ");
+            bool resultado = double.TryParse(Console.ReadLine(), out numero);
+            if (!resultado)
+            {
+                Console.Write("Número inválido! ");
+            }
+            else
+            {
+                numeros.Add(numero);
+            }
         } while (numero != 0);
 
-        for (int i = 1; i <= 10; i++)
+        int quantidade = numeros.Count;
+        double soma = 0;
+        double menor = numeros.First();
+        double maior = numeros.First();
+
+        foreach (double num in numeros)
         {
-            Console.WriteLine($"{i} x {numero} = {i * numero}");
+            soma += num;
+            if (num < menor)
+            {
+                menor = num;
+            }
+            if (num > maior)
+            {
+                maior = num;
+            }
         }
+        double media = soma / quantidade;
+
+        Console.WriteLine($"Quantidade: {quantidade}");
+        Console.WriteLine($"Soma......: {soma}");
+        Console.WriteLine($"Média.....: {media:2F}");
+        Console.WriteLine($"Menor.....: {menor}");
+        Console.WriteLine($"Maior.....: {maior}");
     }
 }
