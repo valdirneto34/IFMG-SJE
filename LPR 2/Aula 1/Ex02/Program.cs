@@ -9,13 +9,15 @@
             bool resultado = int.TryParse(Console.ReadLine(), out numero);
             if (!resultado || numero <= 0)
             {
-                Console.WriteLine("ERRO! Digite um número válido!");
+                Console.WriteLine("ERRO! Digite um valor válido!");
             }
         } while (numero <= 0);
 
+        Console.WriteLine($"------ TABUADA DO {numero} ------");
         for (int i = 1; i <= 10; i++)
         {
-            Console.WriteLine($"{i} x {numero} = {i * numero}");
+            Console.WriteLine($"{numero} x {i} = {i * numero}");
         }
+        Console.WriteLine($"---------------------------------");
     }
 }

@@ -2,30 +2,40 @@
 {
     static void Main()
     {
-        double numero = 0;
-        List<double> numeros = new List<double>();
+        Console.WriteLine("\n==> Digite números para ver a quantidade, a soma, o menor e o maior valor. <==\n");
+        List<double> numeros = [];
+        bool resultado;
         do
         {
-            Console.Write("Digite um número inteiro positivo (0 para SAIR): ");
-            bool resultado = double.TryParse(Console.ReadLine(), out numero);
-            if (numero == 0)
+            Console.Write("Digite um número (0 para SAIR): ");
+            resultado = double.TryParse(Console.ReadLine(), out double numero);
+            if (!resultado)
             {
-                break;
-            }
-            if (!resultado || numero < 0)
-            {
-                Console.WriteLine("Número inválido! ");
+                Console.Write("Valor inválido! ");
             }
             else
             {
+                if (numero == 0)
+                {
+                    break;
+                }
                 numeros.Add(numero);
             }
         } while (true);
 
         int quantidade = numeros.Count;
         double soma = 0;
-        double menor = numeros.First();
-        double maior = numeros.First();
+        double menor, maior;
+        try
+        {
+            menor = numeros.First();
+            maior = numeros.First();
+        }
+        catch (InvalidOperationException)
+        {
+            Console.WriteLine($"\nERRO: Cálculos impossíveis, pois não existem elementos adicionados!\n");
+            return;
+        }
 
         foreach (double num in numeros)
         {
@@ -41,7 +51,7 @@
         }
         double media = soma / quantidade;
 
-        Console.WriteLine($"Quantidade: {quantidade}");
+        Console.WriteLine($"\nQuantidade: {quantidade}");
         Console.WriteLine($"Soma......: {soma}");
         Console.WriteLine($"Média.....: {media:F2}");
         Console.WriteLine($"Menor.....: {menor}");

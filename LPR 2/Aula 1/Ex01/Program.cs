@@ -12,7 +12,7 @@
             resp = double.TryParse(Console.ReadLine(), out nota1);
             if (!resp || nota1 < 0)
             {
-                Console.WriteLine("ERRO! Digite um número válido!");
+                Console.Write("Valor inválido! ");
             }
             else
             {
@@ -26,7 +26,7 @@
             resp = double.TryParse(Console.ReadLine(), out nota2);
             if (!resp || nota2 < 0)
             {
-                Console.WriteLine("ERRO! Digite um número válido!");
+                Console.Write("Valor inválido! ");
             }
             else
             {
@@ -40,7 +40,7 @@
             resp = double.TryParse(Console.ReadLine(), out nota3);
             if (!resp || nota3 < 0)
             {
-                Console.WriteLine("ERRO! Digite um número válido!");
+                Console.Write("Valor inválido! ");
             }
             else
             {
@@ -53,7 +53,7 @@
 
         if (media >= 60)
         {
-            Console.WriteLine($"{nome} está Aprovado!");
+            Console.WriteLine($"{nome} está Aprovado(a)!");
         }
         else if (media >= 40)
         {
@@ -61,7 +61,7 @@
         }
         else
         {
-            Console.WriteLine($"{nome} está Reprovado!");
+            Console.WriteLine($"{nome} está Reprovado(a)!");
         }
     }
 }
