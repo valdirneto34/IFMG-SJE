@@ -25,4 +25,5 @@
 *.sln.docstates
 
 # --- Arquivos específicos ---
-/AEDS 3/TRABALHO 02/visualizacao.html
+**/AEDS 3/TRABALHO 02/visualizacao.html
+IFMG-SJE.sln
