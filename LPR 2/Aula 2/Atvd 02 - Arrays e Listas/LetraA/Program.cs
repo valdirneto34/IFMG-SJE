@@ -19,9 +19,9 @@
     }
     static int ContarAcimaDaMedia(double[] valores)
     {
-        int qtd = 0; 
+        int qtd = 0;
         double soma = 0;
-        Console.Write("Valores digitados: ");
+        Console.Write("\nValores digitados: ");
         for (int i = 0; i < valores.Length; i++)
         {
             if (!double.IsNaN(valores[i]))
@@ -49,14 +49,10 @@
     }
     static void Main()
     {
-        double[] valores = new double[10];
-        for (int i = 0; i < valores.Length; i++)
-        {
-            valores[i] = double.NaN;
-        }
-        Console.WriteLine("Digite no máximo 10 números para vermos quantos estão acima da média.");
+        List<double> valores = new List<double>();
+        Console.WriteLine("Digite vários números para vermos quantos estão acima da média.");
         Console.WriteLine("(Pressione ENTER vazio ou digite 'fim' para parar antes).\n");
-        
+
         for (int i = 0; i < 10; i++)
         {
             Console.Write($"Digite o {i + 1}º número: ");
@@ -66,10 +62,15 @@
             {
                 break;
             }
-            valores[i] = ConverterParaDouble(entrada);
+            valores.Add(ConverterParaDouble(entrada));
         }
-
-        int acimaDaMedia = ContarAcimaDaMedia(valores);
+        if (valores.Count == 0)
+        {
+            Console.WriteLine("\nNenhum valor foi digitado.\nPROGRAMA ENCERRADO!\n");
+            return;
+        }
+        double[] array = valores.ToArray();
+        int acimaDaMedia = ContarAcimaDaMedia(array);
         Console.WriteLine($"\nExistem {acimaDaMedia} valores acima da média.");
     }
 }
