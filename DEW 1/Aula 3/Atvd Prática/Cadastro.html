@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulário de Cadastro</title>
+</head>
+<body>
+    <h1>Formulário de Cadastro</h1>
+    <table>
+        <tr>
+            <td colspan="2"><label for="nome"><strong>Seu nome:</strong></label></td>
+            <td><input type="text" name="nome" id="nome" placeholder="Digite seu nome"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><label for="restricao"><strong>Possui alguma restrição alimentar?</strong></label></td>
+            <td><textarea name="restricao" id="restricao" rows="3" placeholder="Escreva aqui..."></textarea></td>
+        </tr>
+        <tr>
+            <td colspan="2"><label for="curso"><strong>Selecione o Curso:</strong></label></td>
+            <td>
+                <select name="curso" id="curso">
+                    <option value="">-- Selecione --</option>
+                    <option value="ADM">Administração</option>
+                    <option value="AGR">Agronomia</option>
+                    <option value="BIO">Ciências Biológicas</option>
+                    <option value="FLO">Engenharia Florestal</option>
+                    <option value="MAT">Matemática</option>
+                    <option value="PED">Pedagogia</option>
+                    <option value="SI">Sistemas de Informação</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><label for="turma"><strong>Selecione a Turma:</strong></label></td>
+            <td>
+                <select name="turma" id="turma">
+                    <option value="">-- Selecione --</option>
+                    <option value="211">211</option>
+                    <option value="221">221</option>
+                    <option value="231">231</option>
+                    <option value="241">241</option>
+                    <option value="251">251</option>
+                    <option value="261">261</option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"><label for="email"></label><strong>E-mail:</strong></td>
+            <td><input type="email" name="email" id="email" placeholder="exemplo@email.com"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><label for="senha"></label><strong>Senha:</strong></td>
+            <td><input type="password" name="senha" id="senha" placeholder="Crie uma senha"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><label for="confirmarSenha"></label><strong>Confirmar senha:</strong></td>
+            <td><input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="Repita sua senha"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><label for="perfil"></label><strong>Perfil:</strong></td>
+            <td>
+                <input type="radio" name="perfil" id="perfil"> Professor
+                <input type="radio" name="perfil" id="perfil" checked> Aluno
+            </td>
+            <td><input type="submit" value="Enviar"></td>
+        </tr>
+    </table>
+</body>
+</html>
