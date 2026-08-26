@@ -1,68 +1,72 @@
-﻿class Program
+﻿using System.Globalization;
+
+class Program
 {
-    static string LeEntrada()
-    {
-        return Console.ReadLine() ?? "";
-    }
+    static string LeEntrada() => Console.ReadLine() ?? "";
 
     static double ConverterParaDouble(string entrada)
     {
-        double numero;
-        entrada = entrada.Replace('.', ',');
-        while (!double.TryParse(entrada, out numero))
+        string separadorDoSistema = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+
+        while (true)
         {
+            entrada = separadorDoSistema == ","
+                ? entrada.Replace('.', ',')
+                : entrada.Replace(',', '.');
+
+            if (double.TryParse(entrada, out double numero))
+            {
+                return numero;
+            }
+
             Console.Write("Valor inválido! Digite novamente: ");
-            entrada = Console.ReadLine() ?? "";
-            entrada = entrada.Replace('.', ',');
+            entrada = LeEntrada().Trim();
         }
-        return numero;
     }
     static int ContarAcimaDaMedia(double[] valores)
     {
-        int qtd = 0;
         double soma = 0;
-        Console.Write("\nValores digitados: ");
-        for (int i = 0; i < valores.Length; i++)
+        Console.WriteLine($"\nValores digitados: {ImprimeArray(valores)}");
+        foreach (double valor in valores)
         {
-            if (!double.IsNaN(valores[i]))
+            if (!double.IsNaN(valor))
             {
-                soma += valores[i];
-                qtd++;
-                Console.Write($"{valores[i]} -> ");
+                soma += valor;
             }
         }
-        if (qtd == 0) return 0;
 
-        double media = soma / qtd;
-        int acimaDaMedia = 0;
-        Console.WriteLine($"\nMédia: {media:F2}");
-        Console.Write("Valores acima da média: ");
-        for (int i = 0; i < valores.Length; i++)
+        double media = soma / valores.Length;
+        Console.WriteLine($"Média: {media:F2}");
+
+        List<double> valoresAcimaDaMedia = new List<double>();
+        foreach (double valor in valores)
         {
-            if (!double.IsNaN(valores[i]) && valores[i] > media)
+            if (!double.IsNaN(valor) && valor > media)
             {
-                acimaDaMedia++;
-                Console.Write($"{valores[i]} -> ");
+                valoresAcimaDaMedia.Add(valor);
             }
         }
-        return acimaDaMedia;
+        Console.WriteLine($"Valores acima da média: {ImprimeArray(valoresAcimaDaMedia.ToArray())}");
+        return valoresAcimaDaMedia.Count;
     }
+
+    static string ImprimeArray(double[] array) => string.Join(" -> ", array);
     static void Main()
     {
         List<double> valores = new List<double>();
-        Console.WriteLine("Digite vários números para vermos quantos estão acima da média.");
+        Console.WriteLine("\nDigite vários números para vermos quantos estão acima da média entre eles.");
         Console.WriteLine("(Pressione ENTER vazio ou digite 'fim' para parar antes).\n");
 
-        for (int i = 0; i < 10; i++)
+        for (int i = 1; ; i++)
         {
-            Console.Write($"Digite o {i + 1}º número: ");
-            string entrada = LeEntrada().Trim().ToLower();
+            Console.Write($"Digite o {i}º número: ");
+            string entradaTratada = LeEntrada().Trim().ToLower();
 
-            if (string.IsNullOrEmpty(entrada) || entrada == "fim")
+            if (string.IsNullOrEmpty(entradaTratada) || entradaTratada == "fim")
             {
                 break;
             }
-            valores.Add(ConverterParaDouble(entrada));
+            valores.Add(ConverterParaDouble(entradaTratada));
         }
         if (valores.Count == 0)
         {
@@ -70,7 +74,6 @@
             return;
         }
         double[] array = valores.ToArray();
-        int acimaDaMedia = ContarAcimaDaMedia(array);
-        Console.WriteLine($"\nExistem {acimaDaMedia} valores acima da média.");
+        Console.WriteLine($"Existe(m) {ContarAcimaDaMedia(array)} valor(es) acima da média.");
     }
 }

@@ -1,51 +1,57 @@
-﻿class Program
+﻿using System.Globalization;
+class Program
 {
-    static string LeEntrada()
-    {
-        return Console.ReadLine() ?? "";
-    }
+    static string LeEntrada() => Console.ReadLine() ?? "";
 
     static double ConverterParaDouble(string entrada)
     {
+        string separadorDoSistema = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
         double numero;
-        entrada = entrada.Replace('.', ',');
-        while (!double.TryParse(entrada, out numero))
+
+        while (true)
         {
+            entrada = separadorDoSistema == "," 
+                ? entrada.Replace('.', ',') 
+                : entrada.Replace(',', '.');
+
+            if (double.TryParse(entrada, out numero))
+            {
+                return numero;
+            }
+
             Console.Write("Valor inválido! Digite novamente: ");
-            entrada = Console.ReadLine() ?? "";
-            entrada = entrada.Replace('.', ',');
+            entrada = LeEntrada().Trim();
         }
-        return numero;
     }
 
     static double[] InverterArray(double[] arrayEntrada)
     {
-        int tamanhoDoArray = arrayEntrada.Length;
-        double[] arrayInvertido = new double[tamanhoDoArray];
-        foreach (var valor in arrayEntrada)
+        int tamanho = arrayEntrada.Length;
+        double[] arrayInvertido = new double[tamanho];
+        for (int i = 0; i < tamanho; i++)
         {
-            arrayInvertido[tamanhoDoArray - 1] = valor;
-            tamanhoDoArray--;
+            arrayInvertido[tamanho - 1 - i] = arrayEntrada[i];
         }
         return arrayInvertido;
     }
+
+        static string ImprimeArray(double[] array) => string.Join(" -> ", array);
+
     static void Main()
     {
-        Console.WriteLine("Digite vários números e depois veremos a sua ordem inversa.");
+        Console.WriteLine("\nDigite vários números e depois veremos a sua ordem inversa.");
         Console.WriteLine("(Pressione ENTER vazio ou digite 'fim' para parar).\n");
         List<double> valores = new List<double>();
-        int i = 0;
-        do
+        for (int i = 1; ; i++)
         {
-            Console.Write($"Digite o {i + 1}º número: ");
+            Console.Write($"Digite o {i}º número: ");
             string entrada = LeEntrada().Trim().ToLower();
             if (string.IsNullOrEmpty(entrada) || entrada == "fim")
             {
                 break;
             }
             valores.Add(ConverterParaDouble(entrada));
-            i++;
-        } while (true);
+        }
         if (valores.Count == 0)
         {
             Console.WriteLine("\nNenhum valor foi digitado.\nPROGRAMA ENCERRADO!\n");
@@ -53,15 +59,8 @@
         }
         double[] array = valores.ToArray();
         double[] arrayInvertido = InverterArray(array);
-        Console.Write($"\nArray original: ");
-        foreach (double valor in array)
-        {
-            Console.Write($"{valor} -> ");
-        }
-        Console.Write($"\nArray invertido: ");
-        foreach (double valor in arrayInvertido)
-        {
-            Console.Write($"{valor} -> ");
-        }
+
+        Console.WriteLine($"\nArray original: {ImprimeArray(array)}");
+        Console.WriteLine($"Array invertido: {ImprimeArray(arrayInvertido)}");
     }
 }

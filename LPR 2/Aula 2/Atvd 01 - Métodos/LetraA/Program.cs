@@ -2,7 +2,7 @@
 {
     static bool EhPar(int numero)
     {
-        if(numero % 2 == 0)
+        if (numero % 2 == 0)
         {
             return true;
         }
@@ -10,21 +10,12 @@
     }
     static void Main()
     {
-        bool ehInteiro;
         int numero;
         Console.Write("Digite um número inteiro para verificar se ele é par: ");
-        do
+        while (!int.TryParse(Console.ReadLine(), out numero))
         {
-        ehInteiro = int.TryParse(Console.ReadLine(), out numero);
-            if (!ehInteiro)
-            {
-                Console.Write("Valor inválido! Digite novamente: ");
-            }
-            else
-            {
-                break;
-            }
-        } while (true);
+            Console.Write("Valor inválido! Digite novamente: ");
+        }
 
         bool ehPar = EhPar(numero);
         if (ehPar)

@@ -1,44 +1,39 @@
-﻿class Program
+﻿using System.Globalization;
+class Program
 {
-
+    static string LeEntrada() => Console.ReadLine() ?? "";
     static double LeNumero()
     {
+        string separadorDoSistema = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
         double numero;
         do
         {
-            string possivelNumero = Console.ReadLine() ?? "";
-            possivelNumero = possivelNumero.Replace('.', ',');
-            bool ehDouble = double.TryParse(possivelNumero, out numero);
-            if (!ehDouble)
+            string possivelNumero = LeEntrada().Trim();
+            possivelNumero = separadorDoSistema == ","
+                ? possivelNumero.Replace('.', ',')
+                : possivelNumero.Replace(',', '.');
+            if (double.TryParse(possivelNumero, out numero))
             {
-                Console.Write("Valor inválido! Digite novamente: ");
+                return numero;
             }
             else
-            {
-                break;
-            }
+                Console.Write("Valor inválido! Digite novamente: ");
         } while (true);
-        return numero;
     }
     static double Maior(double a, double b)
     {
-        if (a >= b)
-        {
-            return a;
-        }
-        return b;
+        return Math.Max(a, b);
     }
     static void Main()
     {
-        double a, b, maior;
         Console.WriteLine("Digite dois números e veremos qual é o maior!");
         Console.Write("\nDigite o primeiro número: ");
-        a = LeNumero();
+        double a = LeNumero();
 
         Console.Write("\nDigite o segundo número: ");
-        b = LeNumero();
-        
-        maior = Maior(a, b);
+        double b = LeNumero();
+
+        double maior = Maior(a, b);
         Console.WriteLine($"\nO maior número entre {a} e {b} é o {maior}");
     }
 }

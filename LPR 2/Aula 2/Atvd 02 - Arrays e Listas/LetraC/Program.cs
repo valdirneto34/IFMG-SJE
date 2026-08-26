@@ -1,54 +1,61 @@
 ﻿class Program
 {
-    static string LeEntrada()
-    {
-        return Console.ReadLine() ?? "";
-    }
+    static string LeEntrada() => Console.ReadLine() ?? "";
 
-    static double ConverterParaInt(string entrada)
+    static int ConverterParaInt(string entrada)
     {
-        int numero;
-        entrada = entrada.Replace('.', ',');
-        while (!int.TryParse(entrada, out numero))
+        while (true)
         {
+            if (int.TryParse(entrada, out int numero))
+            {
+                return numero;
+            }
             Console.Write("Valor inválido! Digite novamente: ");
-            entrada = Console.ReadLine() ?? "";
-            entrada = entrada.Replace('.', ',');
+            entrada = LeEntrada().Trim();
         }
-        return numero;
     }
 
-    static List<double> RetornaListaDePares(List<double> listaOriginal)
+    static List<int> RetornaListaDePares(List<int> listaOriginal)
     {
-        List<double> pares = new List<double>();
-        foreach (double valor in listaOriginal)
+        List<int> pares = new List<int>();
+        foreach (int valor in listaOriginal)
         {
             if (valor % 2 == 0)
             {
                 pares.Add(valor);
             }
         }
+        return pares;
     }
+
+    static string ImprimeLista(List<int> listaOriginal) => string.Join(" -> ", listaOriginal);
 
     static void Main()
     {
-        Console.WriteLine("Digite números inteiros e eu vou te devolver os apenas os pares.");
+        Console.WriteLine("\nDigite números inteiros e eu vou te devolver os apenas os pares.");
         Console.WriteLine("(Pressione ENTER vazio ou digite 'fim' para parar).\n");
+
         List<int> valores = new List<int>();
-        do
+        for (int i = 1; ; i++)
         {
-            string leitura = LeEntrada();
+            Console.Write($"Digite o {i}º número: ");
             string leitura = LeEntrada().Trim().ToLower();
+            
             if (string.IsNullOrEmpty(leitura) || leitura == "fim")
             {
                 break;
             }
             valores.Add(ConverterParaInt(leitura));
-        } while (true);
+        }
+
         if (valores.Count == 0)
         {
             Console.WriteLine("\nNenhum valor foi digitado.\nPROGRAMA ENCERRADO!\n");
             return;
         }
+
+        List<int> listaDePares = RetornaListaDePares(valores);
+        Console.WriteLine($"Lista original: {ImprimeLista(valores)}");
+        Console.WriteLine($"Lista só de pares: {ImprimeLista(listaDePares)}");
     }
 }

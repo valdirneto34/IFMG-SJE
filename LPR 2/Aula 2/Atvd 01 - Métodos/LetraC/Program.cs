@@ -1,28 +1,27 @@
-﻿class Program
+﻿using System.Globalization;
+class Program
 {
+    static string LeEntrada() => Console.ReadLine() ?? "";
     static double LeDouble()
     {
-        double numero;
-        do
+        string separadorDoSistema = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
+        while (true)
         {
-            string possivelNumero = Console.ReadLine() ?? "";
-            possivelNumero = possivelNumero.Replace('.', ',');
-            bool ehDouble = double.TryParse(possivelNumero, out numero);
-            if (!ehDouble)
+            string possivelNumero = LeEntrada().Trim();
+
+            possivelNumero = separadorDoSistema == ","
+                ? possivelNumero.Replace('.', ',')
+                : possivelNumero.Replace(',', '.');
+
+            if (double.TryParse(possivelNumero, out double numero))
             {
-                Console.Write("Valor inválido! Digite novamente: ");
+                return numero;
             }
-            else
-            {
-                break;
-            }
-        } while (true);
-        return numero;
+            Console.Write("Valor inválido! Digite novamente: ");
+        }
     }
-    static double CalcularImc(double peso, double altura)
-    {
-        return peso / (altura * altura);
-    }
+    static double CalcularImc(double peso, double altura) => peso / Math.Pow(altura, 2);
+
 
     static string ClassificarImc(double imc) => imc switch
 {
@@ -35,19 +34,20 @@
 };
     static void Main()
     {
-        double peso, altura, imc;
-        Console.WriteLine("Vamos calcular o seu IMC!");
+        Console.WriteLine("\nVamos calcular o seu IMC!");
+        
         Console.Write("\nPrimeiro, digite seu peso (em kg): ");
-        peso = LeDouble();
+        double peso = LeDouble();
 
         Console.Write("\nAgora, digite sua altura (em metros): ");
-        altura = LeDouble();
+        double altura = LeDouble();
+
         if(altura > 3.0)
         {
             altura /= 100;
         }
 
-        imc = CalcularImc(peso, altura);
+        double imc = CalcularImc(peso, altura);
         Console.WriteLine($"\nO seu IMC é {imc:F2}");
         Console.WriteLine($"Classificação: {ClassificarImc(imc)}");
     }
