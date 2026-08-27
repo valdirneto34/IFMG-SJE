@@ -6,15 +6,14 @@ class Program
     static double ConverterParaDouble(string entrada)
     {
         string separadorDoSistema = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-        double numero;
 
         while (true)
         {
-            entrada = separadorDoSistema == "," 
-                ? entrada.Replace('.', ',') 
+            entrada = separadorDoSistema == ","
+                ? entrada.Replace('.', ',')
                 : entrada.Replace(',', '.');
 
-            if (double.TryParse(entrada, out numero))
+            if (double.TryParse(entrada, out double numero))
             {
                 return numero;
             }
@@ -35,7 +34,7 @@ class Program
         return arrayInvertido;
     }
 
-        static string ImprimeArray(double[] array) => string.Join(" -> ", array);
+    static string ImprimeArray(double[] array) => string.Join(" -> ", array);
 
     static void Main()
     {

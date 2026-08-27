@@ -40,7 +40,7 @@
         {
             Console.Write($"Digite o {i}º número: ");
             string leitura = LeEntrada().Trim().ToLower();
-            
+
             if (string.IsNullOrEmpty(leitura) || leitura == "fim")
             {
                 break;

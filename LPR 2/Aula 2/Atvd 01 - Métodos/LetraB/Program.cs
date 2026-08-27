@@ -5,14 +5,13 @@ class Program
     static double LeNumero()
     {
         string separadorDoSistema = CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator;
-        double numero;
         do
         {
             string possivelNumero = LeEntrada().Trim();
             possivelNumero = separadorDoSistema == ","
                 ? possivelNumero.Replace('.', ',')
                 : possivelNumero.Replace(',', '.');
-            if (double.TryParse(possivelNumero, out numero))
+            if (double.TryParse(possivelNumero, out double numero))
             {
                 return numero;
             }
