@@ -9,7 +9,7 @@ class Program
         leitura = LeEntrada().Trim();
         while (leitura == "" || string.IsNullOrEmpty(leitura))
         {
-            Console.Write("Valor inválida! Digite novamente: ");
+            Console.Write("Valor inválido! Digite novamente: ");
             leitura = LeEntrada().Trim();
         }
     }
@@ -159,7 +159,7 @@ class Program
         Console.WriteLine("3 - Atualizar Contato");
         Console.WriteLine("4 - Remover Contato");
         Console.WriteLine("5 - Imprimir Contatos");
-        Console.WriteLine("========== MENU ==========");
+        Console.WriteLine("==========================");
         Console.Write("Digite sua escolha: ");
         string leitura = LeEntrada().Trim();
         return ConverteParaInt(leitura);
