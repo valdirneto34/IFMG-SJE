@@ -1,0 +1,167 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
+
+:root {
+    --cor-ifmg: rgb(28, 170, 0);
+    --cor-ifmg-escura: rgb(16, 94, 0);
+    --cor-fundo-tela: rgb(250, 235, 215);
+    --cor-fundo-form: rgb(255, 255, 255);
+    --cor-texto-principal: #333333;
+    --cor-texto-auxiliar: #555;
+    --cor-borda-input: #cccccc;
+}
+
+* {
+    font-family: 'Inter', Arial, sans-serif;
+    padding: 0px;
+    margin: 0px;
+}
+
+html, body {
+    background: var(--cor-fundo-tela);
+    color: var(--cor-texto-principal);
+}
+
+h1, h3 {
+    font-family: 'Montserrat', sans-serif;
+}
+
+h1 {
+    text-align: center;
+    margin: 20px 0px 20px 0px;
+    color: var(--cor-ifmg);
+}
+
+.logoIfmg {
+    width: 150px;
+    margin-bottom: 10px;
+}
+
+form {
+    background: var(--cor-fundo-form);
+    margin: 20px auto;
+    padding: 30px;
+    border: none;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    width: 400px;
+    gap: 15px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.linha-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.linha-form#creditos {
+    color: white;
+    background: var(--cor-ifmg);
+    padding: 8px;
+    border-radius: 5px;
+}
+
+h3 {
+    color: var(--cor-ifmg);
+}
+
+label {
+    font-weight: bold;
+}
+
+.grupo-radio {
+    display: flex;
+    gap: 15px;
+}
+
+.grupo-radio label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: normal;
+    cursor: pointer;
+}
+
+.controles {
+    text-align: center;
+}
+
+.botaoSubmit {
+    background-color: var(--cor-ifmg);
+    color: white;
+    margin-top: 10px;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.botaoSubmit:hover {
+    cursor: pointer;
+    background-color: var(--cor-ifmg-escura);
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select,
+textarea {
+    padding: 5px;
+    border: 1px solid var(--cor-borda-input);
+    border-radius: 5px;
+    width: 180px;
+    transition: border 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border: 2px solid var(--cor-ifmg);
+}
+
+.texto-auxiliar {
+    text-align: center;
+    font-style: italic;
+    font-size: 14px;
+    color: var(--cor-texto-auxiliar);
+    margin-top: 5px;
+}
+
+.texto-auxiliar a {
+    text-decoration: none;
+    color: var(--cor-ifmg);
+    font-weight: bold;
+}
+
+.texto-auxiliar a:hover {
+    text-decoration: underline;
+    color: var(--cor-ifmg-escura);
+}
+
+.autoria {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0px 30px 0px;
+    color: var(--cor-ifmg);
+    font-size: 16px;
+    gap: 5px;
+}
+
+.autoria a {
+    color: var(--cor-ifmg);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.autoria a:hover {
+    text-decoration: underline;
+    color: var(--cor-ifmg-escura);
+}

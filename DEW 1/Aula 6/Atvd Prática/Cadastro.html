@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Formulário de Cadastro</title>
+</head>
+
+<body>
+    <h1>Formulário de Cadastro</h1>
+    <form autocomplete="on">
+        <div class="linha-form">
+            <label for="nome">Seu nome:</label>
+            <input type="text" name="nome" id="nome" placeholder="Digite seu nome">
+        </div>
+
+        <div class="linha-form">
+            <label for="restricao">Possui alguma restrição alimentar?</label>
+            <textarea name="restricao" id="restricao" rows="3" placeholder="Escreva aqui..."></textarea>
+        </div>
+
+        <div class="linha-form">
+            <label for="curso">Selecione o Curso:</label>
+            <select name="curso" id="curso">
+                <option value="">-- Selecione --</option>
+                <option value="ADM">Administração</option>
+                <option value="AGR">Agronomia</option>
+                <option value="BIO">Ciências Biológicas</option>
+                <option value="FLO">Engenharia Florestal</option>
+                <option value="MAT">Matemática</option>
+                <option value="PED">Pedagogia</option>
+                <option value="SI">Sistemas de Informação</option>
+            </select>
+        </div>
+
+        <div class="linha-form">
+            <label for="turma">Selecione a Turma:</label>
+            <select name="turma" id="turma">
+                <option value="">-- Selecione --</option>
+                <option value="211">211</option>
+                <option value="221">221</option>
+                <option value="231">231</option>
+                <option value="241">241</option>
+                <option value="251">251</option>
+                <option value="261">261</option>
+            </select>
+        </div>
+
+        <div class="linha-form">
+            <label for="email">E-mail:</label>
+            <input type="email" name="email" id="email" placeholder="exemplo@email.com">
+        </div>
+
+        <div class="linha-form">
+            <label for="senha">Senha:</label>
+            <input type="password" name="senha" id="senha" placeholder="Crie uma senha">
+        </div>
+
+        <div class="linha-form">
+            <label for="confirmarSenha">Confirmar senha:</label>
+            <input type="password" name="confirmarSenha" id="confirmarSenha" placeholder="Repita sua senha">
+        </div>
+
+        <div class="linha-form">
+            <label>Perfil:</label>
+            <div class="grupo-radio">
+                <label for="perfil_prof">
+                    <input type="radio" name="perfil" id="perfil_prof" value="professor"> Professor
+                </label>
+                <label for="perfil_aluno">
+                    <input type="radio" name="perfil" id="perfil_aluno" value="aluno" checked> Aluno
+                </label>
+            </div>
+        </div>
+
+        <div class="controles">
+            <button type="submit" class="botaoSubmit">Enviar</button>
+        </div>
+    </form>
+    <p class="autoria"><a target="_blank" href="https://github.com/valdirneto34">&copy; Valdir Neto</a></p>
+</body>
+
+</html>
