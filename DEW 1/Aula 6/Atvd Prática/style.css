@@ -127,6 +127,10 @@ textarea:focus {
     border: 2px solid var(--cor-ifmg);
 }
 
+option {
+    text-align: center;
+}
+
 .texto-auxiliar {
     text-align: center;
     font-style: italic;
