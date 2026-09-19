@@ -5,12 +5,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Aula Grid</title>
+    <title>Aula Grid - IFMG</title>
 </head>
 
 <body>
     <header>
-        <!-- Melhoria Semântica: H2 para a instituição, H1 para o Campus (foco principal), H3 para o Ministério -->
         <h2>Instituto Federal de Minas Gerais</h2>
         <h1><span class="italico">Campus</span> São João Evangelista</h1>
         <h3>MINISTÉRIO DA EDUCAÇÃO</h3>
@@ -27,29 +26,47 @@
     <aside>
         <h2 class="acesso-rapido">Acesso Rápido</h2>
         <article>
-            <p class="snap">
+            <p class="noticia-rapida">
                 Alunos do Técnico em Agropecuária realizam visita técnica em fazenda de plantio de soja e café na
                 região.
             </p>
         </article>
         <article>
-            <p class="snap">
+            <p class="noticia-rapida">
                 Abertas as submissões de artigos para o I Simpósio de Pesquisa Operacional e Tecnologias Aplicadas.
             </p>
         </article>
         <article>
-            <p class="snap">
+            <p class="noticia-rapida">
                 Laboratório de Automação recebe novos kits Arduino e balanças de precisão para projetos de sistemas
                 embarcados.
+            </p>
+        </article>
+        <article>
+            <p class="noticia-rapida">
+                Grupo de estudos lança repositório aberto no GitHub com projetos de aplicações Full-Stack desenvolvidos
+                em Java Spring Boot e React.
+            </p>
+        </article>
+        <article>
+            <p class="noticia-rapida">
+                Biblioteca central anuncia a aquisição de novos livros e e-books focados em Estruturas de Dados e
+                Algoritmos de Otimização.
+            </p>
+        </article>
+        <article>
+            <p class="noticia-rapida">
+                Calendário acadêmico atualizado: confira os prazos finais para solicitação de bancas de TCC e validação
+                de horas de atividades complementares.
             </p>
         </article>
     </aside>
 
     <main>
-        <h2 class="secao">Notícias</h2>
+        <h2 class="titulo-secao">Notícias</h2>
         <article>
-            <!-- Melhoria Semântica: Adicionados títulos h3 a cada notícia -->
             <h3 class="titulo-noticia">Processo Seletivo 2027</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 IFMG <span class="italico">Campus</span> São João Evangelista abre inscrições para Processo Seletivo de
                 2027. Há vagas para diversos cursos, incluindo o Bacharelado em Sistemas de Informação.
@@ -57,6 +74,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Bolsas de Iniciação Científica</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Publicado o edital para bolsas de Iniciação Científica. Projetos focados em métodos multicritério de
                 apoio à decisão (como AHP e TOPSIS) terão linhas de pesquisa dedicadas neste ciclo.
@@ -64,6 +82,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Novo Laboratório de BD</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Novo laboratório virtual de Banco de Dados permitirá aos alunos testarem funções, *triggers* e consultas
                 complexas utilizando PostgreSQL e MySQL, com ambientes totalmente conteinerizados via Docker.
@@ -71,15 +90,17 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Atualização: Moradia Estudantil</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Setor de Moradia Estudantil e Assistência Social atualiza diretrizes de alojamento e contratos.
                 Estudantes devem ficar atentos às novas cláusulas de uso e prazos de renovação para o próximo semestre.
             </p>
         </article>
 
-        <h2 class="secao">Destaques</h2>
+        <h2 class="titulo-secao">Destaques</h2>
         <article>
             <h3 class="titulo-noticia">Semana Acadêmica de Tecnologia</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Turma do 6º período apresenta projetos de inovação envolvendo desenvolvimento Full-Stack (Spring Boot e
                 React) durante a Semana Acadêmica de Tecnologia.
@@ -87,6 +108,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Reforma na UAN</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 IFMG <span class="italico">Campus</span> São João Evangelista inicia nova reforma para expansão da
                 UAN e vai passar a oferecer um cardápio especial às terças-feiras para toda a comunidade acadêmica.
@@ -94,6 +116,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Monitoramento com Áudio</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Grupo de pesquisa aplicada desenvolve sistema inovador que utiliza extração de características de áudio
                 (como MFCCs) e geração de espectrogramas em Python para monitorar a biodiversidade local por meio dos
@@ -102,6 +125,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Mostra de Front-end</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Mostra de <span class="italico">Front-end</span> premia interfaces construídas nas disciplinas de
                 Desenvolvimento Web. Os projetos destacaram o uso avançado de Flexbox, variáveis CSS e acessibilidade, e
@@ -109,9 +133,10 @@
             </p>
         </article>
 
-        <h2 class="secao">Outras Notícias</h2>
+        <h2 class="titulo-secao">Outras Notícias</h2>
         <article>
             <h3 class="titulo-noticia">Gestão de Campanhas</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Sistema de Gestão de Campanhas Comerciais e sorteio de cupons, desenvolvido por estudantes do campus,
                 começa a ser testado por lojistas locais para impulsionar as vendas de fim de ano.
@@ -119,6 +144,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Minicurso de Python</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Projeto de extensão promove minicurso de introdução à programação e análise de dados utilizando Python e
                 a biblioteca Pandas para alunos do ensino médio.
@@ -126,6 +152,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Mutirão GitHub</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 IFMG promove mutirão para criação e atualização de portfólios no GitHub, ajudando futuros profissionais
                 de TI a documentarem suas pilhas tecnológicas e projetos full-stack de forma atrativa para o mercado.
@@ -133,6 +160,7 @@
         </article>
         <article>
             <h3 class="titulo-noticia">Segurança de Redes</h3>
+            <time datetime="2026-09-18" class="data-publicacao">18 de Setembro de 2026</time>
             <p class="noticia">
                 Núcleo de Tecnologia da Informação implementa novas políticas de segurança no campus utilizando
                 roteadores sem fio corporativos e *switches* gerenciáveis para otimizar o acesso ao Portal e ao AVA
@@ -142,8 +170,14 @@
     </main>
 
     <footer>
-        <p class="creditos">
-            <a href="">&copy; Valdir Neto</a>
+        <div class="info-instituicao">
+            <p>Avenida Primeiro de Junho, n° 1043, Centro, São João Evangelista - MG, CEP 39705-000</p>
+            <p>Telefone: (33) 3412-2900 | E-mail: <a href="mailto:gabinete.sje@ifmg.edu.br">gabinete.sje@ifmg.edu.br</a></p>
+        </div>
+        
+        <p class="autoria">
+            Desenvolvido por <a href="https://github.com/valdirneto34" target="_blank">Valdir Neto</a> &copy; 2026
+            - <span class="italico">Estudante de Sistemas de Informação</span>
         </p>
     </footer>
 </body>
