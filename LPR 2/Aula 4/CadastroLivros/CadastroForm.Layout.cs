@@ -1,19 +1,28 @@
-namespace CadastroAlunos;
+namespace CadastroLivros;
+
 
 public partial class CadastroForm
 {
     private readonly ErrorProvider erros = new();
-    private readonly TextBox txtNome = new()
+    
+    private readonly TextBox txtTitulo = new()
     {
         Dock = DockStyle.Fill,
         MaxLength = 100,
         TabIndex = 0
     };
 
-    private readonly ComboBox cmbCurso = new()
+    private readonly TextBox txtAutor = new()
     {
         Dock = DockStyle.Fill,
-        TabIndex = 1,
+        MaxLength = 100,
+        TabIndex = 1
+    };
+
+    private readonly ComboBox cmbCategoria = new()
+    {
+        Dock = DockStyle.Fill,
+        TabIndex = 2,
         DropDownStyle = ComboBoxStyle.DropDownList
     };
 
@@ -40,7 +49,7 @@ public partial class CadastroForm
 
     private readonly Label lblStatus = new()
     {
-        Text = "Preencha os dados do aluno.",
+        Text = "Preencha os dados do livro.",
         AutoSize = true,
         Dock = DockStyle.Fill
     };
@@ -61,23 +70,24 @@ public partial class CadastroForm
 
     private void MontarTela()
     {
-        Text = "Cadastro acadêmico";
+        Text = "Cadastro de Livros";
         ClientSize = new Size(760, 480);
         MinimumSize = new Size(600, 400);
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
         AcceptButton = btnSalvar;
-        cmbCurso.Items.AddRange(new object[] {
-        "Sistemas de Informação", "Agronomia", "Administração", "Engenharia Florestal"
+        cmbCategoria.Items.AddRange(new object[] {
+        "Computação", "Literatura", "Ciências", "Administração", "História"
     });
-        var lblNome = new Label { Text = "Nome:", AutoSize = true };
-        var lblCurso = new Label { Text = "Curso:", AutoSize = true };
+        var lblTitulo = new Label { Text = "Título:", AutoSize = true };
+        var lblAutor = new Label { Text = "Autor:", AutoSize = true };
+        var lblCategoria = new Label { Text = "Categoria:", AutoSize = true };
         var layout = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             Padding = new Padding(12),
             ColumnCount = 2,
-            RowCount = 5
+            RowCount = 6
         };
 
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -85,16 +95,22 @@ public partial class CadastroForm
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-        txtNome.Margin = new Padding(3, 3, 24, 3);
-        cmbCurso.Margin = new Padding(3, 3, 24, 3);
+        txtTitulo.Margin = new Padding(3, 3, 24, 3);
+        txtAutor.Margin = new Padding(3, 3, 24, 3);
+        cmbCategoria.Margin = new Padding(3, 3, 24, 3);
 
-        layout.Controls.Add(lblNome, 0, 0);
-        layout.Controls.Add(txtNome, 1, 0);
-        layout.Controls.Add(lblCurso, 0, 1);
-        layout.Controls.Add(cmbCurso, 1, 1);
+        layout.Controls.Add(lblTitulo, 0, 0);
+        layout.Controls.Add(txtTitulo, 1, 0);
+
+        layout.Controls.Add(lblAutor, 0, 1);
+        layout.Controls.Add(txtAutor, 1, 1);
+
+        layout.Controls.Add(lblCategoria, 0, 2);
+        layout.Controls.Add(cmbCategoria, 1, 2);
 
         var botoes = new FlowLayoutPanel
         {
@@ -102,16 +118,16 @@ public partial class CadastroForm
             AutoSize = true,
             TabIndex = 2
         };
-
+        
         botoes.Controls.AddRange(new Control[]{
         btnSalvar, btnNovo, btnExcluir
         });
 
-        layout.Controls.Add(botoes, 0, 2);
+        layout.Controls.Add(botoes, 0, 3);
         layout.SetColumnSpan(botoes, 2);
-        layout.Controls.Add(grade, 0, 3);
+        layout.Controls.Add(grade, 0, 4);
         layout.SetColumnSpan(grade, 2);
-        layout.Controls.Add(lblStatus, 0, 4);
+        layout.Controls.Add(lblStatus, 0, 5);
         layout.SetColumnSpan(lblStatus, 2);
         Controls.Add(layout);
     }
