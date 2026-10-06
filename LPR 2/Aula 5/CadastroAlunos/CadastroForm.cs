@@ -40,7 +40,7 @@ public partial class CadastroForm : Form
         btnSalvar.Text = "Salvar";
         btnExcluir.Enabled = false;
         lblStatus.Text = "Novo aluno. Preencha e clique em Salvar.";
-        txtNome.Focus();
+        txtMatricula.Focus();
     }
 
     private bool ValidarCampos()
@@ -53,11 +53,11 @@ public partial class CadastroForm : Form
             txtMatricula.Focus();
             return false;
         }
-        else if (alunoEmEdicao == null)
+        else
         {
             foreach (Aluno a in alunos)
             {
-                if (txtMatricula.Text.Trim() == a.Matricula)
+                if (txtMatricula.Text.Trim() == a.Matricula && a != alunoEmEdicao)
                 {
                     erros.SetError(txtMatricula, "Já existe um aluno com essa matrícula.");
                     lblStatus.Text = "Revise a matrícula do aluno.";

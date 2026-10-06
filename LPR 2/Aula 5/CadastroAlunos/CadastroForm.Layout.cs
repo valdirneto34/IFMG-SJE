@@ -14,13 +14,13 @@ public partial class CadastroForm
     {
         Dock = DockStyle.Fill,
         MaxLength = 100,
-        TabIndex = 0
+        TabIndex = 1
     };
 
     private readonly ComboBox cmbCurso = new()
     {
         Dock = DockStyle.Fill,
-        TabIndex = 1,
+        TabIndex = 2,
         DropDownStyle = ComboBoxStyle.DropDownList
     };
 
@@ -76,17 +76,18 @@ public partial class CadastroForm
         AcceptButton = btnSalvar;
         cmbCurso.Items.AddRange(new object[] {
         "Administração", "Agronomia", "Ciências Biológicas",
-        "Engenharia Florestal", "Matemática", "Pedagogia", "Sistemas de Informação"
-    });
+        "Engenharia Florestal", "Matemática", "Pedagogia", "Sistemas de Informação"});
+
         var lblMatricula = new Label { Text = "Matrícula:", AutoSize = true };
         var lblNome = new Label { Text = "Nome:", AutoSize = true };
         var lblCurso = new Label { Text = "Curso:", AutoSize = true };
+
         var layout = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             Padding = new Padding(12),
             ColumnCount = 2,
-            RowCount = 5
+            RowCount = 6
         };
 
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
