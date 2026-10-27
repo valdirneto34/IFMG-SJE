@@ -15,74 +15,90 @@ public partial class CadastroForm
     {
         Dock = DockStyle.Fill,
         MaxLength = 100,
-        TabIndex = 0
+        TabIndex = 0,
+        PlaceholderText = "Digite seu nome completo",
+        Margin = new Padding(3, 3, 24, 3)
     };
     private readonly ComboBox cmbCurso = new()
     {
-        Dock = DockStyle.Fill,
+        Anchor = AnchorStyles.Left,
+        Width = 200,
         TabIndex = 1,
-        DropDownStyle = ComboBoxStyle.DropDownList
+        DropDownStyle = ComboBoxStyle.DropDownList,
+        Margin = new Padding(3, 3, 24, 3)
     };
     private readonly DateTimePicker dtpDataNasc = new()
     {
-        Dock = DockStyle.Fill,
+        Anchor = AnchorStyles.Left,
+        Width = 200,
         Format = DateTimePickerFormat.Short,
-        TabIndex = 2
+        TabIndex = 2,
+        Margin = new Padding(3, 3, 24, 3)
     };
     private readonly CheckBox chkAvisos = new()
     {
         Text = "Receber avisos",
         AutoSize = true,
         TabIndex = 3,
-        Anchor = AnchorStyles.Left
+        Anchor = AnchorStyles.Left,
     };
     private readonly RadioButton rdbPresencial = new()
     {
+        TextAlign = ContentAlignment.MiddleCenter,
         Text = "Presencial",
         AutoSize = true,
         Checked = true,
-        TabIndex = 0
+        TabIndex = 0,
+        Margin = new Padding(0, 0, 15, 0)
     };
     private readonly RadioButton rdbRemota = new()
     {
+        TextAlign = ContentAlignment.MiddleCenter,
         Text = "Remota",
         AutoSize = true,
         TabIndex = 1
     };
     private readonly FlowLayoutPanel painelModalidade = new()
     {
-        Dock = DockStyle.Fill,
         AutoSize = true,
         FlowDirection = FlowDirection.LeftToRight,
-        Margin = new Padding(0),
+        Margin = new Padding(50, 4, 0, 0),
         TabIndex = 4
     };
     private readonly NumericUpDown numDependentes = new()
     {
-        Dock = DockStyle.Fill,
-        Minimum = 1,
+        Anchor = AnchorStyles.Left,
+        Width = 200,
+        Minimum = 0,
         Maximum = 10,
         Value = 1,
-        Enabled = false,
-        TabIndex = 5
+        TabIndex = 5,
+        Margin = new Padding(3, 3, 24, 3)
     };
     private readonly Button btnNovo = new()
     {
         Text = "Novo",
         AutoSize = true,
-        TabIndex = 1
+        TabIndex = 0
     };
     private readonly Button btnSalvar = new()
     {
         Text = "Salvar",
         AutoSize = true,
-        TabIndex = 0
+        TabIndex = 1
     };
-    private readonly StatusStrip lblStatus = new()
+    private readonly StatusStrip barraStatus = new() { Dock = DockStyle.Bottom };
+    private readonly ToolStripStatusLabel lblStatusTexto = new()
     {
-        Text = "",
-        AutoSize = true,
-        Dock = DockStyle.Fill
+        Text = "Pronto",
+        Spring = true,
+        TextAlign = ContentAlignment.MiddleLeft
+    };
+    private readonly ToolStripStatusLabel lblContadorInscricoes = new()
+    {
+        Text = "Nenhuma inscrição",
+        Spring = false,
+        TextAlign = ContentAlignment.MiddleRight
     };
     private readonly DataGridView grade = new()
     {
@@ -94,9 +110,14 @@ public partial class CadastroForm
         MultiSelect = false,
         RowHeadersVisible = false,
         SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-        AutoGenerateColumns = true,
-        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
+        AutoGenerateColumns = false,
+        AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill,
+        BackgroundColor = SystemColors.Window,
+        BorderStyle = BorderStyle.Fixed3D
     };
+    private readonly ContextMenuStrip menuGrade = new();
+    private readonly ToolStripMenuItem menuGradeEditar = new() { Text = "Editar" };
+    private readonly ToolStripMenuItem menuGradeExcluir = new() { Text = "Excluir" };
 
     private void MontarTela()
     {
@@ -106,57 +127,55 @@ public partial class CadastroForm
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
         AcceptButton = btnSalvar;
-        // CONFIGURAÇÃO DO MENUSTRIP (VIA CÓDIGO)
-        // 1. Vincula os submenus aos menus principais
-        menuArquivo.DropDownItems.Add(menuSair);
-        menuEditar.DropDownItems.Add(menuSobre);
-        // 2. Adiciona os menus principais à barra de menu
+
         menuPrincipal.Items.Add(menuArquivo);
         menuPrincipal.Items.Add(menuEditar);
-        // 3. Configura atalhos rápidos (opcional)
-        menuSair.ShortcutKeys = Keys.Control | Keys.Q; // Ctrl + Q para sair
-        // 4. Cria os eventos de clique
-        menuSair.Click += MenuSair_Click;
-        menuSobre.Click += MenuSobre_Click;
-        // 5. ADICIONA O MENU AO FORMULÁRIO
-        Controls.Add(menuPrincipal);
+        menuPrincipal.Items.Add(menuAjuda);
+        MainMenuStrip = menuPrincipal;
 
-        // CONFIGURAÇÃO DA TOOLSTRIP (BARRA DE FERRAMENTAS)
-        // Associa os eventos de clique aos botões da barra
-        tsbNovo.Click += BtnNovo_Click;      // Pode reaproveitar o evento do seu botão normal
-        tsbSalvar.Click += BtnSalvar_Click;  // Pode reaproveitar o evento do seu botão normal
-        tsbExcluir.Click += BtnExcluir_Click;
-        // Adiciona uma linha separadora visual entre "Salvar" e "Excluir" (opcional)
         var separador = new ToolStripSeparator();
-        // Adiciona os botões na barra de ferramentas
-        barraFerramentas.Items.AddRange(new ToolStripItem[] { tsbNovo, tsbSalvar, separador, tsbExcluir });
-        // Adiciona a barra ao formulário (ficará logo abaixo do MenuStrip)
+        var separador2 = new ToolStripSeparator();
+        barraFerramentas.Items.AddRange(new ToolStripItem[] { tsbNovo, separador, tsbSalvar, separador2, tsbExcluir });
+
         Controls.Add(barraFerramentas);
+        Controls.Add(menuPrincipal);
+        menuPrincipal.BringToFront();
+
+        menuGrade.Items.AddRange(new ToolStripItem[] { menuGradeEditar, menuGradeExcluir });
+        grade.ContextMenuStrip = menuGrade;
 
         cmbCurso.Items.AddRange(new object[] {
-        "Administração", "Agronomia", "Ciências Biológicas",
-        "Engenharia Florestal", "Matemática", "Pedagogia", "Sistemas de Informação"});
+            "Administração", "Agronomia", "Ciências Biológicas",
+            "Engenharia Florestal", "Matemática", "Pedagogia", "Sistemas de Informação"});
+        cmbCurso.SelectedIndex = 0;
 
-        var lblTituloForm = new Label { Text = "Dados da Inscrição", Autosize = true };
+        var lblTituloForm = new Label
+        {
+            Text = "Dados da Inscrição",
+            AutoSize = true,
+            Font = new Font("Segoe UI", 12F, FontStyle.Bold),
+            ForeColor = Color.DarkBlue,
+            Padding = new Padding(0, 2, 0, 3)
+        };
         var lblNome = new Label { Text = "Nome:", AutoSize = true };
         var lblCurso = new Label { Text = "Curso:", AutoSize = true };
-        var lblDataNasc = new Label { Text = "Nascimento:", AutoSize = true };
-        var lblModalidade = new Label { Text = "Modalidade:", AutoSize = true };
-        var lblDependentes = new Label { Text = "Dependentes:", AutoSize = true };
+        var lblDataNasc = new Label { Text = "Nascimento:", AutoSize = true, Margin = new Padding(50, 4, 0, 0) };
+        var lblModalidade = new Label { Text = "Modalidade:", AutoSize = true, Margin = new Padding(50, 4, 0, 0) };
+        var lblDependentes = new Label { Text = "Dependentes:", AutoSize = true, Margin = new Padding(50, 4, 0, 0) };
 
         var layout = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             Padding = new Padding(12),
-            ColumnCount = 2,
-            RowCount = 10
+            ColumnCount = 4,
+            RowCount = 6
         };
 
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-        layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
@@ -166,37 +185,58 @@ public partial class CadastroForm
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-        txtNome.Margin = new Padding(3, 3, 24, 3);
-        cmbCurso.Margin = new Padding(3, 3, 24, 3);
-        dtpDataNasc.Margin = new Padding(3, 3, 24, 3);
-        numDependentes.Margin = new Padding(3, 3, 24, 3);
+        layout.Controls.Add(lblTituloForm, 0, 0);
+        layout.SetColumnSpan(lblTituloForm, 4);
 
-        layout.Controls.Add(lblNome, 0, 0);
-        layout.Controls.Add(txtNome, 1, 0);
+        layout.Controls.Add(lblNome, 0, 1);
+        layout.Controls.Add(txtNome, 1, 1);
+        layout.SetColumnSpan(txtNome, 3);
 
-        layout.Controls.Add(lblCurso, 0, 1);
-        layout.Controls.Add(cmbCurso, 1, 1);
+        layout.Controls.Add(lblCurso, 0, 2);
+        layout.Controls.Add(cmbCurso, 1, 2);
+        layout.Controls.Add(lblDataNasc, 2, 2);
+        layout.Controls.Add(dtpDataNasc, 3, 2);
 
-        layout.Controls.Add(lblModalidade, 1, 1);
+        layout.Controls.Add(lblModalidade, 1, 3);
+        layout.SetColumnSpan(lblModalidade, 3);
+
+        layout.Controls.Add(chkAvisos, 0, 4);
+        painelModalidade.Controls.AddRange(new Control[] { rdbPresencial, rdbRemota });
+        layout.Controls.Add(painelModalidade, 1, 4);
+        layout.Controls.Add(lblDependentes, 2, 4);
+        layout.Controls.Add(numDependentes, 3, 4);
 
         var botoes = new FlowLayoutPanel
         {
             Dock = DockStyle.Fill,
             AutoSize = true,
-            TabIndex = 2
+            TabIndex = 6,
+            FlowDirection = FlowDirection.RightToLeft
         };
-
         botoes.Controls.AddRange(new Control[]{
-        btnSalvar, btnNovo, btnExcluir
+        btnSalvar, btnNovo
         });
+        layout.Controls.Add(botoes, 4, 5);
 
-        layout.Controls.Add(botoes, 0, 3);
-        layout.SetColumnSpan(botoes, 2);
-        layout.Controls.Add(grade, 0, 4);
-        layout.SetColumnSpan(grade, 2);
-        layout.Controls.Add(lblStatus, 0, 5);
-        layout.SetColumnSpan(lblStatus, 2);
+
+        layout.Controls.Add(grade, 0, 6);
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Nome", HeaderText = "Nome" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Curso", HeaderText = "Curso" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "DataNascimento", HeaderText = "Nascimento" });
+        layout.SetColumnSpan(grade, 4);
+
+        barraStatus.Items.AddRange(new ToolStripItem[] { lblStatusTexto, lblContadorInscricoes });
+        Controls.Add(barraStatus);
+
+        lblNome.Click += (s, e) => txtNome.Focus();
+        lblCurso.Click += (s, e) => cmbCurso.Focus();
+        lblDataNasc.Click += (s, e) => dtpDataNasc.Focus();
+        lblModalidade.Click += (s, e) => rdbPresencial.Focus();
+        lblDependentes.Click += (s, e) => numDependentes.Focus();
+
         Controls.Add(layout);
+        layout.BringToFront();
     }
 }
