@@ -80,7 +80,9 @@ public partial class CadastroForm : Form
         string curso = cmbCurso.SelectedItem?.ToString() ?? "";
         DateTime dataNasc = dtpDataNasc.Value.Date;
         bool avisos = chkAvisos.Checked;
-        bool ehPresencial = rdbPresencial.Checked;
+        ModalidadeCurso modalidadeSelecionada = rdbPresencial.Checked 
+            ? ModalidadeCurso.Presencial 
+            : ModalidadeCurso.Remota;
         int numDepen = (int)numDependentes.Value;
 
         if (alunoEmEdicao is null)
@@ -91,7 +93,7 @@ public partial class CadastroForm : Form
                 Curso = curso,
                 DataNascimento = dataNasc,
                 ReceberAvisos = avisos,
-                EhPresencial = ehPresencial,
+                Modalidade = modalidadeSelecionada,
                 NumDependentes = numDepen
             });
         }
@@ -101,7 +103,7 @@ public partial class CadastroForm : Form
             alunoEmEdicao.Curso = curso;
             alunoEmEdicao.DataNascimento = dataNasc;
             alunoEmEdicao.ReceberAvisos = avisos;
-            alunoEmEdicao.EhPresencial = ehPresencial;
+            alunoEmEdicao.Modalidade = modalidadeSelecionada;
             alunoEmEdicao.NumDependentes = numDepen;
             alunos.ResetItem(alunos.IndexOf(alunoEmEdicao));
         }
@@ -123,6 +125,7 @@ public partial class CadastroForm : Form
         cmbCurso.SelectedItem = alunoEmEdicao.Curso;
         dtpDataNasc.Value = alunoEmEdicao.DataNascimento;
         chkAvisos.Checked = alunoEmEdicao.ReceberAvisos;
+        (alunoEmEdicao.Modalidade == ModalidadeCurso.Presencial ? rdbPresencial : rdbRemota).Checked = true;
         numDependentes.Value = alunoEmEdicao.NumDependentes;
         btnSalvar.Text = "Atualizar";
         erros.Clear();

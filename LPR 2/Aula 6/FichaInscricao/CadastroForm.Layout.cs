@@ -225,6 +225,7 @@ public partial class CadastroForm
         grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Nome", HeaderText = "Nome" });
         grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Curso", HeaderText = "Curso" });
         grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "DataNascimento", HeaderText = "Nascimento" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Modalidade", HeaderText = "Modalidade" });
         layout.SetColumnSpan(grade, 4);
 
         barraStatus.Items.AddRange(new ToolStripItem[] { lblStatusTexto, lblContadorInscricoes });
