@@ -50,6 +50,11 @@ public partial class CadastroForm : Form
         grade.ClearSelection();
         erros.Clear();
         btnSalvar.Text = "Salvar";
+
+        tsbExcluir.Enabled = false;
+        menuGradeExcluir.Enabled = false;
+        menuGradeEditar.Enabled = false;
+
         txtNome.Focus();
     }
 
@@ -80,8 +85,8 @@ public partial class CadastroForm : Form
         string curso = cmbCurso.SelectedItem?.ToString() ?? "";
         DateTime dataNasc = dtpDataNasc.Value.Date;
         bool avisos = chkAvisos.Checked;
-        ModalidadeCurso modalidadeSelecionada = rdbPresencial.Checked 
-            ? ModalidadeCurso.Presencial 
+        ModalidadeCurso modalidadeSelecionada = rdbPresencial.Checked
+            ? ModalidadeCurso.Presencial
             : ModalidadeCurso.Remota;
         int numDepen = (int)numDependentes.Value;
 
@@ -128,6 +133,11 @@ public partial class CadastroForm : Form
         (alunoEmEdicao.Modalidade == ModalidadeCurso.Presencial ? rdbPresencial : rdbRemota).Checked = true;
         numDependentes.Value = alunoEmEdicao.NumDependentes;
         btnSalvar.Text = "Atualizar";
+
+        tsbExcluir.Enabled = true;
+        menuGradeExcluir.Enabled = true;
+        menuGradeEditar.Enabled = true;
+
         erros.Clear();
     }
 

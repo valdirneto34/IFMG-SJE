@@ -8,9 +8,27 @@ public partial class CadastroForm
     private readonly ToolStripMenuItem menuEditar = new() { Text = "&Editar" };
     private readonly ToolStripMenuItem menuAjuda = new() { Text = "&Ajuda" };
     private readonly ToolStrip barraFerramentas = new();
-    private readonly ToolStripButton tsbNovo = new() { Text = "Novo", ToolTipText = "Criar nova inscrição" };
-    private readonly ToolStripButton tsbSalvar = new() { Text = "Salvar", ToolTipText = "Salvar inscrição atual" };
-    private readonly ToolStripButton tsbExcluir = new() { Text = "Excluir", ToolTipText = "Excluir inscrição selecionada" };
+    private readonly ToolStripButton tsbNovo = new()
+    {
+        Text = "Novo",
+        ToolTipText = "Criar nova inscrição",
+        Image = CriarIcone("novo"),
+        DisplayStyle = ToolStripItemDisplayStyle.ImageAndText
+    };
+    private readonly ToolStripButton tsbSalvar = new()
+    {
+        Text = "Salvar",
+        ToolTipText = "Salvar inscrição atual",
+        Image = CriarIcone("salvar"),
+        DisplayStyle = ToolStripItemDisplayStyle.ImageAndText
+    };
+    private readonly ToolStripButton tsbExcluir = new()
+    {
+        Text = "Excluir",
+        ToolTipText = "Excluir inscrição selecionada",
+        Image = CriarIcone("excluir"),
+        DisplayStyle = ToolStripItemDisplayStyle.ImageAndText
+    };
     private readonly TextBox txtNome = new()
     {
         Dock = DockStyle.Fill,
@@ -116,8 +134,8 @@ public partial class CadastroForm
         BorderStyle = BorderStyle.Fixed3D
     };
     private readonly ContextMenuStrip menuGrade = new();
-    private readonly ToolStripMenuItem menuGradeEditar = new() { Text = "Editar" };
-    private readonly ToolStripMenuItem menuGradeExcluir = new() { Text = "Excluir" };
+    private readonly ToolStripMenuItem menuGradeEditar = new() { Text = "Editar", Image = CriarIcone("editar") };
+    private readonly ToolStripMenuItem menuGradeExcluir = new() { Text = "Excluir", Image = CriarIcone("excluir") };
 
     private void MontarTela()
     {
@@ -139,7 +157,6 @@ public partial class CadastroForm
 
         Controls.Add(barraFerramentas);
         Controls.Add(menuPrincipal);
-        menuPrincipal.BringToFront();
 
         menuGrade.Items.AddRange(new ToolStripItem[] { menuGradeEditar, menuGradeExcluir });
         grade.ContextMenuStrip = menuGrade;
@@ -226,6 +243,7 @@ public partial class CadastroForm
         grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Curso", HeaderText = "Curso" });
         grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "DataNascimento", HeaderText = "Nascimento" });
         grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "Modalidade", HeaderText = "Modalidade" });
+        grade.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         layout.SetColumnSpan(grade, 4);
 
         barraStatus.Items.AddRange(new ToolStripItem[] { lblStatusTexto, lblContadorInscricoes });
@@ -239,5 +257,39 @@ public partial class CadastroForm
 
         Controls.Add(layout);
         layout.BringToFront();
+    }
+
+    private static Bitmap CriarIcone(string tipo)
+    {
+        var bmp = new Bitmap(16, 16);
+        using var g = Graphics.FromImage(bmp);
+        g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+        switch (tipo)
+        {
+            case "novo":
+                g.FillRectangle(Brushes.White, 3, 1, 10, 14);
+                g.DrawRectangle(Pens.DimGray, 3, 1, 10, 14);
+                break;
+            case "salvar":
+                using (var pen = new Pen(Color.RoyalBlue, 2f))
+                    g.DrawLines(pen, new[] { new Point(2, 8), new Point(6, 12), new Point(14, 4) });
+                break;
+            case "excluir":
+                using (var pen = new Pen(Color.Crimson, 2f))
+                {
+                    g.DrawLine(pen, 3, 3, 13, 13);
+                    g.DrawLine(pen, 13, 3, 3, 13);
+                }
+                break;
+            case "editar":
+                using (var pen = new Pen(Color.DarkOrange, 2f))
+                {
+                    g.DrawLine(pen, 3, 13, 13, 3);
+                }
+                g.FillRectangle(Brushes.DimGray, 2, 12, 3, 3);
+                break;
+        }
+        return bmp;
     }
 }
