@@ -8,12 +8,12 @@
     <title>Aula de JavaScript</title>
 </head>
 <body>
-    <div class="tudo">
+    <div class="div-principal">
         <h1 class="titulo">Lista de Tarefas</h1>
-        <form action="">
+        <form action="event.preventDefault();">
             <label for="input-tarefa" class="label-tarefa">Nova tarefa:</label>
             <input type="text" name="nova-tarefa" id="input-tarefa" class="input-tarefa">
-            <button type="submit" class="botaoSubmit">Adicionar Tarefa</button>
+            <button type="button" class="botaoSubmit" onclick=adicionarTarefa()>Adicionar Tarefa</button>
         </form>
         <div class="div-tarefas">
             <ul class="lista-tarefas" id="lista">
