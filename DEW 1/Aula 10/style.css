@@ -1,0 +1,69 @@
+@charset "UTF-8";
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
+
+:root {
+    --cor-titulo: rgb(50, 50, 255);
+    --cor-label-tarefa: rgb(50, 50, 255);
+    --cor-botao: rgb(120, 120, 255);
+    --cor-botao-hover: rgb(50, 50, 255);
+    --cor-borda-input: rgb(120, 120, 255);
+    --cor-borda-input-focus: rgb(50, 50, 255);
+    --cor-borda-div-tarefas: rgb(50, 50, 255);
+}
+
+* {
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Inter', Arial, sans-serif;
+}
+
+.tudo {
+    text-align: center;
+}
+
+h1 {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--cor-titulo);
+    margin: 20px auto;
+    text-align: center;
+}
+
+.label-tarefa {
+    color: var(--cor-label-tarefa);
+    font-weight: bold;
+}
+
+.input-tarefa {
+    padding: 5px;
+    border: 1px solid var(--cor-borda-input);
+    border-radius: 5px;
+    width: 180px;
+    transition: border 0.3s ease;
+}
+
+.input-tarefa:focus {
+    outline: none;
+    border: 2px solid var(--cor-borda-input-focus);
+}
+
+.botaoSubmit {
+    background-color: var(--cor-botao);
+    color: white;
+    margin-top: 10px;
+    padding: 8px;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.botaoSubmit:hover {
+    cursor: pointer;
+    background-color: var(--cor-botao-hover);
+}
+
+.div-tarefas {
+    border-radius: 5px;
+    border: 1px solid var(--cor-borda-div-tarefas);
+    margin: 20px 100px;
+}
