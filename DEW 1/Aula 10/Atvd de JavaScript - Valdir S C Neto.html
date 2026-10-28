@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aula de JavaScript</title>
+    <style>
+        @charset "UTF-8";
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
+
+        :root {
+            --cor-background: #eaeaff;
+            --cor-fundo-div-principal: #FFFFFF;
+            --cor-fundo-lista: #FAFAFA;
+
+            --cor-titulo: #312E81;
+            --cor-label-tarefa: #4338CA;
+            --cor-botao: #4F46E5;
+            --cor-botao-hover: #3730A3;
+            --cor-texto-botao: #FFFFFF;
+            --cor-texto-lista: #374151;
+
+            --cor-texto-autoria: #4B5563;
+            --cor-link-autoria: #4F46E5;
+            --cor-link-hover: #312E81;
+
+            --cor-borda-input: #C7D2FE;
+            --cor-borda-input-focus: #4F46E5;
+            --cor-borda-div-tarefas: #E5E7EB;
+            --cor-borda-item-lista: #d7dadf;
+            --cor-sombra: rgba(0, 0, 0, 0.1);
+
+            --fonte-titulo: 'Montserrat', sans-serif;
+            --fonte-principal: 'Inter', Arial, sans-serif;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            font-family: var(--fonte-principal);
+        }
+
+        body {
+            background-color: var(--cor-background);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .div-principal {
+            background-color: var(--cor-fundo-div-principal);
+            text-align: center;
+            border: 1px solid var(--cor-borda-input);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            min-height: 400px;
+            height: fit-content;
+            padding: 20px 0;
+            box-shadow: 0px 4px 15px var(--cor-sombra);
+        }
+
+        h1 {
+            font-family: var(--fonte-titulo);
+            color: var(--cor-titulo);
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .label-tarefa {
+            color: var(--cor-label-tarefa);
+            font-weight: bold;
+        }
+
+        .input-tarefa {
+            padding: 5px;
+            border: 1px solid var(--cor-borda-input);
+            border-radius: 5px;
+            width: 180px;
+            transition: border 0.3s ease;
+        }
+
+        .input-tarefa:focus {
+            outline: none;
+            border: 2px solid var(--cor-borda-input-focus);
+        }
+
+        .botaoSubmit {
+            background-color: var(--cor-botao);
+            color: var(--cor-texto-botao);
+            margin-top: 10px;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .botaoSubmit:hover {
+            cursor: pointer;
+            background-color: var(--cor-botao-hover);
+        }
+
+        .div-tarefas {
+            display: none;
+            border-radius: 8px;
+            border: 1px solid var(--cor-borda-div-tarefas);
+            background-color: var(--cor-fundo-lista);
+            margin: 40px;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .lista-tarefas li {
+            padding: 5px 0;
+            border-bottom: 1px solid var(--cor-borda-item-lista);
+            color: var(--cor-texto-lista);
+            list-style-type: square;
+            list-style-position: inside;
+            overflow-wrap: break-word;
+            word-break: break-word;
+            line-height: 1.4;
+        }
+
+        .lista-tarefas li:last-child {
+            border-bottom: none;
+        }
+
+        .autoria {
+            margin-top: 20px;
+            color: var(--cor-texto-autoria);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .autoria a {
+            color: var(--cor-link-autoria);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .autoria a:hover {
+            text-decoration: underline;
+            color: var(--cor-link-hover);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="div-principal">
+        <h1 class="titulo">Lista de Tarefas</h1>
+        <form onsubmit="adicionarTarefa(); return false;">
+            <label for="input-tarefa" class="label-tarefa">Nova tarefa:</label>
+            <input type="text" name="nova-tarefa" id="input-tarefa" class="input-tarefa">
+            <button type="submit" class="botaoSubmit">Adicionar Tarefa</button>
+        </form>
+        <div class="div-tarefas" id="container-tarefas">
+            <ul class="lista-tarefas" id="lista"></ul>
+        </div>
+    </div>
+    <p class="autoria">Criado por <a target="_blank" href="https://github.com/valdirneto34">Valdir Neto</a> &copy; 2026
+    </p>
+</body>
+<script>
+    function adicionarTarefa() {
+        const lista = document.getElementById('lista');
+        const containerTarefas = document.getElementById('container-tarefas');
+        const novaTarefa = document.getElementById('input-tarefa');
+
+        if (novaTarefa.value.trim() === '') {
+            alert('Por favor, digite uma tarefa!');
+            return;
+        }
+
+        const novoItem = document.createElement('li');
+        novoItem.textContent = novaTarefa.value;
+        lista.appendChild(novoItem);
+
+        containerTarefas.style.display = 'block';
+
+        novaTarefa.value = '';
+        novaTarefa.focus();
+    }
+</script>
+
+</html>
