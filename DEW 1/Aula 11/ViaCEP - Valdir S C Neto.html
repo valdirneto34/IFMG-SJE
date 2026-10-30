@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API ViacEP</title>
+    <style>
+        @charset "UTF-8";
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
+
+        :root {
+            --cor-background: #eaeaff;
+            --cor-fundo-div-principal: #FFFFFF;
+
+            --cor-titulo: #312E81;
+
+            --cor-autoria: #4B5563;
+            --cor-link: #4F46E5;
+            --cor-link-hover: #312E81;
+
+            --cor-borda-input: #C7D2FE;
+            --cor-borda-input-focus: #4F46E5;
+            --cor-sombra: #0000001a;
+            --cor-sombra-input-focus: #007bff40;
+
+            --fonte-titulo: 'Montserrat', sans-serif;
+            --fonte-principal: 'Inter', Arial, sans-serif;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            font-family: var(--fonte-principal);
+        }
+
+        body {
+            background-color: var(--cor-background);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .principal {
+            background-color: var(--cor-fundo-div-principal);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid var(--cor-borda-input);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            min-height: 400px;
+            height: fit-content;
+            padding: 20px 0;
+            box-shadow: 0px 4px 15px var(--cor-sombra);
+        }
+
+        h1 {
+            font-family: var(--fonte-titulo);
+            color: var(--cor-titulo);
+            margin: 20px auto;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin-bottom: 16px;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 600;
+            text-align: left;
+        }
+
+        .form-group input {
+            padding: 8px 12px;
+            border: 1px solid var(--cor-borda-input);
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border: 2px solid var(--cor-borda-input-focus);
+            box-shadow: 0 0 8px var(--cor-sombra-input-focus);
+        }
+
+        .autoria {
+            margin-top: 20px;
+            color: var(--cor-autoria);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .autoria a {
+            color: var(--cor-link);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .autoria a:hover {
+            text-decoration: underline;
+            color: var(--cor-link-hover);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="principal">
+        <h1>Procure seu CEP</h1>
+        <div class="form-group">
+            <label for="cep">CEP:</label>
+            <input type="text" name="cep" id="cep" maxlength="8" onblur="buscarCep()">
+        </div>
+        <div class="form-group">
+            <label for="logradouro">Logradouro:</label>
+            <input type="text" name="logradouro" id="logradouro" readonly>
+        </div>
+        <div class="form-group">
+            <label for="complemento">Complemento:</label>
+            <input type="text" name="complemento" id="complemento" readonly>
+        </div>
+        <div class="form-group">
+            <label for="unidade">Unidade:</label>
+            <input type="text" name="unidade" id="unidade" readonly>
+        </div>
+        <div class="form-group">
+            <label for="bairro">Bairro:</label>
+            <input type="text" name="bairro" id="bairro" readonly>
+        </div>
+        <div class="form-group">
+            <label for="localidade">Localidade (Cidade):</label>
+            <input type="text" name="localidade" id="localidade" readonly>
+        </div>
+        <div class="form-group">
+            <label for="uf">UF:</label>
+            <input type="text" name="uf" id="uf" readonly>
+        </div>
+        <div class="form-group">
+            <label for="estado">Estado:</label>
+            <input type="text" name="estado" id="estado" readonly>
+        </div>
+        <div class="form-group">
+            <label for="regiao">Região:</label>
+            <input type="text" name="regiao" id="regiao" readonly>
+        </div>
+        <div class="form-group">
+            <label for="ibge">IBGE:</label>
+            <input type="text" name="ibge" id="ibge" readonly>
+        </div>
+        <div class="form-group">
+            <label for="gia">GIA:</label>
+            <input type="text" name="gia" id="gia" readonly>
+        </div>
+        <div class="form-group">
+            <label for="ddd">DDD:</label>
+            <input type="text" name="ddd" id="ddd" readonly>
+        </div>
+        <div class="form-group">
+            <label for="siafi">SIAFI:</label>
+            <input type="text" name="siafi" id="siafi" readonly>
+        </div>
+
+    </div>
+    <p class="autoria">
+        Criado por
+        <a target="_blank" href="https://github.com/valdirneto34">Valdir Neto</a>
+        &copy; 2026
+    </p>
+</body>
+<script>
+    async function buscarCep() {
+        const cep = document.getElementById('cep').value.replace(/\D/g, '');
+        if (cep.length == 8) {
+            try {
+                const url = `https://viacep.com.br/ws/${cep}/json/`;
+                const resposta = await fetch(url);
+                const dados = await resposta.json();
+
+                if (dados.erro) {
+                    alert('CEP não encontrado!')
+                } else {
+                    document.getElementById('logradouro').value = dados.logradouro || '';
+                    document.getElementById('complemento').value = dados.complemento || '';
+                    document.getElementById('unidade').value = dados.unidade || '';
+                    document.getElementById('bairro').value = dados.bairro || '';
+                    document.getElementById('localidade').value = dados.localidade || '';
+                    document.getElementById('uf').value = dados.uf || '';
+                    document.getElementById('estado').value = dados.estado || '';
+                    document.getElementById('regiao').value = dados.regiao || '';
+                    document.getElementById('ibge').value = dados.ibge || '';
+                    document.getElementById('gia').value = dados.gia || '';
+                    document.getElementById('ddd').value = dados.ddd || '';
+                    document.getElementById('siafi').value = dados.siafi || '';
+                }
+            } catch (erro) {
+                alert('Erro ao buscar o CEP!')
+            }
+        }
+    }
+</script>
+
+</html>
