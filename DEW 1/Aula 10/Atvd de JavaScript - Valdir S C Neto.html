@@ -22,6 +22,9 @@
             --cor-texto-botao: #FFFFFF;
             --cor-texto-lista: #374151;
 
+            --cor-botao-excluir: #EF4444;
+            --cor-botao-excluir-hover: #b12121;
+
             --cor-texto-autoria: #4B5563;
             --cor-link-autoria: #4F46E5;
             --cor-link-hover: #312E81;
@@ -30,7 +33,8 @@
             --cor-borda-input-focus: #4F46E5;
             --cor-borda-div-tarefas: #E5E7EB;
             --cor-borda-item-lista: #d7dadf;
-            --cor-sombra: rgba(0, 0, 0, 0.1);
+            --cor-sombra: #0000001a;
+            --cor-sombra-input-focus: #007bff40;
 
             --fonte-titulo: 'Montserrat', sans-serif;
             --fonte-principal: 'Inter', Arial, sans-serif;
@@ -83,12 +87,13 @@
             border: 1px solid var(--cor-borda-input);
             border-radius: 5px;
             width: 180px;
-            transition: border 0.3s ease;
+            transition: border-color 0.3s ease;
         }
 
         .input-tarefa:focus {
             outline: none;
             border: 2px solid var(--cor-borda-input-focus);
+            box-shadow: 0 0 8px var(--cor-sombra-input-focus);
         }
 
         .botaoSubmit {
@@ -117,14 +122,42 @@
         }
 
         .lista-tarefas li {
-            padding: 5px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 0;
             border-bottom: 1px solid var(--cor-borda-item-lista);
             color: var(--cor-texto-lista);
-            list-style-type: square;
-            list-style-position: inside;
+            line-height: 1.4;
+        }
+
+        .texto-item {
             overflow-wrap: break-word;
             word-break: break-word;
-            line-height: 1.4;
+            flex: 1;
+        }
+
+        .texto-item::before {
+            content: "▪ ";
+            color: var(--cor-botao);
+        }
+
+        .botao-excluir {
+            background-color: var(--cor-botao-excluir);
+            color: var(--cor-texto-botao);
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .botao-excluir:hover {
+            cursor: pointer;
+            background-color: var(--cor-botao-excluir-hover);
         }
 
         .lista-tarefas li:last-child {
@@ -160,7 +193,7 @@
             <input type="text" name="nova-tarefa" id="input-tarefa" class="input-tarefa">
             <button type="submit" class="botaoSubmit">Adicionar Tarefa</button>
         </form>
-        <div class="div-tarefas" id="container-tarefas">
+        <div class="div-tarefas" id="div-tarefas">
             <ul class="lista-tarefas" id="lista"></ul>
         </div>
     </div>
@@ -170,16 +203,34 @@
 <script>
     function adicionarTarefa() {
         const lista = document.getElementById('lista');
-        const containerTarefas = document.getElementById('container-tarefas');
+        const containerTarefas = document.getElementById('div-tarefas');
         const novaTarefa = document.getElementById('input-tarefa');
 
-        if (novaTarefa.value.trim() === '') {
+        const valorLimpo = novaTarefa.value.trim();
+
+        if (valorLimpo === '') {
             alert('Por favor, digite uma tarefa!');
             return;
         }
 
         const novoItem = document.createElement('li');
-        novoItem.textContent = novaTarefa.value;
+
+        const textoTarefa = document.createElement('span');
+        textoTarefa.className = 'texto-item';
+        textoTarefa.textContent = valorLimpo;
+
+        const botaoExcluir = document.createElement('button');
+        botaoExcluir.textContent = 'Excluir';
+        botaoExcluir.className = 'botao-excluir';
+        botaoExcluir.onclick = function () {
+            novoItem.remove();
+            if (lista.children.length === 0) {
+                containerTarefas.style.display = 'none';
+            }
+        };
+
+        novoItem.appendChild(textoTarefa);
+        novoItem.appendChild(botaoExcluir);
         lista.appendChild(novoItem);
 
         containerTarefas.style.display = 'block';
