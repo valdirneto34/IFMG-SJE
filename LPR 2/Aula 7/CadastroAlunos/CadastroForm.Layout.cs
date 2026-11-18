@@ -2,48 +2,53 @@ namespace CadastroAlunos;
 
 public partial class CadastroForm
 {
-    private readonly ErrorProvider erros = new();
     private readonly TextBox txtNome = new()
     {
         Dock = DockStyle.Fill,
-        MaxLength = 100,
+        MaxLength = 120,
         TabIndex = 0,
-        Margin = new Padding(3, 3, 24, 3)
+        Margin = new Padding(3, 3, 3, 3),
+        PlaceholderText = "Digite o nome completo"
     };
     private readonly TextBox txtEmail = new()
     {
         Dock = DockStyle.Fill,
-        MaxLength = 100,
+        MaxLength = 180,
         TabIndex = 1,
-        Margin = new Padding(3, 3, 24, 3)
+        Margin = new Padding(3, 3, 3, 3),
+        PlaceholderText = "exemplo@email.com"
     };
     private readonly ComboBox cmbCurso = new()
     {
         Dock = DockStyle.Fill,
         TabIndex = 2,
         DropDownStyle = ComboBoxStyle.DropDownList,
-        Margin = new Padding(3, 3, 24, 3)
+        Margin = new Padding(3, 3, 3, 3)
     };
     private readonly TextBox txtTelefone = new()
     {
         Dock = DockStyle.Fill,
-        MaxLength = 11,
+        MaxLength = 15,
         TabIndex = 3,
-        Margin = new Padding(3, 3, 24, 3)
+        Margin = new Padding(3, 3, 3, 3),
+        PlaceholderText = "(99) 99999-9999"
     };
     private readonly TextBox txtCidade = new()
     {
         Dock = DockStyle.Fill,
-        MaxLength = 50,
+        MaxLength = 200,
         TabIndex = 4,
-        Margin = new Padding(3, 3, 24, 3)
+        Margin = new Padding(3, 3, 3, 3),
+        PlaceholderText = "Digite o nome da cidade"
     };
     private readonly DateTimePicker dtpDataIngresso = new()
     {
         Dock = DockStyle.Fill,
         Format = DateTimePickerFormat.Short,
         TabIndex = 5,
-        Margin = new Padding(3, 3, 24, 3)
+        MinDate = DateTime.Today.AddYears(-50),
+        MaxDate = DateTime.Today,
+        Margin = new Padding(3, 3, 3, 3)
     };
     private readonly Button btnSalvar = new()
     {
@@ -63,6 +68,12 @@ public partial class CadastroForm
         AutoSize = true,
         TabIndex = 2
     };
+    private readonly Button btnTestarConexao = new()
+    {
+        Text = "Testar Conexão do Banco",
+        AutoSize = true,
+        TabIndex = 3
+    };
     private readonly Label lblStatus = new()
     {
         Text = "Preencha os dados do aluno.",
@@ -79,7 +90,7 @@ public partial class CadastroForm
         MultiSelect = false,
         RowHeadersVisible = false,
         SelectionMode = DataGridViewSelectionMode.FullRowSelect,
-        AutoGenerateColumns = true,
+        AutoGenerateColumns = false,
         AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill
     };
 
@@ -91,21 +102,27 @@ public partial class CadastroForm
         StartPosition = FormStartPosition.CenterScreen;
         AutoScaleMode = AutoScaleMode.Font;
         AcceptButton = btnSalvar;
+
         cmbCurso.Items.AddRange(new object[] {
         "Administração", "Agronomia", "Ciências Biológicas",
         "Engenharia Florestal", "Matemática", "Pedagogia", "Sistemas de Informação"});
-        var lblNome = new Label { Text = "Nome:", AutoSize = true };
-        var lblEmail = new Label { Text = "E-mail:", AutoSize = true };
-        var lblCurso = new Label { Text = "Curso:", AutoSize = true };
-        var lblTelefone = new Label { Text = "Telefone:", AutoSize = true };
-        var lblCidade = new Label { Text = "Cidade:", AutoSize = true };
-        var lblDataIngresso = new Label { Text = "Data de Ingresso:", AutoSize = true };
+
+        var estiloLabel = AnchorStyles.Left | AnchorStyles.Bottom;
+        var margemLabel = new Padding(0, 0, 6, 6);
+
+        var lblNome = new Label { Text = "Nome:", AutoSize = true, Anchor = estiloLabel, Margin = margemLabel };
+        var lblEmail = new Label { Text = "E-mail:", AutoSize = true, Anchor = estiloLabel, Margin = margemLabel };
+        var lblCurso = new Label { Text = "Curso:", AutoSize = true, Anchor = estiloLabel, Margin = margemLabel };
+        var lblTelefone = new Label { Text = "Telefone:", AutoSize = true, Anchor = estiloLabel, Margin = margemLabel };
+        var lblCidade = new Label { Text = "Cidade:", AutoSize = true, Anchor = estiloLabel, Margin = margemLabel };
+        var lblDataIngresso = new Label { Text = "Data de Ingresso:", AutoSize = true, Anchor = estiloLabel, Margin = margemLabel };
+
         var layout = new TableLayoutPanel
         {
             Dock = DockStyle.Fill,
             Padding = new Padding(12),
             ColumnCount = 4,
-            RowCount = 5
+            RowCount = 6
         };
 
         layout.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
@@ -129,7 +146,7 @@ public partial class CadastroForm
         layout.Controls.Add(cmbCurso, 1, 1);
         layout.Controls.Add(lblTelefone, 2, 1);
         layout.Controls.Add(txtTelefone, 3, 1);
-        
+
         layout.Controls.Add(lblCidade, 0, 2);
         layout.Controls.Add(txtCidade, 1, 2);
         layout.Controls.Add(lblDataIngresso, 2, 2);
@@ -142,11 +159,31 @@ public partial class CadastroForm
             TabIndex = 6
         };
         botoes.Controls.AddRange(new Control[]{
-        btnSalvar, btnNovo, btnExcluir
+        btnSalvar, btnNovo, btnExcluir, btnTestarConexao
         });
         layout.Controls.Add(botoes, 0, 3);
         layout.SetColumnSpan(botoes, 4);
 
+        grade.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            DataPropertyName = "id",
+            HeaderText = "ID",
+            AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+            Width = 40
+        });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "nome", HeaderText = "Nome" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "email", HeaderText = "E-mail" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "curso", HeaderText = "Curso" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "telefone", HeaderText = "Telefone" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn { DataPropertyName = "cidade", HeaderText = "Cidade" });
+        grade.Columns.Add(new DataGridViewTextBoxColumn
+        {
+            DataPropertyName = "data_ingresso",
+            HeaderText = "Data de Ingresso",
+            AutoSizeMode = DataGridViewAutoSizeColumnMode.None,
+            Width = 110
+        });
+        grade.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Bold);
         layout.Controls.Add(grade, 0, 4);
         layout.SetColumnSpan(grade, 4);
 

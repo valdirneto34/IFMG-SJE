@@ -9,7 +9,7 @@ email VARCHAR(180) NOT NULL UNIQUE,
 curso VARCHAR(50), 
 data_ingresso DATE, 
 telefone VARCHAR(11), 
-cidade VARCHAR(50)
+cidade VARCHAR(200)
 );
 
 CREATE USER "app_inscricoes"@"localhost" IDENTIFIED BY "admin123";
