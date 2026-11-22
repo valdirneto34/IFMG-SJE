@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -10,9 +10,6 @@
 
         :root {
             --cor-background: #eaeaff;
-            --cor-background-div: #fff;
-            --cor-borda-div: black;
-            --cor-sombra: #0000001a;
         }
 
         * {
@@ -28,16 +25,13 @@
             justify-content: center;
             align-items: center;
             background-color: var(--cor-background);
+            overflow: hidden;
         }
 
         .dancarina {
             position: relative;
             margin: auto;
             width: 200px;
-            border: 2px solid black;
-            border-radius: 10px;
-            box-shadow: 0px 4px 15px var(--cor-sombra);
-            background-color: var(--cor-background-div);
         }
 
         .img-passaro {
@@ -52,7 +46,65 @@
     </div>
 </body>
 <script>
+    const dancarina = document.querySelector('.dancarina')
+    const velocidade = 5 // pixels por quadro
 
+    // Posição atual da dançarina (deslocamento a partir do ponto inicial)
+    let posX = 0
+    let posY = 0
+
+    // Guarda as setas que estão pressionadas AGORA.
+    // É isso que permite as diagonais: o keydown só informa a última tecla,
+    // então precisamos lembrar quais continuam seguradas.
+    const teclasPressionadas = new Set()
+
+    document.addEventListener('keydown', (evento) => {
+        if (evento.key.startsWith('Arrow')) {
+            evento.preventDefault() // impede a página de rolar com as setas
+            teclasPressionadas.add(evento.key)
+        }
+    })
+
+    document.addEventListener('keyup', (evento) => {
+        teclasPressionadas.delete(evento.key)
+    })
+
+    // Se a janela perder o foco com uma tecla segurada, o keyup não chega
+    window.addEventListener('blur', () => teclasPressionadas.clear())
+
+    function mover() {
+        let dx = 0
+        let dy = 0
+
+        if (teclasPressionadas.has('ArrowUp')) dy -= velocidade
+        if (teclasPressionadas.has('ArrowDown')) dy += velocidade
+        if (teclasPressionadas.has('ArrowLeft')) dx -= velocidade
+        if (teclasPressionadas.has('ArrowRight')) dx += velocidade
+
+        // Na diagonal, mantém a mesma velocidade das retas (senão anda ~41% mais rápido)
+        if (dx !== 0 && dy !== 0) {
+            dx *= Math.SQRT1_2
+            dy *= Math.SQRT1_2
+        }
+
+        // Limites da janela: descobre onde a dançarina estaria sem deslocamento
+        // e calcula até onde ela pode ir sem sair da tela
+        const caixa = dancarina.getBoundingClientRect()
+        const origemX = caixa.left - posX
+        const origemY = caixa.top - posY
+        const larguraTela = document.documentElement.clientWidth
+        const alturaTela = document.documentElement.clientHeight
+
+        posX = Math.min(Math.max(posX + dx, -origemX), larguraTela - caixa.width - origemX)
+        posY = Math.min(Math.max(posY + dy, -origemY), alturaTela - caixa.height - origemY)
+
+        dancarina.style.left = posX + 'px'
+        dancarina.style.top = posY + 'px'
+
+        requestAnimationFrame(mover) // chama de novo no próximo quadro
+    }
+
+    requestAnimationFrame(mover)
 </script>
 
 </html>
