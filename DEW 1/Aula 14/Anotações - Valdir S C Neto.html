@@ -151,15 +151,26 @@
             line-height: 1.4;
         }
 
+        .item-titulo {
+            font-family: var(--fonte-titulo);
+            font-weight: bold;
+        }
+
+        .item-titulo::before {
+            content: "▪ ";
+            color: var(--cor-botao);
+        }
+
+        .item-descricao {
+            font-size: 0.9rem;
+            margin-top: 2px;
+            padding-left: 14px;
+        }
+
         .texto-item {
             overflow-wrap: break-word;
             word-break: break-word;
             flex: 1;
-        }
-
-        .texto-item::before {
-            content: "▪ ";
-            color: var(--cor-botao);
         }
 
         .botao-excluir {
@@ -237,50 +248,67 @@
             const novoTitulo = document.getElementById('input-titulo');
             const novaAnotacao = document.getElementById('input-anotacao');
             const valorTituloLimpo = novoTitulo.value.trim();
-            const valorAnotacaoLimpo = novaAnotacao.value.trim();
+            const valorDescricaoLimpo = novaAnotacao.value.trim();
 
             if (valorTituloLimpo === '') {
-                alert('Por favor, digite uma título!');
+                alert('Por favor, digite um título!');
                 return;
             }
 
-            if (valorAnotacaoLimpo === '') {
+            if (valorDescricaoLimpo === '') {
                 alert('Por favor, digite uma descrição!');
                 return;
             }
 
-            salvarAnotacaoStorage(valorLimpo);
-            criarItemNaTela(valorLimpo);
+            const anotacao = {
+                id: Date.now(),
+                titulo: valorTituloLimpo,
+                descricao: valorDescricaoLimpo
+            };
 
+            salvarAnotacaoStorage(anotacao);
+            criarItemNaTela(anotacao);
+
+            novoTitulo.value = '';
             novaAnotacao.value = '';
-            novaAnotacao.focus();
+            novoTitulo.focus();
         }
 
-        function criarItemNaTela(texto) {
+        function criarItemNaTela(anotacao) {
             const lista = document.getElementById('lista');
             const containerAnotacoes = document.getElementById('div-anotacoes');
 
             const novoItemLista = document.createElement('li');
 
-            const txtAnotacao = document.createElement('span');
-            txtAnotacao.className = 'texto-item';
-            txtAnotacao.textContent = texto;
+            const novaAnotacao = document.createElement('div');
+            const novoTitulo = document.createElement('p');
+            const novaDescricao = document.createElement('p');
+
+            novaAnotacao.className = 'texto-item';
+            novoTitulo.className = 'item-titulo';
+            novaDescricao.className = 'item-descricao';
+
+            novoTitulo.textContent = anotacao.titulo;
+            novaDescricao.textContent = anotacao.descricao;
 
             const btnExcluir = document.createElement('button');
             btnExcluir.textContent = 'Excluir';
             btnExcluir.className = 'botao-excluir';
             btnExcluir.onclick = function () {
-                const indice = Array.from(lista.children).indexOf(novoItemLista);
-                removerAnotacaoStorage(indice);
+                removerAnotacaoStorage(anotacao.id);
                 novoItemLista.remove();
                 if (lista.children.length === 0) {
-                    alert('Sem anotações para guardar!');
+                    alert('Nenhuma anotação cadastrada.');
                     containerAnotacoes.style.display = 'none';
                 }
             };
 
-            novoItemLista.appendChild(txtAnotacao);
+            novaAnotacao.appendChild(novoTitulo);
+            novaAnotacao.appendChild(novaDescricao);
+
+            novoItemLista.appendChild(novaAnotacao);
             novoItemLista.appendChild(btnExcluir);
+
             lista.appendChild(novoItemLista);
 
             containerAnotacoes.style.display = 'block';
@@ -297,14 +325,14 @@
             localStorage.setItem('anotacoes', JSON.stringify(anotacoes));
         }
 
-        function removerAnotacaoStorage(indice) {
+        function removerAnotacaoStorage(id) {
             const anotacoes = obterAnotacoes();
-            anotacoes.splice(indice, 1);
-            localStorage.setItem('anotacoes', JSON.stringify(anotacoes));
+            const novasAnotacoes = anotacoes.filter(a => a.id !== id);
+            localStorage.setItem('anotacoes', JSON.stringify(novasAnotacoes));
         }
 
         function carregarAnotacoes() {
-            anotacoes = obterAnotacoes();
+            const anotacoes = obterAnotacoes();
             if (anotacoes.length == 0) {
                 alert('Sem anotações para guardar!');
             } else {
