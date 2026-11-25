@@ -199,50 +199,78 @@
     </div>
     <p class="autoria">Criado por <a target="_blank" href="https://github.com/valdirneto34">Valdir Neto</a> &copy; 2026
     </p>
-</body>
-<script>
-    function adicionarTarefa() {
-        const lista = document.getElementById('lista');
-        const containerTarefas = document.getElementById('div-tarefas');
-        const novaTarefa = document.getElementById('input-tarefa');
 
-        const valorLimpo = novaTarefa.value.trim();
+    <script>
+        function adicionarTarefa() {
+            const novaTarefa = document.getElementById('input-tarefa');
+            const valorLimpo = novaTarefa.value.trim();
 
-        if (valorLimpo === '') {
-            alert('Por favor, digite uma tarefa!');
-            return;
+            if (valorLimpo === '') {
+                alert('Por favor, digite uma tarefa!');
+                return;
+            }
+
+            salvarTarefaStorage(valorLimpo);
+            criarItemNaTela(valorLimpo);
+
+            novaTarefa.value = '';
+            novaTarefa.focus();
         }
 
-        const novoItem = document.createElement('li');
+        function criarItemNaTela(texto) {
+            const lista = document.getElementById('lista');
+            const containerTarefas = document.getElementById('div-tarefas');
 
-        const textoTarefa = document.createElement('span');
-        textoTarefa.className = 'texto-item';
-        textoTarefa.textContent = valorLimpo;
+            const novoItem = document.createElement('li');
 
-        const botaoExcluir = document.createElement('button');
-        botaoExcluir.textContent = 'Excluir';
-        botaoExcluir.className = 'botao-excluir';
-        botaoExcluir.onclick = function () {
-            novoItem.remove();
-            if (lista.children.length === 0) {
-                containerTarefas.style.display = 'none';
-            }
-        };
+            const textoTarefa = document.createElement('span');
+            textoTarefa.className = 'texto-item';
+            textoTarefa.textContent = texto;
 
-        novoItem.appendChild(textoTarefa);
-        novoItem.appendChild(botaoExcluir);
-        lista.appendChild(novoItem);
+            const botaoExcluir = document.createElement('button');
+            botaoExcluir.textContent = 'Excluir';
+            botaoExcluir.className = 'botao-excluir';
+            botaoExcluir.onclick = function () {
+                const indice = Array.from(lista.children).indexOf(novoItem);
+                removerTarefaStorage(indice);
+                novoItem.remove();
+                if (lista.children.length === 0) {
+                    containerTarefas.style.display = 'none';
+                }
+            };
 
-        containerTarefas.style.display = 'block';
+            novoItem.appendChild(textoTarefa);
+            novoItem.appendChild(botaoExcluir);
+            lista.appendChild(novoItem);
 
-        novaTarefa.value = '';
-        novaTarefa.focus();
-    }
+            containerTarefas.style.display = 'block';
+        }
 
-    function obterTarefas() {
-        const dados = localStorage.getItem("tarefas");
-        return dados ? JSON.parse(dados) : [];
-    }
-</script>
+        function obterTarefas() {
+            const tarefas = localStorage.getItem('tarefas');
+            return tarefas ? JSON.parse(tarefas) : [];
+        }
+
+        function salvarTarefaStorage(tarefa) {
+            const tarefas = obterTarefas();
+            tarefas.push(tarefa);
+            localStorage.setItem('tarefas', JSON.stringify(tarefas));
+        }
+
+        function removerTarefaStorage(indice) {
+            const tarefas = obterTarefas();
+            tarefas.splice(indice, 1);
+            localStorage.setItem('tarefas', JSON.stringify(tarefas));
+        }
+
+        function carregarTarefas() {
+            obterTarefas().forEach(function (tarefa) {
+                criarItemNaTela(tarefa);
+            });
+        }
+
+        carregarTarefas();
+    </script>
+</body>
 
 </html>
