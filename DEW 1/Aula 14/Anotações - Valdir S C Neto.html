@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anotações</title>
+    <style>
+        @charset "UTF-8";
+
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap');
+
+        :root {
+            --cor-background: #eaeaff;
+            --cor-fundo-main: #FFFFFF;
+            --cor-fundo-lista: #FAFAFA;
+
+            --cor-titulo: #312E81;
+            --cor-label-anotacao: #4338CA;
+            --cor-botao: #4F46E5;
+            --cor-botao-hover: #3730A3;
+            --cor-texto-botao: #FFFFFF;
+            --cor-texto-lista: #374151;
+
+            --cor-botao-excluir: #EF4444;
+            --cor-botao-excluir-hover: #b12121;
+
+            --cor-texto-autoria: #4B5563;
+            --cor-link-autoria: #4F46E5;
+            --cor-link-hover: #312E81;
+
+            --cor-borda-input: #C7D2FE;
+            --cor-borda-input-focus: #4F46E5;
+            --cor-borda-div-anotacoes: #E5E7EB;
+            --cor-borda-item-lista: #d7dadf;
+            --cor-sombra: #0000001a;
+            --cor-sombra-input-focus: #007bff40;
+
+            --fonte-titulo: 'Montserrat', sans-serif;
+            --fonte-principal: 'Inter', Arial, sans-serif;
+        }
+
+        * {
+            margin: 0px;
+            padding: 0px;
+            font-family: var(--fonte-principal);
+        }
+
+        body {
+            background-color: var(--cor-background);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        main {
+            background-color: var(--cor-fundo-main);
+            text-align: center;
+            border: 1px solid var(--cor-borda-input);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 800px;
+            min-height: 400px;
+            height: fit-content;
+            padding: 20px 0;
+            box-shadow: 0px 4px 15px var(--cor-sombra);
+        }
+
+        h1 {
+            font-family: var(--fonte-titulo);
+            color: var(--cor-titulo);
+            margin: 10px auto;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            gap: 5px;
+        }
+
+        .linha-form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .controles {
+            text-align: center;
+        }
+
+        label {
+            color: var(--cor-label-anotacao);
+            font-weight: bold;
+        }
+
+        .input-anotacao {
+            padding: 5px;
+            border: 1px solid var(--cor-borda-input);
+            border-radius: 5px;
+            width: 180px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-anotacao:focus {
+            outline: none;
+            border: 2px solid var(--cor-borda-input-focus);
+            box-shadow: 0 0 8px var(--cor-sombra-input-focus);
+        }
+
+        .botaoSubmit {
+            background-color: var(--cor-botao);
+            color: var(--cor-texto-botao);
+            margin-top: 10px;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .botaoSubmit:hover {
+            cursor: pointer;
+            background-color: var(--cor-botao-hover);
+        }
+
+        .div-anotacoes {
+            display: none;
+            border-radius: 8px;
+            border: 1px solid var(--cor-borda-div-anotacoes);
+            background-color: var(--cor-fundo-lista);
+            margin: 40px;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .lista-anotacoes li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--cor-borda-item-lista);
+            color: var(--cor-texto-lista);
+            line-height: 1.4;
+        }
+
+        .texto-item {
+            overflow-wrap: break-word;
+            word-break: break-word;
+            flex: 1;
+        }
+
+        .texto-item::before {
+            content: "▪ ";
+            color: var(--cor-botao);
+        }
+
+        .botao-excluir {
+            background-color: var(--cor-botao-excluir);
+            color: var(--cor-texto-botao);
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            flex-shrink: 0;
+        }
+
+        .botao-excluir:hover {
+            cursor: pointer;
+            background-color: var(--cor-botao-excluir-hover);
+        }
+
+        .lista-anotacoes li:last-child {
+            border-bottom: none;
+        }
+
+        .autoria {
+            margin-top: 20px;
+            color: var(--cor-texto-autoria);
+            font-size: 0.95rem;
+            text-align: center;
+        }
+
+        .autoria a {
+            color: var(--cor-link-autoria);
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .autoria a:hover {
+            text-decoration: underline;
+            color: var(--cor-link-hover);
+        }
+    </style>
+</head>
+
+<body>
+    <main>
+        <h1 class="titulo">Lista de Anotações</h1>
+
+        <form onsubmit="adicionarAnotacao(); return false;">
+            <div class="linha-form">
+                <label for="input-titulo" class="titulo-anotacao">Título da anotação:</label>
+                <input type="text" name="titulo-anotacao" id="input-titulo" class="input-anotacao">
+            </div>
+
+            <div class="linha-form">
+                <label for="input-anotacao" class="label-anotacao">Descrição da anotação:</label>
+                <input type="text" name="nova-anotacao" id="input-anotacao" class="input-anotacao">
+            </div>
+
+            <div class="controles">
+                <button type="submit" class="botaoSubmit">Adicionar Anotação</button>
+            </div>
+        </form>
+
+        <div class="div-anotacoes" id="div-anotacoes">
+            <ul class="lista-anotacoes" id="lista"></ul>
+        </div>
+    </main>
+
+    <p class="autoria">Criado por <a target="_blank" href="https://github.com/valdirneto34">Valdir Neto</a> &copy; 2026
+    </p>
+
+    <script>
+        function adicionarAnotacao() {
+            const novoTitulo = document.getElementById('input-titulo');
+            const novaAnotacao = document.getElementById('input-anotacao');
+            const valorTituloLimpo = novoTitulo.value.trim();
+            const valorAnotacaoLimpo = novaAnotacao.value.trim();
+
+            if (valorTituloLimpo === '') {
+                alert('Por favor, digite uma título!');
+                return;
+            }
+
+            if (valorAnotacaoLimpo === '') {
+                alert('Por favor, digite uma descrição!');
+                return;
+            }
+
+            salvarAnotacaoStorage(valorLimpo);
+            criarItemNaTela(valorLimpo);
+
+            novaAnotacao.value = '';
+            novaAnotacao.focus();
+        }
+
+        function criarItemNaTela(texto) {
+            const lista = document.getElementById('lista');
+            const containerAnotacoes = document.getElementById('div-anotacoes');
+
+            const novoItemLista = document.createElement('li');
+
+            const txtAnotacao = document.createElement('span');
+            txtAnotacao.className = 'texto-item';
+            txtAnotacao.textContent = texto;
+
+            const btnExcluir = document.createElement('button');
+            btnExcluir.textContent = 'Excluir';
+            btnExcluir.className = 'botao-excluir';
+            btnExcluir.onclick = function () {
+                const indice = Array.from(lista.children).indexOf(novoItemLista);
+                removerAnotacaoStorage(indice);
+                novoItemLista.remove();
+                if (lista.children.length === 0) {
+                    alert('Sem anotações para guardar!');
+                    containerAnotacoes.style.display = 'none';
+                }
+            };
+
+            novoItemLista.appendChild(txtAnotacao);
+            novoItemLista.appendChild(btnExcluir);
+            lista.appendChild(novoItemLista);
+
+            containerAnotacoes.style.display = 'block';
+        }
+
+        function obterAnotacoes() {
+            const anotacoes = localStorage.getItem('anotacoes');
+            return anotacoes ? JSON.parse(anotacoes) : [];
+        }
+
+        function salvarAnotacaoStorage(anotacao) {
+            const anotacoes = obterAnotacoes();
+            anotacoes.push(anotacao);
+            localStorage.setItem('anotacoes', JSON.stringify(anotacoes));
+        }
+
+        function removerAnotacaoStorage(indice) {
+            const anotacoes = obterAnotacoes();
+            anotacoes.splice(indice, 1);
+            localStorage.setItem('anotacoes', JSON.stringify(anotacoes));
+        }
+
+        function carregarAnotacoes() {
+            anotacoes = obterAnotacoes();
+            if (anotacoes.length == 0) {
+                alert('Sem anotações para guardar!');
+            } else {
+                anotacoes.forEach(function (anotacao) {
+                    criarItemNaTela(anotacao);
+                });
+            }
+        }
+
+        carregarAnotacoes();
+    </script>
+</body>
+
+</html>
